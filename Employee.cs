@@ -13,9 +13,14 @@
             this.annualBonus = annualBonus;
         }
 
+        public string Name
+        {
+            get { return name; }
+        }
+
         public double TotalAnnualPay()
         {
-            return annualSalary += annualBonus;
+            return annualSalary + annualBonus;
         }
 
         public double HourlyPay()
