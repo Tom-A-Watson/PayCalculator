@@ -4,19 +4,36 @@
     {
         public static void Main(string[] args)
         {
-            Employee emp1 = new Employee("Jeff", 27000, 3000);
-            Console.WriteLine($"\nEnter 'annual' to see {emp1.Name}'s annual salary.\nOr enter 'hourly' to see his annual rate.");
-            var options = Console.ReadLine();
+            Console.WriteLine("Enter 1 to get all employee information.\nEnter 2 to get a single employee's information");
+            var option = Console.ReadLine();
 
-            switch (options)
+            switch (option)
             {
-                case "annual":
-                    Console.WriteLine($"{emp1.Name}'s total annual pay is: \t £" + Math.Round(emp1.TotalAnnualPay(), 2));
-                    break;
-                case "hourly":
-                    Console.WriteLine($"{emp1.Name}'s hourly rate is: \t\t £" + Math.Round(emp1.HourlyPay(), 2));
-                    break;
+                case "1":
+                    GetAllInfo(); break;
+                case "2":
+                    GetEmployee(); break;
             }
+        }
+
+        static void GetAllInfo()
+        {
+            for (int i = 0; i < MockEmployeeRepo._permEmps.Count; i++)
+            {
+                Employee permEmp = MockEmployeeRepo._permEmps[i];
+                {
+                    string info = $"\nStaff ID: {permEmp.Id} \nStaff Name: {permEmp.Name} \nStaff Salary: {permEmp.Salary}";
+                    Console.WriteLine(info);
+                }
+            }
+        }
+
+        static void GetEmployee()
+        {
+            Console.WriteLine("Enter the ID of the employee you would like to view?");
+            string? idInput = Console.ReadLine();
+            Employee emp = MockEmployeeRepo._permEmps[Int32.Parse(idInput) - 1];
+            Console.WriteLine($"\nStaff ID: {emp.Id} \nStaff Name: {emp.Name} \nStaff Salary: {emp.Salary}");
         }
     }
 }
