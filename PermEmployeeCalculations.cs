@@ -1,13 +1,10 @@
 ﻿namespace PayCalculator
 {
-    public class PermEmployee : Employee
+    public class PermEmployeeCalculations : Employee
     {
-        private decimal Bonus { get; set; }
-
-        public PermEmployee(decimal bonus)
-        {
-            Bonus = bonus;
-        }
+        public string? ContractType { get; set; }
+        public decimal Salary { get; set; }
+        public int HoursWorked { get; set; }
 
         public decimal TotalAnnualPay()
         {
