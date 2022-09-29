@@ -4,6 +4,6 @@
     {
         public string? Name { get; set; }
         public int Id { get; set; }
-        public decimal Bonus { get; set; }
+        public string? ContractType { get; set; }
     }
 }

@@ -2,6 +2,28 @@
 {
     class Program
     {
+        public static List<PermanentEmployee> _permEmps = new List<PermanentEmployee>()
+        {
+            new PermanentEmployee()
+            {
+                Name = "Joe Bloggs",
+                Id = 001,
+                ContractType = "Permanent",
+                Salary = 25000,
+                Bonus = 2500,
+                HoursWorked = 35
+            },
+
+            new PermanentEmployee()
+            {
+                Name = "John Smith",
+                Id = 002,
+                ContractType = "Permanent",
+                Salary = 35000,
+                Bonus = 1000,
+                HoursWorked = 35
+            }
+        };
         public static void Main(string[] args)
         {
             Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit");
@@ -15,18 +37,18 @@
                 case "2":
                     GetEmployee(); 
                     break;
-                case "3": return;
+                case "3": 
+                    return;
                 default:
-                    if (option != "1" || option != "2" || option != "3") { Console.WriteLine("\nInvalid input!"); } 
+                    Console.WriteLine("\nInvalid input!");
                     break;
             }
         }
 
         static void GetAllInfo()
         {
-            for (int i = 0; i < MockEmployeeRepo._permEmps.Count; i++)
+            foreach (PermanentEmployee permEmp in _permEmps)
             {
-                PermEmployeeCalculations permEmp = (PermEmployeeCalculations) MockEmployeeRepo._permEmps[i];
                 Console.WriteLine($"\nStaff ID: {permEmp.Id} \nStaff Name: {permEmp.Name} \nStaff Contract Type: {permEmp.ContractType}" +
                     $" \nStaff Salary: {permEmp.Salary} \nStaff Bonus: {permEmp.Bonus} \nHours Worked: {permEmp.HoursWorked}");
             }
@@ -37,7 +59,7 @@
             Console.WriteLine("\nEnter the ID of the employee you would like to view");
             
             string? idInput = Console.ReadLine();
-            PermEmployeeCalculations permEmp = (PermEmployeeCalculations) MockEmployeeRepo._permEmps[Int32.Parse(idInput) - 1];
+            PermanentEmployee permEmp = _permEmps[Int32.Parse(idInput) - 1];
             
             Console.WriteLine($"\nStaff ID: {permEmp.Id} \nStaff Name: {permEmp.Name} \nStaff Contract Type: {permEmp.ContractType}" +
                 $" \nStaff Salary: {permEmp.Salary} \nStaff Bonus: {permEmp.Bonus} \nHours Worked: {permEmp.HoursWorked}");
