@@ -1,6 +1,6 @@
 ﻿namespace PayCalculator
 {
-    public class PayCalculator : PermanentEmployee
+    public class PermPayCalc : PermanentEmployee
     {
         public decimal TotalAnnualPay()
         {

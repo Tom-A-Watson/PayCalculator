@@ -26,7 +26,8 @@
                 HoursWorked = 35
             }
         };
-        public static void Main(string[] args)
+        
+        static void Main(string[] args)
         {
             Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit\n");
             string? option = Console.ReadLine();
@@ -64,8 +65,8 @@
             permEmp = _permEmps[Int32.Parse(idInput) - 1];
             PrintDetails();
         }
-
-        public static void PrintDetails()
+        
+        static void PrintDetails()
         {
             Console.WriteLine($"\nStaff ID: {permEmp?.Id} \nStaff Name: {permEmp?.Name} \nStaff Contract Type: {permEmp?.ContractType}" +
                 $" \nStaff Salary: {permEmp?.Salary} \nStaff Bonus: {permEmp?.Bonus} \nHours Worked: {permEmp?.HoursWorked}");
