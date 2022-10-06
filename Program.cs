@@ -2,21 +2,74 @@
 {
     class Program
     {
-        public static void Main(string[] args)
-        {
-            Employee emp1 = new Employee("Jeff", 27000, 3000);
-            Console.WriteLine($"\nEnter 'annual' to see {emp1.Name}'s annual salary.\nOr enter 'hourly' to see his annual rate.");
-            var options = Console.ReadLine();
+        static PermanentEmployee? permEmp;
 
-            switch (options)
+        public static List<PermanentEmployee> _permEmps = new List<PermanentEmployee>()
+        {
+            new PermanentEmployee()
             {
-                case "annual":
-                    Console.WriteLine($"{emp1.Name}'s total annual pay is: \t £" + Math.Round(emp1.TotalAnnualPay(), 2));
+                Name = "Joe Bloggs",
+                Id = 001,
+                ContractType = "Permanent",
+                Salary = 25000,
+                Bonus = 2500,
+                HoursWorked = 35
+            },
+
+            new PermanentEmployee()
+            {
+                Name = "John Smith",
+                Id = 002,
+                ContractType = "Permanent",
+                Salary = 35000,
+                Bonus = 1000,
+                HoursWorked = 35
+            }
+        };
+        
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit\n");
+            string? option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "1":
+                    GetAllInfo(); 
                     break;
-                case "hourly":
-                    Console.WriteLine($"{emp1.Name}'s hourly rate is: \t\t £" + Math.Round(emp1.HourlyPay(), 2));
+                case "2":
+                    GetEmployee(); 
+                    break;
+                case "3": 
+                    return;
+                default:
+                    Console.WriteLine("\nInvalid input!");
                     break;
             }
+        }
+
+        static void GetAllInfo()
+        {
+            for (int i = 0; i < _permEmps.Count; i++)
+            {
+                permEmp = _permEmps[i];
+                PrintDetails();
+            }
+        }
+
+        static void GetEmployee()
+        {
+            Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
+            
+            string? idInput = Console.ReadLine();
+            permEmp = _permEmps[Int32.Parse(idInput) - 1];
+            PrintDetails();
+        }
+        
+        static void PrintDetails()
+        {
+            Console.WriteLine($"\nStaff ID: {permEmp?.Id} \nStaff Name: {permEmp?.Name} \nStaff Contract Type: {permEmp?.ContractType}" +
+                $" \nStaff Salary: {permEmp?.Salary} \nStaff Bonus: {permEmp?.Bonus} \nHours Worked: {permEmp?.HoursWorked}");
         }
     }
 }
