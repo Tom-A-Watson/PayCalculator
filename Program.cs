@@ -2,8 +2,6 @@
 {
     class Program
     {
-        static PermanentEmployee? permEmp;
-
         public static List<PermanentEmployee> _permEmps = new List<PermanentEmployee>()
         {
             new PermanentEmployee()
@@ -50,10 +48,9 @@
 
         static void GetAllInfo()
         {
-            for (int i = 0; i < _permEmps.Count; i++)
+            foreach (var permanentEmployee in _permEmps)
             {
-                permEmp = _permEmps[i];
-                PrintDetails();
+                PrintDetails(permanentEmployee);
             }
         }
 
@@ -62,14 +59,13 @@
             Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
             
             string? idInput = Console.ReadLine();
-            permEmp = _permEmps[Int32.Parse(idInput) - 1];
-            PrintDetails();
+            PrintDetails(_permEmps[Int32.Parse(idInput) - 1]);
         }
         
-        static void PrintDetails()
+        static void PrintDetails(PermanentEmployee permanentEmployee)
         {
-            Console.WriteLine($"\nStaff ID: {permEmp?.Id} \nStaff Name: {permEmp?.Name} \nStaff Contract Type: {permEmp?.ContractType}" +
-                $" \nStaff Salary: {permEmp?.Salary} \nStaff Bonus: {permEmp?.Bonus} \nHours Worked: {permEmp?.HoursWorked}");
+            Console.WriteLine($"\nStaff ID: {permanentEmployee?.Id} \nStaff Name: {permanentEmployee?.Name} \nStaff Contract Type: {permanentEmployee?.ContractType}" +
+                $" \nStaff Salary: {permanentEmployee?.Salary} \nStaff Bonus: {permanentEmployee?.Bonus} \nHours Worked: {permanentEmployee?.HoursWorked}");
         }
     }
 }
