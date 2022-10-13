@@ -57,9 +57,7 @@
         static void GetEmployee()
         {
             Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
-            
-            string? idInput = Console.ReadLine();
-            PrintDetails(_permEmps[Int32.Parse(idInput) - 1]);
+            PrintDetails(_permEmps[Int32.Parse(Console.ReadLine()!) - 1]);
         }
         
         static void PrintDetails(PermanentEmployee permanentEmployee)
