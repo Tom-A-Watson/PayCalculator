@@ -24,6 +24,27 @@
                 HoursWorked = 35
             }
         };
+
+        public static List<TemporaryEmployee> _tempEmps = new List<TemporaryEmployee>()
+        {
+            new TemporaryEmployee()
+            {
+                Name = "Jeff Burns",
+                Id = 003,
+                ContractType = "Temporary",
+                DayRate = 200,
+                WeeksWorked = 42
+            },
+
+            new TemporaryEmployee()
+            {
+                Name = "Emily Sanders",
+                Id = 004,
+                ContractType = "Temporary",
+                DayRate = 250,
+                WeeksWorked = 38
+            }
+        };
         
         static void Main(string[] args)
         {
