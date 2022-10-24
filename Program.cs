@@ -83,7 +83,7 @@
         static void GetEmployee()
         {
             Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
-            var idInput = Int32.Parse(Console.ReadLine()!);
+            int idInput = Int32.Parse(Console.ReadLine()!);
 
             foreach (var permanentEmployee in _permEmps)
             {
@@ -91,11 +91,19 @@
                 {
                     PrintDetails(permanentEmployee);
                 }
-                else
+            }
+
+            foreach (var temporaryEmployee in _tempEmps)
+            {
+                if (idInput == temporaryEmployee.Id)
                 {
-                    Console.WriteLine("Invalid ID! Please enter a valid ID");
-                    return;
+                    PrintDetails(temporaryEmployee);
                 }
+            }
+
+            if (idInput < 1 || idInput > _permEmps.Count + _tempEmps.Count)
+            {
+                Console.WriteLine("\nInvalid ID! Please enter a valid one");
             }
         }
 
