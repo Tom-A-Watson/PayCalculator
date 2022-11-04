@@ -2,7 +2,7 @@
 {
     class Program
     {
-        public static List<PermanentEmployee> _permEmps = new List<PermanentEmployee>()
+        public static List<PermanentEmployee> _permanentEmployees = new List<PermanentEmployee>()
         {
             new PermanentEmployee()
             {
@@ -25,7 +25,7 @@
             }
         };
 
-        public static List<TemporaryEmployee> _tempEmps = new List<TemporaryEmployee>()
+        public static List<TemporaryEmployee> _temporaryEmployees = new List<TemporaryEmployee>()
         {
             new TemporaryEmployee()
             {
@@ -69,12 +69,12 @@
 
         static void GetAllInfo()
         {
-            foreach (var permanentEmployee in _permEmps)
+            foreach (var permanentEmployee in _permanentEmployees)
             {
                 PrintDetails(permanentEmployee);
             }
 
-            foreach (var temporaryEmployee in _tempEmps)
+            foreach (var temporaryEmployee in _temporaryEmployees)
             {
                 PrintDetails(temporaryEmployee);
             }
@@ -83,25 +83,33 @@
         static void GetEmployee()
         {
             Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
-            int idInput = Int32.Parse(Console.ReadLine()!);
+            var idInput = Console.ReadLine()!;
+            bool idIsInvalid = !Int32.TryParse(idInput, out int validID);
 
-            foreach (var permanentEmployee in _permEmps)
+            foreach (var permanentEmployee in _permanentEmployees)
             {
-                if (idInput == permanentEmployee.Id)
+                if (validID == permanentEmployee.Id)
                 {
                     PrintDetails(permanentEmployee);
+                    return;
                 }
             }
 
-            foreach (var temporaryEmployee in _tempEmps)
+            foreach (var temporaryEmployee in _temporaryEmployees)
             {
-                if (idInput == temporaryEmployee.Id)
+                if (validID == temporaryEmployee.Id)
                 {
                     PrintDetails(temporaryEmployee);
+                    return;
                 }
             }
 
-            if (idInput < 1 || idInput > _permEmps.Count + _tempEmps.Count)
+            if (idIsInvalid)
+            {
+                Console.WriteLine("\nInvalid input! Please enter a number");
+            }
+
+            if (validID < 1 || validID > _permanentEmployees.Count + _temporaryEmployees.Count)
             {
                 Console.WriteLine("\nInvalid ID! Please enter a valid one");
             }
