@@ -86,6 +86,17 @@
             var idInput = Console.ReadLine()!;
             bool idIsInvalid = !Int32.TryParse(idInput, out int validID);
 
+            if (idIsInvalid)
+            {
+                Console.WriteLine("\nInvalid input! Please enter a number");
+                return;
+            }
+
+            if (validID < 1 || validID > _permanentEmployees.Count + _temporaryEmployees.Count)
+            {
+                Console.WriteLine("\nInvalid ID! Please enter a valid one");
+            }
+
             foreach (var permanentEmployee in _permanentEmployees)
             {
                 if (validID == permanentEmployee.Id)
@@ -102,17 +113,6 @@
                     PrintDetails(temporaryEmployee);
                     return;
                 }
-            }
-
-            if (idIsInvalid)
-            {
-                Console.WriteLine("\nInvalid input! Please enter a number");
-                return;
-            }
-
-            if (validID < 1 || validID > _permanentEmployees.Count + _temporaryEmployees.Count)
-            {
-                Console.WriteLine("\nInvalid ID! Please enter a valid one");
             }
         }
 
