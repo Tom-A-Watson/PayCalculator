@@ -107,6 +107,7 @@
             if (idIsInvalid)
             {
                 Console.WriteLine("\nInvalid input! Please enter a number");
+                return;
             }
 
             if (validID < 1 || validID > _permanentEmployees.Count + _temporaryEmployees.Count)
