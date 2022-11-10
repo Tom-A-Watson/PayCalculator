@@ -11,7 +11,7 @@
                 ContractType = "Permanent",
                 Salary = 25000,
                 Bonus = 2500,
-                HoursWorked = 35
+                HoursWorked = 1820
             },
 
             new PermanentEmployee()
@@ -21,7 +21,7 @@
                 ContractType = "Permanent",
                 Salary = 35000,
                 Bonus = 1000,
-                HoursWorked = 35
+                HoursWorked = 1820
             }
         };
 
@@ -29,11 +29,11 @@
         {
             new TemporaryEmployee()
             {
-                Name = "Jeff Burns",
+                Name = "Matt Burns",
                 Id = 003,
                 ContractType = "Temporary",
-                DayRate = 200,
-                WeeksWorked = 42
+                DayRate = 250,
+                WeeksWorked = 48
             },
 
             new TemporaryEmployee()
@@ -42,33 +42,40 @@
                 Id = 004,
                 ContractType = "Temporary",
                 DayRate = 250,
-                WeeksWorked = 38
+                WeeksWorked = 48
             }
         };
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit\n");
-            string? option = Console.ReadLine();
-
-            switch (option)
+            bool quitApp = false;
+            do
             {
-                case "1":
-                    GetAllInfo();
-                    break;
-                case "2":
-                    GetEmployee();
-                    break;
-                case "3":
-                    return;
-                default:
-                    Console.WriteLine("\nInvalid input!");
-                    break;
-            }
+                Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit\n");
+                string? option = Console.ReadLine();
+
+                switch (option)
+                {
+                    case "1":
+                        GetAllInfo();
+                        break;
+                    case "2":
+                        GetEmployee();
+                        break;
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("\nInvalid input!");
+                        break;
+                }
+            } while (!quitApp);
         }
 
         static void GetAllInfo()
         {
+            Console.Clear();
+
             foreach (var permanentEmployee in _permanentEmployees)
             {
                 PrintDetails(permanentEmployee);
@@ -78,6 +85,9 @@
             {
                 PrintDetails(temporaryEmployee);
             }
+
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
         }
 
         static void GetEmployee()
@@ -102,7 +112,21 @@
                 if (validID == permanentEmployee.Id)
                 {
                     PrintDetails(permanentEmployee);
-                    return;
+                    Console.WriteLine($"\nWould you like to view {permanentEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                    string? option = Console.ReadLine();
+
+                    switch (option)
+                    {
+                        case "1":
+                            Console.WriteLine(Math.Round(permanentEmployee.Salary + permanentEmployee.Bonus, 2));
+                            break;
+                        case "2":
+                            Console.WriteLine(Math.Round(permanentEmployee.Salary / permanentEmployee.HoursWorked, 2));
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input!");
+                            break;
+                    }
                 }
             }
 
@@ -111,7 +135,21 @@
                 if (validID == temporaryEmployee.Id)
                 {
                     PrintDetails(temporaryEmployee);
-                    return;
+                    Console.WriteLine($"\nWould you like to view {temporaryEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                    string? option = Console.ReadLine();
+
+                    switch (option)
+                    {
+                        case "1":
+                            Console.WriteLine(Math.Round(temporaryEmployee.DayRate * 5 * temporaryEmployee.WeeksWorked, 2));
+                            break;
+                        case "2":
+                            Console.WriteLine(Math.Round(temporaryEmployee.DayRate / 7, 2));
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input!");
+                            break;
+                    }
                 }
             }
         }
