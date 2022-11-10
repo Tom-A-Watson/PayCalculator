@@ -2,14 +2,14 @@
 {
     public class PermPayCalc : PermanentEmployee
     {
-        public decimal TotalAnnualPay()
+        public decimal TotalAnnualPay(decimal Salary, decimal Bonus)
         {
             return Salary + Bonus;
         }
 
-        public decimal HourlyRate()
+        public decimal HourlyRate(decimal Salary, int HoursWorked)
         {
-            return Salary / 1820;
+            return Salary / HoursWorked;
         }
     }
 }
