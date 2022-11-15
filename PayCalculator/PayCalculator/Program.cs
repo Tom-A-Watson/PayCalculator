@@ -49,7 +49,7 @@
         static void Main(string[] args)
         {
             bool quitApp = false;
-            do
+            while (!quitApp)
             {
                 Console.WriteLine("Enter 1 to get all employee information \nEnter 2 to get a single employee's information \nEnter 3 to exit\n");
                 string? option = Console.ReadLine();
@@ -69,7 +69,10 @@
                         Console.WriteLine("\nInvalid input!");
                         break;
                 }
-            } while (!quitApp);
+
+                Console.WriteLine("\nPress enter to continue");
+                Console.ReadLine();
+            }
         }
 
         static void GetAllInfo()
@@ -85,13 +88,11 @@
             {
                 PrintDetails(temporaryEmployee);
             }
-
-            Console.WriteLine("Press enter to continue");
-            Console.ReadLine();
         }
 
         static void GetEmployee()
         {
+            Console.Clear();
             Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
             var idInput = Console.ReadLine()!;
             bool idIsInvalid = !Int32.TryParse(idInput, out int validID);
@@ -104,7 +105,7 @@
 
             if (validID < 1 || validID > _permanentEmployees.Count + _temporaryEmployees.Count)
             {
-                Console.WriteLine("\nInvalid ID! Please enter a valid one");
+                Console.WriteLine("\nID not found! Please enter a valid ID");
             }
 
             foreach (var permanentEmployee in _permanentEmployees)
@@ -114,18 +115,20 @@
                     PrintDetails(permanentEmployee);
                     Console.WriteLine($"\nWould you like to view {permanentEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
                     string? option = Console.ReadLine();
-                    PermPayCalc permanentPayCalculator = new PermPayCalc();
+                    PermPayCalc permEmployeePayCalculator = new();
 
                     switch (option)
                     {
                         case "1":
-                            Console.WriteLine(Math.Round(permanentPayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2));
+                            Console.WriteLine($"\n{permanentEmployee.Name}'s salary is: £" +
+                                $"{Math.Round(permEmployeePayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2)}");
                             break;
                         case "2":
-                            Console.WriteLine(Math.Round(permanentEmployee.Salary / permanentEmployee.HoursWorked, 2));
+                            Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" + 
+                                $"{Math.Round(permanentEmployee.Salary / permanentEmployee.HoursWorked, 2)}");
                             break;
                         default:
-                            Console.WriteLine("Invalid input!");
+                            Console.WriteLine("\nInvalid input!");
                             break;
                     }
                 }
@@ -138,17 +141,20 @@
                     PrintDetails(temporaryEmployee);
                     Console.WriteLine($"\nWould you like to view {temporaryEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
                     string? option = Console.ReadLine();
+                    TempPayCalc tempEmployeePayCalculator = new();
 
                     switch (option)
                     {
                         case "1":
-                            Console.WriteLine(Math.Round(temporaryEmployee.DayRate * 5 * temporaryEmployee.WeeksWorked, 2));
+                            Console.WriteLine($"\n{temporaryEmployee.Name}'s salary is: £" + 
+                                $"{Math.Round(tempEmployeePayCalculator.TotalAnnualPay(temporaryEmployee.DayRate, temporaryEmployee.WeeksWorked), 2)}");
                             break;
                         case "2":
-                            Console.WriteLine(Math.Round(temporaryEmployee.DayRate / 7, 2));
+                            Console.WriteLine($"\n{temporaryEmployee.Name}'s hourly rate is: £" + 
+                                $"{Math.Round(tempEmployeePayCalculator.HourlyRate(temporaryEmployee.DayRate), 2)}");
                             break;
                         default:
-                            Console.WriteLine("Invalid input!");
+                            Console.WriteLine("\nInvalid input!");
                             break;
                     }
                 }
