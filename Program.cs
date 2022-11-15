@@ -114,11 +114,12 @@
                     PrintDetails(permanentEmployee);
                     Console.WriteLine($"\nWould you like to view {permanentEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
                     string? option = Console.ReadLine();
+                    PermPayCalc permanentPayCalculator = new PermPayCalc();
 
                     switch (option)
                     {
                         case "1":
-                            Console.WriteLine(Math.Round(permanentEmployee.Salary + permanentEmployee.Bonus, 2));
+                            Console.WriteLine(Math.Round(permanentPayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2));
                             break;
                         case "2":
                             Console.WriteLine(Math.Round(permanentEmployee.Salary / permanentEmployee.HoursWorked, 2));
