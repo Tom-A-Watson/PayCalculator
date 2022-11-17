@@ -125,7 +125,7 @@
                             break;
                         case "2":
                             Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" + 
-                                $"{Math.Round(permanentEmployee.Salary / permanentEmployee.HoursWorked, 2)}");
+                                $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary, permanentEmployee.HoursWorked), 2)}");
                             break;
                         default:
                             Console.WriteLine("\nInvalid input!");
