@@ -1,4 +1,4 @@
-﻿namespace PayCalculator
+﻿namespace PayCalculator.Models
 {
     public class TemporaryEmployee : Employee
     {

@@ -1,30 +1,10 @@
-﻿namespace PayCalculator
+﻿using PayCalculator.Models;
+using PayCalculator.Services;
+
+namespace PayCalculator
 {
     class Program
     {
-        public static List<PermanentEmployee> _permanentEmployees = new List<PermanentEmployee>()
-        {
-            new PermanentEmployee()
-            {
-                Name = "Joe Bloggs",
-                Id = 001,
-                ContractType = "Permanent",
-                Salary = 25000,
-                Bonus = 2500,
-                HoursWorked = 1820
-            },
-
-            new PermanentEmployee()
-            {
-                Name = "John Smith",
-                Id = 002,
-                ContractType = "Permanent",
-                Salary = 35000,
-                Bonus = 1000,
-                HoursWorked = 1820
-            }
-        };
-
         public static List<TemporaryEmployee> _temporaryEmployees = new List<TemporaryEmployee>()
         {
             new TemporaryEmployee()

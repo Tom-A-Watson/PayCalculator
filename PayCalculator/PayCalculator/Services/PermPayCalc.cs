@@ -1,4 +1,4 @@
-﻿namespace PayCalculator
+﻿namespace PayCalculator.Services
 {
     public class PermPayCalc
     {
