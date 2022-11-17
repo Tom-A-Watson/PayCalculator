@@ -1,13 +1,13 @@
 ﻿    namespace PayCalculator
 {
-    public class TempPayCalc : TemporaryEmployee
+    public class TempPayCalc
     {
-        public decimal TotalAnnualPay()
+        public decimal TotalAnnualPay(decimal DayRate, int WeeksWorked)
         {
             return DayRate * 5 * WeeksWorked;
         }
 
-        public decimal HourlyRate()
+        public decimal HourlyRate(decimal DayRate)
         {
             return DayRate / 7;
         }
