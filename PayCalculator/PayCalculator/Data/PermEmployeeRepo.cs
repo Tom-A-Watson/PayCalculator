@@ -32,29 +32,55 @@ namespace PayCalculator.Data
             };
         }
 
-        public PermanentEmployee Create(PermanentEmployee Employee)
+        public PermanentEmployee Create(PermanentEmployee employee)
         {
-            throw new NotImplementedException();
+            PermanentEmployee newEmployee = new();
+            Random r = new();
+
+            newEmployee.Id = r.Next(3, 1000);
+            newEmployee.Name = employee.Name;
+            newEmployee.Salary = employee.Salary;
+            newEmployee.Bonus = employee.Bonus;
+            newEmployee.HoursWorked = employee.HoursWorked;
+            _permanentEmployeeList.Add(newEmployee);
+            return newEmployee;
+        }
+
+        public PermanentEmployee GetEmployee(int id)    // Read
+        {
+            var employee = _permanentEmployeeList.SingleOrDefault(x => x.Id == id);
+            return employee!;
+        }
+
+        public PermanentEmployee? Update(PermanentEmployee employee)
+        {
+            int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
+
+            if (index < 0 || index > _permanentEmployeeList.Count)
+            {
+                return null;
+            }
+            else
+            {
+                _permanentEmployeeList[index].Name = employee.Name;
+                _permanentEmployeeList[index].Salary = employee.Salary;
+                _permanentEmployeeList[index].Bonus = employee.Bonus;
+                _permanentEmployeeList[index].HoursWorked = employee.HoursWorked;
+            }
+
+            var Employee = GetEmployee(employee.Id);
+            return Employee;
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            _permanentEmployeeList.Remove(GetEmployee(id));
+            return true;
         }
 
-        public IEnumerable<PermanentEmployee> GetAll()
+        public IEnumerable<PermanentEmployee> GetAll()  
         {
             return _permanentEmployeeList;
-        }
-
-        public PermanentEmployee GetEmployee(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PermanentEmployee Update(PermanentEmployee Employee)
-        {
-            throw new NotImplementedException();
         }
     }
 }

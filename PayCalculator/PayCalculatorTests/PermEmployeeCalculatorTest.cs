@@ -1,4 +1,4 @@
-using PayCalculator;
+using PayCalculator.Services;
 
 namespace PayCalculatorTest
 {
