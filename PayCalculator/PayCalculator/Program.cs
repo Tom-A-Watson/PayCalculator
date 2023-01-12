@@ -263,7 +263,7 @@ namespace PayCalculator
                 }
 
                 Console.WriteLine(permanentEmployee);
-                Console.WriteLine($"Would you like to view {permanentEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                Console.WriteLine($"Would you like to view {permanentEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
                 PermanentPayCalculator permEmployeePayCalculator = new();
 
                 switch (Console.ReadLine())
@@ -294,7 +294,7 @@ namespace PayCalculator
                 }
 
                 Console.WriteLine(temporaryEmployee);
-                Console.WriteLine($"Would you like to view {temporaryEmployee.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                Console.WriteLine($"Would you like to view {temporaryEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
                 TemporaryPayCalculator tempEmployeePayCalculator = new();
 
                 switch (Console.ReadLine())

@@ -4,9 +4,9 @@ namespace PayCalculator.Repositories
 {
     public class PermanentEmployeeRepository : IEmployeeRepository<PermanentEmployee>
     {
-        public List<PermanentEmployee> _permanentEmployeeList;
+        private List<PermanentEmployee> _permanentEmployeeList;
 
-        private PermanentEmployeeRepository()
+        public PermanentEmployeeRepository()
         {
             _permanentEmployeeList = new List<PermanentEmployee>()
             {

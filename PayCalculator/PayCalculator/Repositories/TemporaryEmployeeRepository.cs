@@ -6,7 +6,7 @@ namespace PayCalculator.Repositories
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
         
-        private TemporaryEmployeeRepository()
+        public TemporaryEmployeeRepository()
         {
             _temporaryEmployeeList = new List<TemporaryEmployee>()
             {
