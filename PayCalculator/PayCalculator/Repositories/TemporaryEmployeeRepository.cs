@@ -2,11 +2,11 @@
 
 namespace PayCalculator.Repositories
 {
-    public class TemporaryEmployeeRepository : IEmployeeRepo<TemporaryEmployee>
+    public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
         
-        public TemporaryEmployeeRepository()
+        private TemporaryEmployeeRepository()
         {
             _temporaryEmployeeList = new List<TemporaryEmployee>()
             {

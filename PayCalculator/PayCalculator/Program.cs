@@ -6,8 +6,8 @@ namespace PayCalculator
 {
     class Program
     {
-        private static IEmployeeRepo<PermanentEmployee> _permEmployeeRepo = new PermanentEmployeeRepository();
-        private static IEmployeeRepo<TemporaryEmployee> _tempEmployeeRepo = new TemporaryEmployeeRepository();
+        private static IEmployeeRepository<PermanentEmployee> _permEmployeeRepo = new PermanentEmployeeRepository();
+        private static IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo = new TemporaryEmployeeRepository();
         private static string error = "\nNon-numerical input is invalid! Please enter a number";
 
         static void Main(string[] args)
