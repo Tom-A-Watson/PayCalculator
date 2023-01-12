@@ -7,7 +7,7 @@
 
         public override string ToString()
         {
-            return $"\nID: {Id} \nName: {Name} \nContract Type: {ContractType} \nDay Rate: {DayRate} \nWeeks Worked: {WeeksWorked}\n";
+            return $"\nID: {Id} \nName: {Name} \nContract Type: {ContractType.Temporary} \nDay Rate: {DayRate} \nWeeks Worked: {WeeksWorked}" + "\n";
         }
     }
 }

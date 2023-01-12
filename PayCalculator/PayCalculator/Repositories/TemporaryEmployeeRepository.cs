@@ -1,12 +1,12 @@
 ﻿using PayCalculator.Models;
 
-namespace PayCalculator.Data
+namespace PayCalculator.Repositories
 {
-    public class TempEmployeeRepo : IEmployeeRepo<TemporaryEmployee>
+    public class TemporaryEmployeeRepository : IEmployeeRepo<TemporaryEmployee>
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
         
-        public TempEmployeeRepo()
+        public TemporaryEmployeeRepository()
         {
             _temporaryEmployeeList = new List<TemporaryEmployee>()
             {
@@ -14,7 +14,7 @@ namespace PayCalculator.Data
                 {
                     Name = "Matt Burns",
                     Id = 003,
-                    ContractType = "Temporary",
+                    Contract = ContractType.Temporary,
                     DayRate = 250,
                     WeeksWorked = 48
                 },
@@ -23,7 +23,7 @@ namespace PayCalculator.Data
                 {
                     Name = "Emily Sanders",
                     Id = 004,
-                    ContractType = "Temporary",
+                    Contract = ContractType.Temporary,
                     DayRate = 250,
                     WeeksWorked = 48
                 }
@@ -32,20 +32,18 @@ namespace PayCalculator.Data
 
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
-            TemporaryEmployee newEmployee = new();
             Random r = new();
-
-            newEmployee.Id = r.Next(3, 1000);
-            newEmployee.Name = employee.Name;
-            newEmployee.DayRate = employee.DayRate;
-            newEmployee.WeeksWorked = employee.WeeksWorked;
-            return newEmployee;
+            
+            employee.Id = r.Next(5, 1000);
+            employee.Contract = ContractType.Temporary;
+            _temporaryEmployeeList.Add(employee);
+            return employee;
         }
 
-        public TemporaryEmployee GetEmployee(int id)    // Read
+        public TemporaryEmployee GetEmployee(int id)
         {
             var employee = _temporaryEmployeeList.SingleOrDefault(x => x.Id == id);
-            return employee;
+            return employee!;
         }
 
         public TemporaryEmployee? Update(TemporaryEmployee employee)
@@ -63,14 +61,23 @@ namespace PayCalculator.Data
                 _temporaryEmployeeList[index].WeeksWorked = employee.WeeksWorked;
             }
 
-            var Employee = GetEmployee(employee.Id);
-            return Employee;
+            var updatedEmployee = GetEmployee(employee.Id);
+            return updatedEmployee;
         }
 
         public bool Delete(int id)
         {
-            _temporaryEmployeeList.Remove(GetEmployee(id));
-            return true;
+            var employee = GetEmployee(id);
+
+            if (GetEmployee(id) == null)
+            {
+                return false;
+            }
+            else
+            {
+                _temporaryEmployeeList.Remove(employee);
+                return true;
+            }
         }
 
         public IEnumerable<TemporaryEmployee> GetAll()

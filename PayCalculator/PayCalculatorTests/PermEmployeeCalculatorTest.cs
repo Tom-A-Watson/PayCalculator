@@ -8,17 +8,23 @@ namespace PayCalculatorTest
         [Test]
         public void PermTotalPayIsCalculated()
         {
-            var calculator = new PermPayCalc(); // Arrange
-            var total = calculator.TotalAnnualPay(10000, 1000); // Act
-            Assert.That(total, Is.EqualTo(11000)); // Assert
+            // Arrange
+            var calculator = new PermanentPayCalculator();
+            // Act
+            var total = calculator.TotalAnnualPay(10000, 1000);
+            // Assert
+            Assert.That(total, Is.EqualTo(11000)); 
         }
 
         [Test]
         public void PermHourlyRateIsCalculated()
         {
-            var calculator = new PermPayCalc(); // Arrange
-            var hourlyRate = calculator.HourlyRate(10000, 200); // Act
-            Assert.That(hourlyRate, Is.EqualTo(50)); // Assert
+            // Arrange
+            var calculator = new PermanentPayCalculator(); 
+            // Act
+            var hourlyRate = calculator.HourlyRate(10000, 200); 
+            // Assert
+            Assert.That(hourlyRate, Is.EqualTo(50)); 
         }
     }
 }

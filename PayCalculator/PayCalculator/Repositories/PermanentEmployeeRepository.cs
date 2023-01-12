@@ -1,12 +1,12 @@
 ﻿using PayCalculator.Models;
 
-namespace PayCalculator.Data
+namespace PayCalculator.Repositories
 {
-    public class PermEmployeeRepo : IEmployeeRepo<PermanentEmployee>
+    public class PermanentEmployeeRepository : IEmployeeRepo<PermanentEmployee>
     {
         public List<PermanentEmployee> _permanentEmployeeList;
 
-        public PermEmployeeRepo()
+        public PermanentEmployeeRepository()
         {
             _permanentEmployeeList = new List<PermanentEmployee>()
             {
@@ -14,8 +14,8 @@ namespace PayCalculator.Data
                 {
                     Name = "Joe Bloggs",
                     Id = 001,
-                    ContractType = "Permanent",
                     Salary = 25000,
+                    Contract = ContractType.Permanent,
                     Bonus = 2500,
                     HoursWorked = 1820
                 },
@@ -24,8 +24,8 @@ namespace PayCalculator.Data
                 {
                     Name = "John Smith",
                     Id = 002,
-                    ContractType = "Permanent",
                     Salary = 35000,
+                    Contract = ContractType.Permanent,
                     Bonus = 1000,
                     HoursWorked = 1820
                 }
@@ -34,19 +34,15 @@ namespace PayCalculator.Data
 
         public PermanentEmployee Create(PermanentEmployee employee)
         {
-            PermanentEmployee newEmployee = new();
             Random r = new();
 
-            newEmployee.Id = r.Next(3, 1000);
-            newEmployee.Name = employee.Name;
-            newEmployee.Salary = employee.Salary;
-            newEmployee.Bonus = employee.Bonus;
-            newEmployee.HoursWorked = employee.HoursWorked;
-            _permanentEmployeeList.Add(newEmployee);
-            return newEmployee;
+            employee.Id = r.Next(3, 1000);
+            employee.Contract = ContractType.Permanent;
+            _permanentEmployeeList.Add(employee);
+            return employee;
         }
 
-        public PermanentEmployee GetEmployee(int id)    // Read
+        public PermanentEmployee GetEmployee(int id)
         {
             var employee = _permanentEmployeeList.SingleOrDefault(x => x.Id == id);
             return employee!;
@@ -68,14 +64,23 @@ namespace PayCalculator.Data
                 _permanentEmployeeList[index].HoursWorked = employee.HoursWorked;
             }
 
-            var Employee = GetEmployee(employee.Id);
-            return Employee;
+            var updatedEmployee = GetEmployee(employee.Id);
+            return updatedEmployee;
         }
 
         public bool Delete(int id)
         {
-            _permanentEmployeeList.Remove(GetEmployee(id));
-            return true;
+            var employee = GetEmployee(id);
+            
+            if (GetEmployee(id) == null)
+            {
+                return false;
+            }
+            else
+            {
+                _permanentEmployeeList.Remove(employee);
+                return true;
+            }
         }
 
         public IEnumerable<PermanentEmployee> GetAll()  

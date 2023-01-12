@@ -1,4 +1,4 @@
-﻿namespace PayCalculator.Data
+﻿namespace PayCalculator.Repositories
 {
     public interface IEmployeeRepo<T>
     {
