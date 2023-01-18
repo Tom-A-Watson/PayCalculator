@@ -40,10 +40,10 @@ namespace PayCalculator.Repositories
             return employee;
         }
 
-        public TemporaryEmployee GetEmployee(int id)
+        public TemporaryEmployee? GetEmployee(int id)
         {
             var employee = _temporaryEmployeeList.SingleOrDefault(x => x.Id == id);
-            return employee!;
+            return employee;
         }
 
         public TemporaryEmployee? Update(TemporaryEmployee employee)

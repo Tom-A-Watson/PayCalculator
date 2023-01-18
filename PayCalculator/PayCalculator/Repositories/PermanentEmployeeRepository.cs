@@ -42,10 +42,10 @@ namespace PayCalculator.Repositories
             return employee;
         }
 
-        public PermanentEmployee GetEmployee(int id)
+        public PermanentEmployee? GetEmployee(int id)
         {
             var employee = _permanentEmployeeList.SingleOrDefault(x => x.Id == id);
-            return employee!;
+            return employee;
         }
 
         public PermanentEmployee? Update(PermanentEmployee employee)
