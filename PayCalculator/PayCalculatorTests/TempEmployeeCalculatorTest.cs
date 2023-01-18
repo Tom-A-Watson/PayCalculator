@@ -1,6 +1,6 @@
-﻿using PayCalculator;
+﻿using PayCalculator.Services;
 
-namespace PayCalculatorTests
+namespace PayCalculatorTest
 {
     [TestFixture]
     public class TempEmployeeCalculatorTest
@@ -8,17 +8,23 @@ namespace PayCalculatorTests
         [Test]
         public void TempTotalPayIsCalculated()
         {
-            var calculator = new TempPayCalc(); // Arrange
-            var total = calculator.TotalAnnualPay(500, 40); // Act
-            Assert.That(total, Is.EqualTo(100000)); // Assert
+            // Arrange
+            var calculator = new TemporaryPayCalculator();
+            // Act
+            var total = calculator.TotalAnnualPay(500, 40); 
+            // Assert
+            Assert.That(total, Is.EqualTo(100000)); 
         }
 
         [Test]
         public void TempHourlyRateIsCalculated()
         {
-            var calculator = new TempPayCalc(); // Arrange
-            var hourlyRate = calculator.HourlyRate(350); // Act
-            Assert.That(hourlyRate, Is.EqualTo(50)); // Assert
+            // Arrange
+            var calculator = new TemporaryPayCalculator(); 
+            // Act
+            var hourlyRate = calculator.HourlyRate(350); 
+            // Assert
+            Assert.That(hourlyRate, Is.EqualTo(50)); 
         }
     }
 }

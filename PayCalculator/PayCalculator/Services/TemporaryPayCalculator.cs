@@ -1,6 +1,6 @@
-﻿    namespace PayCalculator
+﻿namespace PayCalculator.Services
 {
-    public class TempPayCalc
+    public class TemporaryPayCalculator
     {
         public decimal TotalAnnualPay(decimal DayRate, int WeeksWorked)
         {
