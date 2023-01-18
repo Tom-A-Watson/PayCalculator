@@ -8,7 +8,10 @@ namespace PayCalculator
     {
         private static IEmployeeRepository<PermanentEmployee> _permEmployeeRepo = new PermanentEmployeeRepository();
         private static IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo = new TemporaryEmployeeRepository();
-        private static string error = "\nNon-numerical input is invalid! Please enter a number";
+        private static string enterID = "\nEnter the ID of the employee you would like to ";
+        private static string confirmationDeclined = "\nConfirmation was declined, returning to the main menu";
+        private static string nonNumericalError = "\nNon-numerical input is invalid! Please enter a number";
+        private static string nullInputError = "The confirmation was left blank, returning to the main menu";
 
         static void Main(string[] args)
         {
@@ -55,37 +58,54 @@ namespace PayCalculator
             Console.Clear();
             Console.WriteLine("\nWould you like to delete [1] a permanent or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            string idRequest = "\nEnter the ID of the employee you would like to delete\n";
-            string confirmation = "Please confirm that you want to delete this entry (Y/N)\n";
-            string deleted = "\nThe employee has been deleted";
+            string confirmation = "\nPlease confirm that you want to delete this entry (Y/N)\n";
+            string deleted = " has been deleted from the database";
 
             if (option == "1")
             {
-                Console.WriteLine(idRequest);
-                var employeeID = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_permEmployeeRepo.GetEmployee(employeeID));
-                Console.WriteLine(confirmation);
+                Console.WriteLine(enterID + "delete\n");
+                var id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(_permEmployeeRepo.GetEmployee(id) + confirmation);
                 var input = Console.ReadLine()!.ToUpper();
 
                 if (input == "Y" || input == "YES")
                 {
-                    _permEmployeeRepo.Delete(employeeID);
-                    Console.WriteLine(deleted);
+                    Console.WriteLine("\n" + _permEmployeeRepo.GetEmployee(id)!.Name + deleted);
+                    _permEmployeeRepo.Delete(id);
+                    return;
+                }
+                else if (input == "N" || input == "NO")
+                {
+                    Console.WriteLine(confirmationDeclined);
+                    return;
+                } 
+                else if (input == "")
+                {
+                    Console.WriteLine(nullInputError);
                     return;
                 }
             }
             else if (option == "2")
             {
-                Console.WriteLine(idRequest);
-                var employeeID = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_tempEmployeeRepo.GetEmployee(employeeID));
-                Console.WriteLine(confirmation);
+                Console.WriteLine(enterID + "delete\n");
+                var id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(_tempEmployeeRepo.GetEmployee(id) + confirmation);
                 var input = Console.ReadLine()!.ToUpper();
 
                 if (input == "Y" || input == "YES")
                 {
-                    _tempEmployeeRepo.Delete(employeeID);
-                    Console.WriteLine(deleted);
+                    Console.WriteLine("\n" + _tempEmployeeRepo.GetEmployee(id)!.Name + deleted);
+                    _tempEmployeeRepo.Delete(id);
+                    return;
+                }
+                else if (input == "N" || input == "NO")
+                {
+                    Console.WriteLine(confirmationDeclined);
+                    return;
+                }
+                else if (input == "")
+                {
+                    Console.WriteLine(nullInputError);
                     return;
                 }
             }
@@ -96,7 +116,7 @@ namespace PayCalculator
             Console.Clear();
             Console.WriteLine("\nWould you like to create [1] a permanent or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            string confirmation = "\nThe new entry is as follows:";
+            string confirmation = "\nThe new entry is as follows:\n";
             
             if (option == "1")
             {
@@ -109,7 +129,7 @@ namespace PayCalculator
                 permanentEmployee.Bonus = Convert.ToDecimal(Console.ReadLine());
                 Console.WriteLine("\nEnter the amount of hours the new employee has worked");
                 permanentEmployee.HoursWorked = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(confirmation + "\n" + _permEmployeeRepo.Create(permanentEmployee));
+                Console.WriteLine(confirmation + _permEmployeeRepo.Create(permanentEmployee));
             }
             else if (option == "2")
             {
@@ -120,7 +140,7 @@ namespace PayCalculator
                 temporaryEmployee.DayRate = Convert.ToDecimal(Console.ReadLine());
                 Console.WriteLine("\nEnter the number of weeks this employee has worked");
                 temporaryEmployee.WeeksWorked = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(confirmation + "\n" + _tempEmployeeRepo.Create(temporaryEmployee));
+                Console.WriteLine(confirmation + _tempEmployeeRepo.Create(temporaryEmployee));
             }
         }
 
@@ -128,22 +148,21 @@ namespace PayCalculator
         {
             Console.Clear();
             Console.WriteLine("\nWould you like to update [1] a permanent employee or [2] a temporary employee?\n");
-            var enterID = "\nEnter the ID of the employee you would like to update\n";
             var option = Console.ReadLine();
+            string selectField = "\nPlease select the field you would like to update";
+            string confirmation = "\nPlease confirm that you want to update this entry (Y/N)\n";
             string updated = "\nThe field has been updated";
 
             if (option == "1")
             {
-                Console.WriteLine(enterID);
+                Console.WriteLine(enterID + "update\n");
                 var id = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_permEmployeeRepo.GetEmployee(id));
-                Console.WriteLine("Please confirm that you want to update this entry (Y/N)\n");
-                var permConfirmation = Console.ReadLine()!;
+                Console.WriteLine(_permEmployeeRepo.GetEmployee(id) + confirmation);
+                var permConfirmation = Console.ReadLine()!.ToUpper();
 
-                if (permConfirmation.ToUpper() == "Y" || permConfirmation.ToUpper() == "YES")
+                if (permConfirmation == "Y" || permConfirmation == "YES")
                 {
-                    Console.WriteLine("\nPlease select the field you would like to update");
-                    Console.WriteLine("1: Name    2: Annual Salary    3: Annual Bonus    4: Hours Worked\n");
+                    Console.WriteLine(selectField + "\n1: Name    2: Annual Salary    3: Annual Bonus    4: Hours Worked\n");
                     var input = Console.ReadLine();
                     var permEmployee = _permEmployeeRepo.GetEmployee(id);
 
@@ -152,52 +171,62 @@ namespace PayCalculator
                         case "1":
                             Console.WriteLine("\nEnter the new name\n");
                             var updatedName = Console.ReadLine();
-                            permEmployee.Name = updatedName!;
+                            permEmployee!.Name = updatedName!;
                             _permEmployeeRepo.Update(permEmployee);
                             break;
                         case "2":
                             Console.WriteLine("\nEnter the new annual salary\n");
-                            bool salaryIsInvalid = !decimal.TryParse(Console.ReadLine(), out decimal validSalary);
-                            
-                            if (salaryIsInvalid)
+                            bool salaryIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedSalary);
+
+                            if (salaryIsNotNumerical)
                             {
-                                Console.WriteLine(error);
+                                Console.WriteLine(nonNumericalError);
                                 return;
                             }
 
-                            permEmployee.Salary = validSalary;
+                            permEmployee!.Salary = updatedSalary;
                             _permEmployeeRepo.Update(permEmployee);
                             break;
                         case "3":
                             Console.WriteLine("\nEnter the new annual bonus\n");
-                            var updatedBonus = Convert.ToDecimal(Console.ReadLine());
-                            permEmployee.Bonus = updatedBonus;
+                            bool bonusIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedBonus);
+                            
+                            if (bonusIsNotNumerical)
+                            {
+                                Console.WriteLine(nonNumericalError);
+                                return;
+                            }
+
+                            permEmployee!.Bonus = updatedBonus;
                             _permEmployeeRepo.Update(permEmployee);
                             break;
                         case "4":
                             Console.WriteLine("\nEnter the new number of hours worked\n");
                             var updatedHoursWorked = Convert.ToInt32(Console.ReadLine());
-                            permEmployee.HoursWorked = updatedHoursWorked;
+                            permEmployee!.HoursWorked = updatedHoursWorked;
                             _permEmployeeRepo.Update(permEmployee);
                             break;
                     }
+
                     Console.WriteLine(updated);
+                    return;
+                }
+                else if (permConfirmation == "")
+                {
+                    Console.WriteLine(nullInputError);
                     return;
                 }
             }
             else if (option == "2")
             {
-                Console.WriteLine(enterID);
+                Console.WriteLine(enterID + "update\n");
                 var id = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_tempEmployeeRepo.GetEmployee(id));
-                Console.WriteLine("Please confirm that you want to update this entry (Y/N)\n");
-                var tempConfirmation = Console.ReadLine()!;
-                
+                Console.WriteLine(_tempEmployeeRepo.GetEmployee(id) + confirmation);
+                var tempConfirmation = Console.ReadLine()!.ToUpper()!;
 
-                if (tempConfirmation.ToUpper() == "Y" || tempConfirmation.ToUpper() == "YES")
+                if (tempConfirmation == "Y" || tempConfirmation == "YES")
                 {
-                    Console.WriteLine("\nPlease select the field you would like to update");
-                    Console.WriteLine("1: Name    2: Day Rate    3: Weeks Worked\n");
+                    Console.WriteLine(selectField + "\n1: Name    2: Day Rate    3: Weeks Worked\n");
                     var input = Console.ReadLine();
                     var tempEmployee = _tempEmployeeRepo.GetEmployee(id);
 
@@ -206,30 +235,36 @@ namespace PayCalculator
                         case "1":
                             Console.WriteLine("\nEnter the new name\n");
                             var updatedName = Console.ReadLine();
-                            tempEmployee.Name = updatedName!;
+                            tempEmployee!.Name = updatedName!;
                             _tempEmployeeRepo.Update(tempEmployee);
                             break;
                         case "2":
                             Console.WriteLine("\nEnter the new day rate\n");
-                            bool salaryIsInvalid = !decimal.TryParse(Console.ReadLine(), out decimal validDayRate);
-
-                            if (salaryIsInvalid)
+                            bool dayRateIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedDayRate);
+                            
+                            if (dayRateIsNotNumerical)
                             {
-                                Console.WriteLine(error);
+                                Console.WriteLine(nonNumericalError);
                                 return;
                             }
 
-                            tempEmployee.DayRate = validDayRate;
+                            tempEmployee!.DayRate = updatedDayRate;
                             _tempEmployeeRepo.Update(tempEmployee);
                             break;
                         case "3":
                             Console.WriteLine("\nEnter the new number of weeks worked\n");
                             var updatedWeeksWorked = Convert.ToInt32(Console.ReadLine());
-                            tempEmployee.WeeksWorked = updatedWeeksWorked;
+                            tempEmployee!.WeeksWorked = updatedWeeksWorked;
                             _tempEmployeeRepo.Update(tempEmployee);
                             break;
                     }
+                    
                     Console.WriteLine(updated);
+                    return;
+                }
+                else if (tempConfirmation == "")
+                {
+                    Console.WriteLine(nullInputError);
                     return;
                 }
             }
@@ -238,10 +273,8 @@ namespace PayCalculator
         static void GetAllInfo()
         {
             Console.Clear();
-            Console.WriteLine("\n-=-=-=-=- Permanent Employees -=-=-=-=-");
-            Console.WriteLine(string.Concat(_permEmployeeRepo.GetAll()));
-            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-");
-            Console.WriteLine(string.Concat(_tempEmployeeRepo.GetAll()));
+            Console.WriteLine("-=-=-=-=- Permanent Employees -=-=-=-=-\n" + string.Concat(_permEmployeeRepo.GetAll()));
+            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-\n" + string.Concat(_tempEmployeeRepo.GetAll()));
         }
 
         static void GetEmployee()
@@ -252,18 +285,17 @@ namespace PayCalculator
 
             if (option == "1")
             {
-                Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
+                Console.WriteLine(enterID + "view\n");
                 bool idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
                 var permanentEmployee = _permEmployeeRepo.GetEmployee(validID);
                 
                 if (idIsInvalid)
                 {
-                    Console.WriteLine(error);
+                    Console.WriteLine(nonNumericalError);
                     return;
                 }
 
-                Console.WriteLine(permanentEmployee);
-                Console.WriteLine($"Would you like to view {permanentEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                Console.WriteLine(permanentEmployee + $"\nWould you like to view {permanentEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
                 PermanentPayCalculator permEmployeePayCalculator = new();
 
                 switch (Console.ReadLine())
@@ -283,18 +315,17 @@ namespace PayCalculator
             }
             else if (option == "2")
             {
-                Console.WriteLine("\nEnter the ID of the employee you would like to view\n");
+                Console.WriteLine(enterID + "view\n");
                 bool idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
                 var temporaryEmployee = _tempEmployeeRepo.GetEmployee(validID);
 
                 if (idIsInvalid)
                 {
-                    Console.WriteLine(error);
+                    Console.WriteLine(nonNumericalError);
                     return;
                 }
 
-                Console.WriteLine(temporaryEmployee);
-                Console.WriteLine($"Would you like to view {temporaryEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                Console.WriteLine(temporaryEmployee + $"\nWould you like to view {temporaryEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
                 TemporaryPayCalculator tempEmployeePayCalculator = new();
 
                 switch (Console.ReadLine())

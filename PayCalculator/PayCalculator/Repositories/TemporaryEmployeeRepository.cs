@@ -5,7 +5,7 @@ namespace PayCalculator.Repositories
     public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
-        
+
         public TemporaryEmployeeRepository()
         {
             _temporaryEmployeeList = new List<TemporaryEmployee>()
@@ -33,7 +33,7 @@ namespace PayCalculator.Repositories
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
             Random r = new();
-            
+
             employee.Id = r.Next(5, 1000);
             employee.Contract = ContractType.Temporary;
             _temporaryEmployeeList.Add(employee);
@@ -73,11 +73,9 @@ namespace PayCalculator.Repositories
             {
                 return false;
             }
-            else
-            {
-                _temporaryEmployeeList.Remove(employee);
-                return true;
-            }
+           
+            _temporaryEmployeeList.Remove(employee);
+            return true;
         }
 
         public IEnumerable<TemporaryEmployee> GetAll()

@@ -76,11 +76,9 @@ namespace PayCalculator.Repositories
             {
                 return false;
             }
-            else
-            {
-                _permanentEmployeeList.Remove(employee);
-                return true;
-            }
+           
+            _permanentEmployeeList.Remove(employee);
+            return true;
         }
 
         public IEnumerable<PermanentEmployee> GetAll()  
