@@ -1,6 +1,8 @@
-﻿namespace PayCalculator.Services
+﻿using PayCalculatorLibrary.Services;
+
+namespace PayCalculator.Services
 {
-    public class PermanentPayCalculator
+    public class PermanentPayCalculator : IPermanentPayCalculator
     {
         public decimal TotalAnnualPay(decimal Salary, decimal Bonus)
         {
