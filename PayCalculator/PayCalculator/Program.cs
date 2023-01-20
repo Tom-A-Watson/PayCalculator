@@ -8,19 +8,19 @@ namespace PayCalculator
     {
         private static IEmployeeRepository<PermanentEmployee> _permEmployeeRepo = new PermanentEmployeeRepository();
         private static IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo = new TemporaryEmployeeRepository();
-        private static string enterID = "\nEnter the ID of the employee you would like to ";
-        private static string confirmationDeclined = "\nConfirmation was declined, returning to the main menu";
-        private static string nonNumericalError = "\nNon-numerical input is invalid! Please enter a number";
-        private static string nullInputError = "The confirmation was left blank, returning to the main menu";
+        private static readonly string enterID = "\nEnter the ID of the employee you would like to ";
+        private static readonly string confirmationDeclined = "\nConfirmation was declined, returning to the main menu";
+        private static readonly string nonNumericalError = "\nNon-numerical input is invalid! Please enter a number";
+        private static readonly string nullInputError = "The confirmation was left blank, returning to the main menu";
+        private static readonly bool quitApp = false;
 
         static void Main(string[] args)
         {
-            bool quitApp = false;
             while (!quitApp)
             {
                 Console.WriteLine("Enter 1 to get all employee information\n \nEnter 2 to get a single employee's information\n \nEnter 3 to create a new employee\n" +
                     "\nEnter 4 to update an employee's details\n \nEnter 5 to delete an employee\n \nEnter 6 to exit\n");
-                string? option = Console.ReadLine();
+                var option = Console.ReadLine();
 
                 switch (option)
                 {
@@ -58,8 +58,8 @@ namespace PayCalculator
             Console.Clear();
             Console.WriteLine("\nWould you like to delete [1] a permanent or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            string confirmation = "\nPlease confirm that you want to delete this entry (Y/N)\n";
-            string deleted = " has been deleted from the database";
+            var confirmation = "\nPlease confirm that you want to delete this entry (Y/N)\n";
+            var deleted = " has been deleted from the database";
 
             if (option == "1")
             {
@@ -116,7 +116,7 @@ namespace PayCalculator
             Console.Clear();
             Console.WriteLine("\nWould you like to create [1] a permanent or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            string confirmation = "\nThe new entry is as follows:\n";
+            var confirmation = "\nThe new entry is as follows:\n";
             
             if (option == "1")
             {
@@ -149,9 +149,9 @@ namespace PayCalculator
             Console.Clear();
             Console.WriteLine("\nWould you like to update [1] a permanent employee or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            string selectField = "\nPlease select the field you would like to update";
-            string confirmation = "\nPlease confirm that you want to update this entry (Y/N)\n";
-            string updated = "\nThe field has been updated";
+            var selectField = "\nPlease select the field you would like to update";
+            var confirmation = "\nPlease confirm that you want to update this entry (Y/N)\n";
+            var updated = "\nThe field has been updated";
 
             if (option == "1")
             {
@@ -176,7 +176,7 @@ namespace PayCalculator
                             break;
                         case "2":
                             Console.WriteLine("\nEnter the new annual salary\n");
-                            bool salaryIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedSalary);
+                            var salaryIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedSalary);
 
                             if (salaryIsNotNumerical)
                             {
@@ -189,7 +189,7 @@ namespace PayCalculator
                             break;
                         case "3":
                             Console.WriteLine("\nEnter the new annual bonus\n");
-                            bool bonusIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedBonus);
+                            var bonusIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedBonus);
                             
                             if (bonusIsNotNumerical)
                             {
@@ -240,7 +240,7 @@ namespace PayCalculator
                             break;
                         case "2":
                             Console.WriteLine("\nEnter the new day rate\n");
-                            bool dayRateIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedDayRate);
+                            var dayRateIsNotNumerical = !decimal.TryParse(Console.ReadLine(), out decimal updatedDayRate);
                             
                             if (dayRateIsNotNumerical)
                             {
@@ -286,7 +286,7 @@ namespace PayCalculator
             if (option == "1")
             {
                 Console.WriteLine(enterID + "view\n");
-                bool idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
+                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
                 var permanentEmployee = _permEmployeeRepo.GetEmployee(validID);
                 
                 if (idIsInvalid)
@@ -316,7 +316,7 @@ namespace PayCalculator
             else if (option == "2")
             {
                 Console.WriteLine(enterID + "view\n");
-                bool idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
+                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
                 var temporaryEmployee = _tempEmployeeRepo.GetEmployee(validID);
 
                 if (idIsInvalid)
