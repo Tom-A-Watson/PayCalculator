@@ -53,60 +53,77 @@ namespace PayCalculator
             }
         }
 
-        static void DeleteEmployee()
+        static void GetAllInfo()
         {
             Console.Clear();
-            Console.WriteLine("\nWould you like to delete [1] a permanent or [2] a temporary employee?\n");
+            Console.WriteLine("-=-=-=-=- Permanent Employees -=-=-=-=-\n" + string.Concat(_permEmployeeRepo.GetAll()));
+            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-\n" + string.Concat(_tempEmployeeRepo.GetAll()));
+        }
+
+        static void GetEmployee()
+        {
+            Console.Clear();
+            Console.WriteLine("\nWoukd you like to view [1] a permanent employee or [2] a temporary employee?\n");
             var option = Console.ReadLine();
-            var confirmation = "\nPlease confirm that you want to delete this entry (Y/N)\n";
-            var deleted = " has been deleted from the database";
 
             if (option == "1")
             {
-                Console.WriteLine(enterID + "delete\n");
-                var id = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_permEmployeeRepo.GetEmployee(id) + confirmation);
-                var input = Console.ReadLine()!.ToUpper();
+                Console.WriteLine(enterID + "view\n");
+                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
+                var permanentEmployee = _permEmployeeRepo.GetEmployee(validID);
 
-                if (input == "Y" || input == "YES")
+                if (idIsInvalid)
                 {
-                    Console.WriteLine("\n" + _permEmployeeRepo.GetEmployee(id)!.Name + deleted);
-                    _permEmployeeRepo.Delete(id);
+                    Console.WriteLine(nonNumericalError);
                     return;
                 }
-                else if (input == "N" || input == "NO")
+
+                Console.WriteLine(permanentEmployee + $"\nWould you like to view {permanentEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                PermanentPayCalculator permEmployeePayCalculator = new();
+
+                switch (Console.ReadLine())
                 {
-                    Console.WriteLine(confirmationDeclined);
-                    return;
-                } 
-                else if (input == "")
-                {
-                    Console.WriteLine(nullInputError);
-                    return;
+                    case "1":
+                        Console.WriteLine($"\n{permanentEmployee.Name}'s salary is: £" +
+                        $"{Math.Round(permEmployeePayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2)}\n");
+                        break;
+                    case "2":
+                        Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" +
+                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary, permanentEmployee.HoursWorked), 2)}\n");
+                        break;
+                    default:
+                        Console.WriteLine("\nInvalid input!\n");
+                        break;
                 }
             }
             else if (option == "2")
             {
-                Console.WriteLine(enterID + "delete\n");
-                var id = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine(_tempEmployeeRepo.GetEmployee(id) + confirmation);
-                var input = Console.ReadLine()!.ToUpper();
+                Console.WriteLine(enterID + "view\n");
+                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
+                var temporaryEmployee = _tempEmployeeRepo.GetEmployee(validID);
 
-                if (input == "Y" || input == "YES")
+                if (idIsInvalid)
                 {
-                    Console.WriteLine("\n" + _tempEmployeeRepo.GetEmployee(id)!.Name + deleted);
-                    _tempEmployeeRepo.Delete(id);
+                    Console.WriteLine(nonNumericalError);
                     return;
                 }
-                else if (input == "N" || input == "NO")
+
+                Console.WriteLine(temporaryEmployee + $"\nWould you like to view {temporaryEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
+                TemporaryPayCalculator tempEmployeePayCalculator = new();
+
+                switch (Console.ReadLine())
                 {
-                    Console.WriteLine(confirmationDeclined);
-                    return;
-                }
-                else if (input == "")
-                {
-                    Console.WriteLine(nullInputError);
-                    return;
+                    case "1":
+                        Console.WriteLine($"\n{temporaryEmployee.Name}'s salary is: £" +
+                        $"{Math.Round(tempEmployeePayCalculator.TotalAnnualPay(temporaryEmployee.DayRate, temporaryEmployee.WeeksWorked), 2)}\n");
+                        break;
+                    case "2":
+                        Console.WriteLine($"\n{temporaryEmployee.Name}'s hourly rate is: £" +
+                        $"{Math.Round(tempEmployeePayCalculator.HourlyRate(temporaryEmployee.DayRate), 2)}\n");
+                        break;
+                    default:
+                        Console.WriteLine("\nInvalid input!");
+                        break;
                 }
             }
         }
@@ -270,77 +287,60 @@ namespace PayCalculator
             }
         }
 
-        static void GetAllInfo()
+        static void DeleteEmployee()
         {
             Console.Clear();
-            Console.WriteLine("-=-=-=-=- Permanent Employees -=-=-=-=-\n" + string.Concat(_permEmployeeRepo.GetAll()));
-            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-\n" + string.Concat(_tempEmployeeRepo.GetAll()));
-        }
-
-        static void GetEmployee()
-        {
-            Console.Clear();
-            Console.WriteLine("\nWoukd you like to view [1] a permanent employee or [2] a temporary employee?\n");
+            Console.WriteLine("\nWould you like to delete [1] a permanent or [2] a temporary employee?\n");
             var option = Console.ReadLine();
+            var confirmation = "\nPlease confirm that you want to delete this entry (Y/N)\n";
+            var deleted = " has been deleted from the database";
 
             if (option == "1")
             {
-                Console.WriteLine(enterID + "view\n");
-                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
-                var permanentEmployee = _permEmployeeRepo.GetEmployee(validID);
-                
-                if (idIsInvalid)
+                Console.WriteLine(enterID + "delete\n");
+                var id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(_permEmployeeRepo.GetEmployee(id) + confirmation);
+                var input = Console.ReadLine()!.ToUpper();
+
+                if (input == "Y" || input == "YES")
                 {
-                    Console.WriteLine(nonNumericalError);
+                    Console.WriteLine("\n" + _permEmployeeRepo.GetEmployee(id)!.Name + deleted);
+                    _permEmployeeRepo.Delete(id);
                     return;
                 }
-
-                Console.WriteLine(permanentEmployee + $"\nWould you like to view {permanentEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
-                PermanentPayCalculator permEmployeePayCalculator = new();
-
-                switch (Console.ReadLine())
+                else if (input == "N" || input == "NO")
                 {
-                    case "1":
-                        Console.WriteLine($"\n{permanentEmployee.Name}'s salary is: £" +
-                        $"{Math.Round(permEmployeePayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2)}\n");
-                        break;
-                    case "2":
-                        Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" +
-                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary, permanentEmployee.HoursWorked), 2)}\n");
-                        break;
-                    default:
-                        Console.WriteLine("\nInvalid input!\n");
-                        break;
+                    Console.WriteLine(confirmationDeclined);
+                    return;
+                }
+                else if (input == "")
+                {
+                    Console.WriteLine(nullInputError);
+                    return;
                 }
             }
             else if (option == "2")
             {
-                Console.WriteLine(enterID + "view\n");
-                var idIsInvalid = !int.TryParse(Console.ReadLine(), out int validID);
-                var temporaryEmployee = _tempEmployeeRepo.GetEmployee(validID);
+                Console.WriteLine(enterID + "delete\n");
+                var id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(_tempEmployeeRepo.GetEmployee(id) + confirmation);
+                var input = Console.ReadLine()!.ToUpper();
 
-                if (idIsInvalid)
+                if (input == "Y" || input == "YES")
                 {
-                    Console.WriteLine(nonNumericalError);
+                    Console.WriteLine("\n" + _tempEmployeeRepo.GetEmployee(id)!.Name + deleted);
+                    _tempEmployeeRepo.Delete(id);
                     return;
                 }
-
-                Console.WriteLine(temporaryEmployee + $"\nWould you like to view {temporaryEmployee!.Name}'s total annual salary [1] or hourly rate [2]?\n");
-                TemporaryPayCalculator tempEmployeePayCalculator = new();
-
-                switch (Console.ReadLine())
+                else if (input == "N" || input == "NO")
                 {
-                    case "1":
-                        Console.WriteLine($"\n{temporaryEmployee.Name}'s salary is: £" +
-                        $"{Math.Round(tempEmployeePayCalculator.TotalAnnualPay(temporaryEmployee.DayRate, temporaryEmployee.WeeksWorked), 2)}\n");
-                        break;
-                    case "2":
-                        Console.WriteLine($"\n{temporaryEmployee.Name}'s hourly rate is: £" +
-                        $"{Math.Round(tempEmployeePayCalculator.HourlyRate(temporaryEmployee.DayRate), 2)}\n");
-                        break;
-                    default:
-                        Console.WriteLine("\nInvalid input!");
-                        break;
+                    Console.WriteLine(confirmationDeclined);
+                    return;
+                }
+                else if (input == "")
+                {
+                    Console.WriteLine(nullInputError);
+                    return;
                 }
             }
         }
