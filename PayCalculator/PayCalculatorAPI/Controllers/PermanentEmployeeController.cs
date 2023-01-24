@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayCalculator.Models;
-using PayCalculator.Repositories;
+using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorAPI.Controllers
@@ -28,21 +28,23 @@ namespace PayCalculatorAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PermanentEmployee>> GetEmployee(int id)
         {
-            if (_permEmployeeRepo.GetEmployee(id) == null)
+            var result = _permEmployeeRepo.GetEmployee(id);
+
+            if (result == null)
             {
                 return NotFound(idNotFoundMessage);
             }
 
-            return Ok(_permEmployeeRepo.GetEmployee(id));
+            return Ok(result);
         }
 
-        [HttpPut("{employee}")]
+        [HttpPut]
         public async Task<ActionResult<PermanentEmployee>> Create(PermanentEmployee employee)
         {
-            return Ok(_permEmployeeRepo.Create(employee));
+            return Created("Permanent Employee Repository", _permEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch("{employee}")]
+        [HttpPatch]
         public async Task<ActionResult<PermanentEmployee>> Update(PermanentEmployee employee)
         {
             if (employee == null)
@@ -50,18 +52,20 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound("This employee does not exist!");
             }
 
-            return Ok(_permEmployeeRepo.Update(employee));
+            return Accepted(_permEmployeeRepo.Update(employee));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            if (_permEmployeeRepo.GetEmployee(id) == null)
+            var result = _permEmployeeRepo.Delete(id);
+
+            if (result == false)
             {
                 return NotFound(idNotFoundMessage);
             }
 
-            return Ok(_permEmployeeRepo.Delete(id));
+            return Accepted(result);
         }
     }
 }

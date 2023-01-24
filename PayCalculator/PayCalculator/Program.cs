@@ -1,6 +1,6 @@
-﻿using PayCalculator.Repositories;
-using PayCalculator.Models;
-using PayCalculator.Services;
+﻿using PayCalculatorLibrary.Repositories;
+using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculator
 {

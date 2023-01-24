@@ -1,6 +1,6 @@
-﻿using PayCalculator.Models;
+﻿using PayCalculatorLibrary.Models;
 
-namespace PayCalculator.Repositories
+namespace PayCalculatorLibrary.Repositories
 {
     public class PermanentEmployeeRepository : IEmployeeRepository<PermanentEmployee>
     {
@@ -51,6 +51,7 @@ namespace PayCalculator.Repositories
         public PermanentEmployee? Update(PermanentEmployee employee)
         {
             int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
+            var existingEmployee = _permanentEmployeeList[index];
 
             if (index < 0 || index > _permanentEmployeeList.Count)
             {
@@ -58,26 +59,34 @@ namespace PayCalculator.Repositories
             }
             else
             {
-                _permanentEmployeeList[index].Name = employee.Name;
-                _permanentEmployeeList[index].Salary = employee.Salary;
-                _permanentEmployeeList[index].Bonus = employee.Bonus;
-                _permanentEmployeeList[index].HoursWorked = employee.HoursWorked;
+                var updated = employee;
+
+                if (updated.Name == "string") existingEmployee.Name = existingEmployee.Name;
+                else existingEmployee.Name = updated.Name;
+                
+                if (updated.Salary == 0) existingEmployee.Salary = existingEmployee.Salary; 
+                else existingEmployee.Salary = updated.Salary; 
+                
+                if (updated.Bonus == 0) existingEmployee.Bonus = existingEmployee.Bonus; 
+                else existingEmployee.Bonus = updated.Bonus; 
+                
+                if (updated.HoursWorked == 0) existingEmployee.HoursWorked = existingEmployee.HoursWorked; 
+                else existingEmployee.HoursWorked = updated.HoursWorked; 
             }
 
-            var updatedEmployee = GetEmployee(employee.Id);
-            return updatedEmployee;
+            return employee;
         }
 
         public bool Delete(int id)
         {
             var employee = GetEmployee(id);
             
-            if (GetEmployee(id) == null)
+            if (employee == null)
             {
                 return false;
             }
            
-            _permanentEmployeeList.Remove(employee);
+            _permanentEmployeeList.Remove(employee!);
             return true;
         }
 

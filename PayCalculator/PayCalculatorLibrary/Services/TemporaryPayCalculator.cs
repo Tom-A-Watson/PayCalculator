@@ -1,4 +1,4 @@
-﻿namespace PayCalculator.Services
+﻿namespace PayCalculatorLibrary.Services
 {
     public class TemporaryPayCalculator : ITemporaryPayCalculator
     {

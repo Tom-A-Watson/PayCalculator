@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayCalculator.Models;
-using PayCalculator.Repositories;
-using PayCalculator.Services;
+using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorAPI.Controllers
 {
@@ -28,21 +28,23 @@ namespace PayCalculatorAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TemporaryEmployee>> GetEmployee(int id)
         {
-            if (_tempEmployeeRepo.GetEmployee(id) == null)
+            var result = _tempEmployeeRepo.GetEmployee(id);
+
+            if (result == null)
             {
                 return NotFound(idNotFoundMessage);
             }
 
-            return Ok(_tempEmployeeRepo.GetEmployee(id));
+            return Ok(result);
         }
 
-        [HttpPut("{employee}")]
+        [HttpPut]
         public async Task<ActionResult<TemporaryEmployee>> Create(TemporaryEmployee employee)
         {
-            return Ok(_tempEmployeeRepo.Create(employee));
+            return Created("Temporary Employee Repository", _tempEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch("{employee}")]
+        [HttpPatch]
         public async Task<ActionResult<TemporaryEmployee>> Update(TemporaryEmployee employee)
         {
             if (employee == null)
@@ -50,18 +52,20 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound("This employee does not exist!");
             }
 
-            return Ok(_tempEmployeeRepo.Update(employee));
+            return Accepted(_tempEmployeeRepo.Update(employee));
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TemporaryEmployee>> Delete(int id)
+        public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            if (_tempEmployeeRepo.GetEmployee(id) == null)
+            var result = _tempEmployeeRepo.Delete(id);
+
+            if (result == false)
             {
                 return NotFound(idNotFoundMessage);
             }
 
-            return Ok(_tempEmployeeRepo.Delete(id));
+            return Accepted(result);
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using PayCalculator.Models;
+﻿using PayCalculatorLibrary.Models;
 
-namespace PayCalculator.Repositories
+namespace PayCalculatorLibrary.Repositories
 {
     public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
@@ -49,6 +49,7 @@ namespace PayCalculator.Repositories
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
             int index = _temporaryEmployeeList.FindIndex(x => x.Id == employee.Id);
+            var existingEmployee = _temporaryEmployeeList[index];
 
             if (index < 0 || index > _temporaryEmployeeList.Count)
             {
@@ -56,25 +57,31 @@ namespace PayCalculator.Repositories
             }
             else
             {
-                _temporaryEmployeeList[index].Name = employee.Name;
-                _temporaryEmployeeList[index].DayRate = employee.DayRate;
-                _temporaryEmployeeList[index].WeeksWorked = employee.WeeksWorked;
+                var updated = employee;
+
+                if (updated.Name == "string") existingEmployee.Name = existingEmployee.Name;
+                else existingEmployee.Name = updated.Name;
+                
+                if (updated.DayRate == 0) existingEmployee.DayRate = existingEmployee.DayRate;
+                else existingEmployee.DayRate = updated.DayRate;
+                
+                if (updated.WeeksWorked == 0) existingEmployee.WeeksWorked = existingEmployee.WeeksWorked; 
+                else existingEmployee.WeeksWorked = updated.WeeksWorked;
             }
 
-            var updatedEmployee = GetEmployee(employee.Id);
-            return updatedEmployee;
+            return employee;
         }
 
         public bool Delete(int id)
         {
             var employee = GetEmployee(id);
 
-            if (GetEmployee(id) == null)
+            if (employee == null)
             {
                 return false;
             }
            
-            _temporaryEmployeeList.Remove(employee);
+            _temporaryEmployeeList.Remove(employee!);
             return true;
         }
 

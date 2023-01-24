@@ -1,4 +1,4 @@
-﻿namespace PayCalculator.Models
+﻿namespace PayCalculatorLibrary.Models
 {
     public enum ContractType
     {

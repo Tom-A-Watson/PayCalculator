@@ -1,6 +1,4 @@
-﻿using PayCalculatorLibrary.Services;
-
-namespace PayCalculator.Services
+﻿namespace PayCalculatorLibrary.Services
 {
     public class PermanentPayCalculator : IPermanentPayCalculator
     {

@@ -1,6 +1,5 @@
-using PayCalculator.Models;
-using PayCalculator.Repositories;
-using PayCalculator.Services;
+using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
