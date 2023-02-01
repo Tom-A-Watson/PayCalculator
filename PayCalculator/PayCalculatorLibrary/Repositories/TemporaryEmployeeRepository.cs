@@ -24,7 +24,7 @@ namespace PayCalculatorLibrary.Repositories
                     Name = "Emily Sanders",
                     Id = 004,
                     Contract = ContractType.Temporary,
-                    DayRate = 250,
+                    DayRate = 350,
                     WeeksWorked = 48
                 }
             };

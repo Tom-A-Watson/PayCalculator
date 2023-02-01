@@ -11,25 +11,39 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
-        private readonly string idNotFoundMessage = "Sorry, this ID could not be found";
+        private readonly Models.ErrorMessages _errorMessages;
 
-        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator)
+        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, Models.ErrorMessages errorMessages)
         {
             _permEmployeeRepo = permEmployeeRepo;
             _permPayCalculator = permPayCalculator;
+            _errorMessages = errorMessages;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<PermanentEmployee>>> Get()
         {
-            return Ok(_permEmployeeRepo.GetAll());
+            var employeeList = _permEmployeeRepo.GetAll();
+            foreach (var employee in employeeList)
+            {
+                employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+            }
+
+            return Ok(employeeList);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PermanentEmployee>> GetEmployee(int id)
         {
-            var result = _permEmployeeRepo.GetEmployee(id);
-            return (result == null) ? NotFound(idNotFoundMessage) : Ok(result);
+            var employee = _permEmployeeRepo.GetEmployee(id);
+
+            if (employee == null)
+            {
+                return NotFound(_errorMessages.idNotFound);
+            }
+
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+            return Ok(employee);
         }
 
         [HttpPut]
@@ -41,14 +55,14 @@ namespace PayCalculatorAPI.Controllers
         [HttpPatch]
         public async Task<ActionResult<PermanentEmployee>> Update(PermanentEmployee employee)
         {
-            return (employee == null) ? NotFound("This employee does not exist!") : Accepted(_permEmployeeRepo.Update(employee));
+            return (employee == null) ? NotFound(_errorMessages.employeeNotFound) : Accepted();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            bool? result = _permEmployeeRepo.Delete(id);
-            return (result == null) ? NotFound(idNotFoundMessage) : Accepted(result);
+            bool? deletedEmployee = _permEmployeeRepo.Delete(id);
+            return (deletedEmployee == null) ? NotFound(_errorMessages.idNotFound) : Accepted(deletedEmployee);
         }
     }
 }

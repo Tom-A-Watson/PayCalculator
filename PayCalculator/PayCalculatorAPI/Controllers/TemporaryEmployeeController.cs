@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -12,32 +11,39 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
-        private readonly string idNotFoundMessage = "Sorry, this ID could not be found";
+        private readonly Models.ErrorMessages _errorMessages;
 
-        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator)
+        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, Models.ErrorMessages errorMessages)
         {
             _tempEmployeeRepo = tempEmployeeRepo;
             _tempPayCalculator = tempPayCalculator;
+            _errorMessages = errorMessages;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<TemporaryEmployee>>> Get()
         {
-            return Ok(_tempEmployeeRepo.GetAll());
+            var employeeList = _tempEmployeeRepo.GetAll();
+            foreach (var employee in employeeList)
+            {
+                employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
+            }
+
+            return Ok(employeeList);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TemporaryEmployee>> GetEmployee(int id)
         {
-            var result = _tempEmployeeRepo.GetEmployee(id);
+            var employee = _tempEmployeeRepo.GetEmployee(id);
             
-            if (result == null)
+            if (employee == null)
             {
-                return NotFound(idNotFoundMessage);
+                return NotFound(_errorMessages.idNotFound);
             }
 
-            result.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(result.DayRate, result.WeeksWorked);
-            return Ok(result);
+            employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
+            return Ok(employee);
         }
 
         [HttpPut]
@@ -49,14 +55,14 @@ namespace PayCalculatorAPI.Controllers
         [HttpPatch]
         public async Task<ActionResult<TemporaryEmployee>> Update(TemporaryEmployee employee)
         {
-            return (employee == null) ? NotFound("This employee does not exist!") : Accepted();
+            return (employee == null) ? NotFound(_errorMessages.employeeNotFound) : Accepted();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            bool? result = _tempEmployeeRepo.Delete(id);
-            return (result == null) ? NotFound(idNotFoundMessage) : Accepted(result);
+            bool? deletedEmployee = _tempEmployeeRepo.Delete(id);
+            return (deletedEmployee == null) ? NotFound(_errorMessages.idNotFound) : Accepted(deletedEmployee);
         }
     }
 }
