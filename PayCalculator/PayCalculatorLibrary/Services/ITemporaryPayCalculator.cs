@@ -2,8 +2,8 @@
 {
     public interface ITemporaryPayCalculator
     {
-        decimal TotalAnnualPay(decimal DayRate, int WeeksWorked);
+        decimal TotalAnnualPay(decimal dayRate, int weeksWorked);
 
-        decimal HourlyRate(decimal DayRate);
+        decimal HourlyRate(decimal dayRate);
     }
 }

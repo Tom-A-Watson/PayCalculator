@@ -2,8 +2,8 @@
 {
     public interface IPermanentPayCalculator
     {
-        decimal TotalAnnualPay(decimal Salary, decimal Bonus);
+        decimal TotalAnnualPay(decimal salary, decimal bonus);
 
-        decimal HourlyRate(decimal Salary, int HoursWorked);
+        decimal HourlyRate(decimal salary, int hoursWorked);
     }
 }

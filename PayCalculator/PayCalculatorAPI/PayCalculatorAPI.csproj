@@ -14,4 +14,8 @@
     <ProjectReference Include="..\PayCalculatorLibrary\PayCalculatorLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -29,12 +30,13 @@ namespace PayCalculatorAPI.Controllers
         public async Task<ActionResult<TemporaryEmployee>> GetEmployee(int id)
         {
             var result = _tempEmployeeRepo.GetEmployee(id);
-
+            
             if (result == null)
             {
                 return NotFound(idNotFoundMessage);
             }
 
+            result.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(result.DayRate, result.WeeksWorked);
             return Ok(result);
         }
 
@@ -47,25 +49,14 @@ namespace PayCalculatorAPI.Controllers
         [HttpPatch]
         public async Task<ActionResult<TemporaryEmployee>> Update(TemporaryEmployee employee)
         {
-            if (employee == null)
-            {
-                return NotFound("This employee does not exist!");
-            }
-
-            return Accepted(_tempEmployeeRepo.Update(employee));
+            return (employee == null) ? NotFound("This employee does not exist!") : Accepted();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            var result = _tempEmployeeRepo.Delete(id);
-
-            if (result == false)
-            {
-                return NotFound(idNotFoundMessage);
-            }
-
-            return Accepted(result);
+            bool? result = _tempEmployeeRepo.Delete(id);
+            return (result == null) ? NotFound(idNotFoundMessage) : Accepted(result);
         }
     }
 }

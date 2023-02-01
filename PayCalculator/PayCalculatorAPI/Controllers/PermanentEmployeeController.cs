@@ -29,13 +29,7 @@ namespace PayCalculatorAPI.Controllers
         public async Task<ActionResult<PermanentEmployee>> GetEmployee(int id)
         {
             var result = _permEmployeeRepo.GetEmployee(id);
-
-            if (result == null)
-            {
-                return NotFound(idNotFoundMessage);
-            }
-
-            return Ok(result);
+            return (result == null) ? NotFound(idNotFoundMessage) : Ok(result);
         }
 
         [HttpPut]
@@ -47,25 +41,14 @@ namespace PayCalculatorAPI.Controllers
         [HttpPatch]
         public async Task<ActionResult<PermanentEmployee>> Update(PermanentEmployee employee)
         {
-            if (employee == null)
-            {
-                return NotFound("This employee does not exist!");
-            }
-
-            return Accepted(_permEmployeeRepo.Update(employee));
+            return (employee == null) ? NotFound("This employee does not exist!") : Accepted(_permEmployeeRepo.Update(employee));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<PermanentEmployee>> Delete(int id)
         {
-            var result = _permEmployeeRepo.Delete(id);
-
-            if (result == false)
-            {
-                return NotFound(idNotFoundMessage);
-            }
-
-            return Accepted(result);
+            bool? result = _permEmployeeRepo.Delete(id);
+            return (result == null) ? NotFound(idNotFoundMessage) : Accepted(result);
         }
     }
 }
