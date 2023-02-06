@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PayCalculatorAPI.Resources;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -11,17 +12,15 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
-        private readonly Models.ErrorMessages _errorMessages;
 
-        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, Models.ErrorMessages errorMessages)
+        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator)
         {
             _permEmployeeRepo = permEmployeeRepo;
             _permPayCalculator = permPayCalculator;
-            _errorMessages = errorMessages;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<PermanentEmployee>>> Get()
+        public IActionResult Get()
         {
             var employeeList = _permEmployeeRepo.GetAll();
             foreach (var employee in employeeList)
@@ -33,13 +32,13 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PermanentEmployee>> GetEmployee(int id)
+        public IActionResult GetEmployee(int id)
         {
             var employee = _permEmployeeRepo.GetEmployee(id);
 
             if (employee == null)
             {
-                return NotFound(_errorMessages.idNotFound);
+                return NotFound(ErrorMessages.IdNotFound);
             }
 
             employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
@@ -47,22 +46,33 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<PermanentEmployee>> Create(PermanentEmployee employee)
+        public IActionResult Create(CreatePermanentEmployee createPermanentEmployee)
         {
-            return Created("Permanent Employee Repository", _permEmployeeRepo.Create(employee));
+            PermanentEmployee employee = new();
+            employee.Name = createPermanentEmployee.Name;
+            employee.Salary = createPermanentEmployee.Salary;
+            employee.Bonus = createPermanentEmployee.Bonus;
+            employee.HoursWorked = createPermanentEmployee.HoursWorked;
+            return Created($"/permanentemployee/{employee.Id}", _permEmployeeRepo.Create(employee));
         }
 
         [HttpPatch]
-        public async Task<ActionResult<PermanentEmployee>> Update(PermanentEmployee employee)
+        public IActionResult Update(PermanentEmployee employee)
         {
-            return (employee == null) ? NotFound(_errorMessages.employeeNotFound) : Accepted();
+            if (employee == null)
+            {
+                return NotFound(ErrorMessages.EmployeeNotFound);
+            }
+
+            _permEmployeeRepo.Update(employee);
+            return Accepted();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PermanentEmployee>> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            bool? deletedEmployee = _permEmployeeRepo.Delete(id);
-            return (deletedEmployee == null) ? NotFound(_errorMessages.idNotFound) : Accepted(deletedEmployee);
+            var delete = _permEmployeeRepo.Delete(id);
+            return (delete == false) ? NotFound(ErrorMessages.IdNotFound) : Accepted(delete);
         }
     }
 }

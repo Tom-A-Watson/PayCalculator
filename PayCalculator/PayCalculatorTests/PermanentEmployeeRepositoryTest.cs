@@ -1,4 +1,7 @@
-﻿namespace PayCalculatorTest
+﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
+
+namespace PayCalculatorTest
 {
     [TestFixture]
     public class PermanentEmployeeRepositoryTest
@@ -15,7 +18,7 @@
         public void SetupTests()
         {
             // Arrange
-            repository = new PermanentEmployeeRepository();
+            repository = new();
             
             blankEmployee = new()
             {

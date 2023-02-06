@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PayCalculatorAPI.Resources;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -11,17 +12,15 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
-        private readonly Models.ErrorMessages _errorMessages;
 
-        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, Models.ErrorMessages errorMessages)
+        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator)
         {
             _tempEmployeeRepo = tempEmployeeRepo;
             _tempPayCalculator = tempPayCalculator;
-            _errorMessages = errorMessages;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TemporaryEmployee>>> Get()
+        public IActionResult Get()
         {
             var employeeList = _tempEmployeeRepo.GetAll();
             foreach (var employee in employeeList)
@@ -33,13 +32,13 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TemporaryEmployee>> GetEmployee(int id)
+        public IActionResult GetEmployee(int id)
         {
             var employee = _tempEmployeeRepo.GetEmployee(id);
             
             if (employee == null)
             {
-                return NotFound(_errorMessages.idNotFound);
+                return NotFound(ErrorMessages.IdNotFound);
             }
 
             employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
@@ -47,22 +46,32 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<TemporaryEmployee>> Create(TemporaryEmployee employee)
+        public IActionResult Create(CreateTemporaryEmployee createTemporaryEmployee)
         {
-            return Created("Temporary Employee Repository", _tempEmployeeRepo.Create(employee));
+            TemporaryEmployee employee = new();
+            employee.Name = createTemporaryEmployee.Name;
+            employee.DayRate = createTemporaryEmployee.DayRate;
+            employee.WeeksWorked = createTemporaryEmployee.WeeksWorked;
+            return Created($"/temporaryemployee{employee.Id}", _tempEmployeeRepo.Create(employee));
         }
 
         [HttpPatch]
-        public async Task<ActionResult<TemporaryEmployee>> Update(TemporaryEmployee employee)
+        public IActionResult Update(TemporaryEmployee employee)
         {
-            return (employee == null) ? NotFound(_errorMessages.employeeNotFound) : Accepted();
+            if (employee == null)
+            {
+                return NotFound(ErrorMessages.EmployeeNotFound);
+            }
+
+            _tempEmployeeRepo.Update(employee);
+            return Accepted();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PermanentEmployee>> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            bool? deletedEmployee = _tempEmployeeRepo.Delete(id);
-            return (deletedEmployee == null) ? NotFound(_errorMessages.idNotFound) : Accepted(deletedEmployee);
+            var delete = _tempEmployeeRepo.Delete(id);
+            return (delete == false) ? NotFound(ErrorMessages.IdNotFound) : Accepted(delete);
         }
     }
 }

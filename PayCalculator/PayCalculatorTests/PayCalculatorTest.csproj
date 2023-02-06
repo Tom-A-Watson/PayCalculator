@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PayCalculatorAPI\PayCalculatorAPI.csproj" />
     <ProjectReference Include="..\PayCalculator\PayCalculator.csproj" />
   </ItemGroup>
 

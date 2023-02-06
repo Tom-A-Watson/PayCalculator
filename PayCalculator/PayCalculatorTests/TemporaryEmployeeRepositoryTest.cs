@@ -1,4 +1,7 @@
-﻿namespace PayCalculatorTest
+﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
+
+namespace PayCalculatorTest
 {
     [TestFixture]
     public class TemporaryEmployeeRepositoryTest
