@@ -7,9 +7,8 @@ namespace PayCalculatorTest
     public class TemporaryEmployeeRepositoryTest
     {
 #nullable disable
-        // Arrange
         private TemporaryEmployeeRepository repository;
-        private TemporaryEmployee blankEmployee;
+        private TemporaryEmployee testEmployee;
         private TemporaryEmployee employee;
         private bool deleted;
 #nullable enable
@@ -20,7 +19,7 @@ namespace PayCalculatorTest
             // Arrange
             repository = new TemporaryEmployeeRepository();
 
-            blankEmployee = new()
+            testEmployee = new()
             {
                 Id = 1,
                 Name = "ben",
@@ -52,7 +51,7 @@ namespace PayCalculatorTest
         public void TestCreateEmployeeWorks()
         {
             // Act
-            employee = repository.Create(blankEmployee);
+            employee = repository.Create(testEmployee);
 
             // Assert
             Assert.Multiple(() =>

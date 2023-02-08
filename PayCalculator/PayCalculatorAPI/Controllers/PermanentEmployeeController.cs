@@ -23,6 +23,12 @@ namespace PayCalculatorAPI.Controllers
         public IActionResult Get()
         {
             var employeeList = _permEmployeeRepo.GetAll();
+
+            if (employeeList.Count() == 0)
+            {
+                return NotFound(ErrorMessages.EmptyEmployeeList);
+            }
+
             foreach (var employee in employeeList)
             {
                 employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);

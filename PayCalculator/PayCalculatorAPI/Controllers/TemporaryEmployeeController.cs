@@ -23,6 +23,12 @@ namespace PayCalculatorAPI.Controllers
         public IActionResult Get()
         {
             var employeeList = _tempEmployeeRepo.GetAll();
+
+            if (employeeList.Count() == 0)
+            {
+                return NotFound();
+            }
+
             foreach (var employee in employeeList)
             {
                 employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
