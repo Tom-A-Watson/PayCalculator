@@ -4,6 +4,7 @@ using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
 using Moq;
+using NuGet.Frameworks;
 
 namespace PayCalculatorTest
 {
@@ -11,8 +12,10 @@ namespace PayCalculatorTest
     public class PermEmployeeControllerTest
     {
 #nullable disable
-        private PermanentEmployee employee;
+        private int id;
+        private PermanentEmployee permanentEmployee;
         private List<PermanentEmployee> _employees;
+        private CreateOrUpdatePermanentEmployee employee;
         private PermanentEmployeeController controller;
         private Mock<IEmployeeRepository<PermanentEmployee>> _mockRepository;
         private Mock<PermanentPayCalculator> _mockCalculator;
@@ -89,10 +92,11 @@ namespace PayCalculatorTest
         public void TestGetEmployeeReturnsOk()
         {
             // Arrange
-            _mockRepository.Setup(x => x.GetEmployee(1)).Returns(_employees[0]);
+            id = 1;
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
 
             // Act
-            var response = controller.GetEmployee(1);
+            var response = controller.GetEmployee(id);
             var result = response as OkObjectResult;
 
             // Assert
@@ -107,10 +111,11 @@ namespace PayCalculatorTest
         public void TestGetEmployeeReturnsNotFound()
         {
             // Arrange
-            _mockRepository.Setup(x => x.GetEmployee(3)).Returns((PermanentEmployee) null!);
+            id = 3;
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
 
             // Act
-            var response = controller.GetEmployee(3);
+            var response = controller.GetEmployee(id);
             var result = response as NotFoundObjectResult;
 
             // Assert
@@ -119,6 +124,67 @@ namespace PayCalculatorTest
                 Assert.IsNotNull(result);
                 Assert.That(result?.StatusCode, Is.EqualTo(404));
             });
+        }
+
+        [Test]
+        public void TestCreateEmployeeReturnsCreated()
+        {
+            // Arrange
+            employee = new();
+            _mockRepository.Setup(x => x.Create(permanentEmployee)).Returns(permanentEmployee);
+
+            // Act
+            var response = controller.Create(employee);
+            var result = response as CreatedAtActionResult;
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsNotNull(result);
+                Assert.That(result?.StatusCode, Is.EqualTo(201));
+            });
+        }
+
+        [Test]
+        public void TestUpdateReturnsAccepted()
+        {
+            // Arrange
+            _mockRepository.Setup(x => x.Update(permanentEmployee)).Returns(permanentEmployee);
+            
+            // Act
+            var response = controller.Update(permanentEmployee);
+            var result = response as AcceptedAtActionResult;
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsNotNull(result);
+                Assert.That(result?.StatusCode, Is.EqualTo(202));
+            });
+        }
+
+        [Test]
+        public void TestUpdateReturnsNotFound()
+        {
+            // Arrange
+            // Act
+            // Assert
+        }
+
+        [Test]
+        public void TestDeleteReturnsAccepted()
+        {
+            // Arrange
+            // Act
+            // Assert
+        }
+
+        [Test]
+        public void TestDeleteReturnsNotFound()
+        {
+            // Arrange
+            // Act
+            // Assert
         }
     }
 }

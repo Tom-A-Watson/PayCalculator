@@ -1,6 +1,6 @@
 ﻿namespace PayCalculatorLibrary.Models
 {
-    public class CreateTemporaryEmployee
+    public class CreateOrUpdateTemporaryEmployee
     {
         public string Name { get; set; }
         public decimal DayRate { get; set; }

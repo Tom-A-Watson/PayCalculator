@@ -1,6 +1,6 @@
 ﻿namespace PayCalculatorLibrary.Models
 {
-    public class CreatePermanentEmployee
+    public class CreateOrUpdatePermanentEmployee
     {
         public string Name { get; set; }
         public decimal Salary { get; set; }

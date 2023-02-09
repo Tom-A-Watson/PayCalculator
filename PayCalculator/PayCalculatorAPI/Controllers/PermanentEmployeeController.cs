@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayCalculatorAPI.Resources;
+using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -12,6 +13,7 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
+        private FieldExtractor extractor;
 
         public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator)
         {
@@ -52,13 +54,10 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Create(CreatePermanentEmployee createPermanentEmployee)
+        public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
-            PermanentEmployee employee = new();
-            employee.Name = createPermanentEmployee.Name;
-            employee.Salary = createPermanentEmployee.Salary;
-            employee.Bonus = createPermanentEmployee.Bonus;
-            employee.HoursWorked = createPermanentEmployee.HoursWorked;
+            extractor = new();
+            var employee = extractor.ExtractPermEmployeeDetails(createModel);
             return Created($"/permanentemployee/{employee.Id}", _permEmployeeRepo.Create(employee));
         }
 

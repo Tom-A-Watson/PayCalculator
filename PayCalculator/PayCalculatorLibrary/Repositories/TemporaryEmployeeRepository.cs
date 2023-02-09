@@ -1,10 +1,12 @@
 ﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorLibrary.Repositories
 {
     public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
+        private TemporaryPayCalculator _tempPayCalculator;
 
         public TemporaryEmployeeRepository()
         {
@@ -33,9 +35,10 @@ namespace PayCalculatorLibrary.Repositories
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
             Random r = new();
-
+            _tempPayCalculator = new();
             employee.Id = r.Next(5, 1000);
             employee.Contract = ContractType.Temporary;
+            employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
             _temporaryEmployeeList.Add(employee);
             return employee;
         }

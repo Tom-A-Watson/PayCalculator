@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using PayCalculatorAPI.Resources;
+using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -12,6 +14,7 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
+        private FieldExtractor extractor;
 
         public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator)
         {
@@ -52,23 +55,23 @@ namespace PayCalculatorAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Create(CreateTemporaryEmployee createTemporaryEmployee)
+        public IActionResult Create(CreateOrUpdateTemporaryEmployee createModel)
         {
-            TemporaryEmployee employee = new();
-            employee.Name = createTemporaryEmployee.Name;
-            employee.DayRate = createTemporaryEmployee.DayRate;
-            employee.WeeksWorked = createTemporaryEmployee.WeeksWorked;
+            extractor = new();
+            var employee = extractor.ExtractTempEmployeeDetails(createModel);
             return Created($"/temporaryemployee{employee.Id}", _tempEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch]
-        public IActionResult Update(TemporaryEmployee employee)
+        [HttpPatch("{id}")]
+        public IActionResult Update(CreateOrUpdateTemporaryEmployee updateModel)
         {
-            if (employee == null)
+            if (updateModel == null)
             {
                 return NotFound(ErrorMessages.EmployeeNotFound);
             }
 
+            extractor = new();
+            var employee = extractor.ExtractTempEmployeeDetails(updateModel);
             _tempEmployeeRepo.Update(employee);
             return Accepted();
         }
