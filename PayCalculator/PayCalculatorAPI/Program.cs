@@ -1,4 +1,4 @@
-using PayCalculatorAPI.Resources;
+using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -10,7 +10,8 @@ builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentE
 builder.Services.AddSingleton<IEmployeeRepository<TemporaryEmployee>, TemporaryEmployeeRepository>();
 builder.Services.AddSingleton<IPermanentPayCalculator, PermanentPayCalculator>();
 builder.Services.AddSingleton<ITemporaryPayCalculator, TemporaryPayCalculator>();
-
+builder.Services.AddSingleton<IPermanentEmployeeMapper, PermanentEmployeeMapper>();
+builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using PayCalculatorAPI.Resources;
 using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
@@ -14,12 +12,13 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
-        private FieldExtractor extractor;
+        private ITemporaryEmployeeMapper _mapper;
 
-        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator)
+        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, ITemporaryEmployeeMapper mapper)
         {
             _tempEmployeeRepo = tempEmployeeRepo;
             _tempPayCalculator = tempPayCalculator;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -57,12 +56,11 @@ namespace PayCalculatorAPI.Controllers
         [HttpPut]
         public IActionResult Create(CreateOrUpdateTemporaryEmployee createModel)
         {
-            extractor = new();
-            var employee = extractor.ExtractTempEmployeeDetails(createModel);
+            var employee = _mapper.Map(createModel);
             return Created($"/temporaryemployee{employee.Id}", _tempEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{updateModel}")]
         public IActionResult Update(CreateOrUpdateTemporaryEmployee updateModel)
         {
             if (updateModel == null)
@@ -70,8 +68,7 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound(ErrorMessages.EmployeeNotFound);
             }
 
-            extractor = new();
-            var employee = extractor.ExtractTempEmployeeDetails(updateModel);
+            var employee = _mapper.Map(updateModel);
             _tempEmployeeRepo.Update(employee);
             return Accepted();
         }

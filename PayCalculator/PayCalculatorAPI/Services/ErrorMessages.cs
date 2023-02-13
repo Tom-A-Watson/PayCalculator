@@ -1,4 +1,4 @@
-﻿namespace PayCalculatorAPI.Resources
+﻿namespace PayCalculatorAPI.Services
 {
     public static class ErrorMessages
     {

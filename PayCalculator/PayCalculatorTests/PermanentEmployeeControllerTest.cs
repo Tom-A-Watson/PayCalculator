@@ -4,12 +4,12 @@ using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
 using Moq;
-using NuGet.Frameworks;
+using PayCalculatorAPI.Services;
 
 namespace PayCalculatorTest
 {
     [TestFixture]
-    public class PermEmployeeControllerTest
+    public class PermanentEmployeeControllerTest
     {
 #nullable disable
         private int id;
@@ -17,6 +17,7 @@ namespace PayCalculatorTest
         private List<PermanentEmployee> _employees;
         private CreateOrUpdatePermanentEmployee employee;
         private PermanentEmployeeController controller;
+        private Mock<IPermanentEmployeeMapper> _mockMapper;
         private Mock<IEmployeeRepository<PermanentEmployee>> _mockRepository;
         private Mock<PermanentPayCalculator> _mockCalculator;
 #nullable enable
@@ -46,9 +47,26 @@ namespace PayCalculatorTest
                 }
             };
 
+            permanentEmployee = new()
+            {
+                Name = "",
+                Salary = 0,
+                Bonus = 0,
+                HoursWorked = 0
+            };
+
+            employee = new()
+            {
+                Name = "Tom Watson",
+                Salary = 50000,
+                Bonus = 2000,
+                HoursWorked = 1820
+            };
+
             _mockRepository = new();
             _mockCalculator = new();
-            controller = new PermanentEmployeeController(_mockRepository.Object, _mockCalculator.Object);
+            _mockMapper = new();
+            controller = new PermanentEmployeeController(_mockRepository.Object, _mockCalculator.Object, _mockMapper.Object);
         }
         
         [Test]
@@ -130,7 +148,6 @@ namespace PayCalculatorTest
         public void TestCreateEmployeeReturnsCreated()
         {
             // Arrange
-            employee = new();
             _mockRepository.Setup(x => x.Create(permanentEmployee)).Returns(permanentEmployee);
 
             // Act
@@ -152,7 +169,7 @@ namespace PayCalculatorTest
             _mockRepository.Setup(x => x.Update(permanentEmployee)).Returns(permanentEmployee);
             
             // Act
-            var response = controller.Update(permanentEmployee);
+            var response = controller.Update(employee);
             var result = response as AcceptedAtActionResult;
 
             // Assert
@@ -175,16 +192,38 @@ namespace PayCalculatorTest
         public void TestDeleteReturnsAccepted()
         {
             // Arrange
+            id = 2;
+            _mockRepository.Setup(x => x.Delete(id)).Returns(true);
+
             // Act
+            var response = controller.Delete(id);
+            var result = response as AcceptedResult;
+
             // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsNotNull(result);
+                Assert.That(result?.StatusCode, Is.EqualTo(202));
+            });
         }
 
         [Test]
         public void TestDeleteReturnsNotFound()
         {
             // Arrange
+            id = 10;
+            _mockRepository.Setup(x => x.Delete(id)).Returns(false);
+
             // Act
+            var response = controller.Delete(id);
+            var result = response as NotFoundObjectResult;
+
             // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.IsNotNull(result);
+                Assert.That(result?.StatusCode, Is.EqualTo(404));
+            });
         }
     }
 }

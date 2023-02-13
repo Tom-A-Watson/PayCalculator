@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayCalculatorAPI.Resources;
 using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
@@ -13,12 +12,13 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
-        private FieldExtractor extractor;
+        private readonly IPermanentEmployeeMapper _mapper;
 
-        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator)
+        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, IPermanentEmployeeMapper mapper)
         {
             _permEmployeeRepo = permEmployeeRepo;
             _permPayCalculator = permPayCalculator;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -56,19 +56,19 @@ namespace PayCalculatorAPI.Controllers
         [HttpPut]
         public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
-            extractor = new();
-            var employee = extractor.ExtractPermEmployeeDetails(createModel);
+            PermanentEmployee employee = _mapper.Map(createModel);
             return Created($"/permanentemployee/{employee.Id}", _permEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch]
-        public IActionResult Update(PermanentEmployee employee)
+        [HttpPatch("{updateModel}")]
+        public IActionResult Update(CreateOrUpdatePermanentEmployee updateModel)
         {
-            if (employee == null)
+            if (updateModel == null)
             {
                 return NotFound(ErrorMessages.EmployeeNotFound);
             }
 
+            var employee = _mapper.Map(updateModel);
             _permEmployeeRepo.Update(employee);
             return Accepted();
         }

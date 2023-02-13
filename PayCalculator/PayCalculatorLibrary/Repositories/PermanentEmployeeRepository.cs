@@ -1,13 +1,16 @@
 ﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorLibrary.Repositories
 {
     public class PermanentEmployeeRepository : IEmployeeRepository<PermanentEmployee>
     {
         private List<PermanentEmployee> _permanentEmployeeList;
+        private PermanentPayCalculator _permPayCalculator;
 
         public PermanentEmployeeRepository()
         {
+            _permPayCalculator = new();
             _permanentEmployeeList = new List<PermanentEmployee>()
             {
                 new PermanentEmployee()
@@ -35,9 +38,9 @@ namespace PayCalculatorLibrary.Repositories
         public PermanentEmployee Create(PermanentEmployee employee)
         {
             Random r = new();
-
             employee.Id = r.Next(3, 1000);
             employee.Contract = ContractType.Permanent;
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
             _permanentEmployeeList.Add(employee);
             return employee;
         }

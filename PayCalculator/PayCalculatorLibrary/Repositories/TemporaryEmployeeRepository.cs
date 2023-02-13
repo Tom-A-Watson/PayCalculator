@@ -10,6 +10,7 @@ namespace PayCalculatorLibrary.Repositories
 
         public TemporaryEmployeeRepository()
         {
+            _tempPayCalculator = new();
             _temporaryEmployeeList = new List<TemporaryEmployee>()
             {
                 new TemporaryEmployee()
@@ -35,7 +36,6 @@ namespace PayCalculatorLibrary.Repositories
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
             Random r = new();
-            _tempPayCalculator = new();
             employee.Id = r.Next(5, 1000);
             employee.Contract = ContractType.Temporary;
             employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
