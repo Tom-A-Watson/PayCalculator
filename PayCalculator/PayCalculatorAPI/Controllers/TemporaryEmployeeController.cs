@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayCalculatorAPI.Services;
+using PayCalculatorLibrary.Constants;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -28,7 +29,7 @@ namespace PayCalculatorAPI.Controllers
 
             if (employeeList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(ErrorMessages.EmptyEmployeeList);
             }
 
             foreach (var employee in employeeList)
@@ -57,11 +58,12 @@ namespace PayCalculatorAPI.Controllers
         public IActionResult Create(CreateOrUpdateTemporaryEmployee createModel)
         {
             var employee = _mapper.Map(createModel);
+            employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
             return Created($"/temporaryemployee{employee.Id}", _tempEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch("{updateModel}")]
-        public IActionResult Update(CreateOrUpdateTemporaryEmployee updateModel)
+        [HttpPatch("{id}")]
+        public IActionResult Update(int id, [FromBody] CreateOrUpdateTemporaryEmployee updateModel)
         {
             if (updateModel == null)
             {
@@ -69,6 +71,7 @@ namespace PayCalculatorAPI.Controllers
             }
 
             var employee = _mapper.Map(updateModel);
+            employee.Id = id;
             _tempEmployeeRepo.Update(employee);
             return Accepted();
         }

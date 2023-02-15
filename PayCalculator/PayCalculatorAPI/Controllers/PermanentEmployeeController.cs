@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayCalculatorAPI.Services;
+using PayCalculatorLibrary.Constants;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
@@ -56,12 +57,13 @@ namespace PayCalculatorAPI.Controllers
         [HttpPut]
         public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
-            PermanentEmployee employee = _mapper.Map(createModel);
+            var employee = _mapper.Map(createModel);
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
             return Created($"/permanentemployee/{employee.Id}", _permEmployeeRepo.Create(employee));
         }
 
-        [HttpPatch("{updateModel}")]
-        public IActionResult Update(CreateOrUpdatePermanentEmployee updateModel)
+        [HttpPatch("{id}")]
+        public IActionResult Update(int id, [FromBody] CreateOrUpdatePermanentEmployee updateModel)
         {
             if (updateModel == null)
             {
@@ -69,6 +71,7 @@ namespace PayCalculatorAPI.Controllers
             }
 
             var employee = _mapper.Map(updateModel);
+            employee.Id = id;
             _permEmployeeRepo.Update(employee);
             return Accepted();
         }

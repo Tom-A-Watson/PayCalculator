@@ -6,11 +6,9 @@ namespace PayCalculatorLibrary.Repositories
     public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
         private List<TemporaryEmployee> _temporaryEmployeeList;
-        private TemporaryPayCalculator _tempPayCalculator;
 
         public TemporaryEmployeeRepository()
         {
-            _tempPayCalculator = new();
             _temporaryEmployeeList = new List<TemporaryEmployee>()
             {
                 new TemporaryEmployee()
@@ -38,7 +36,6 @@ namespace PayCalculatorLibrary.Repositories
             Random r = new();
             employee.Id = r.Next(5, 1000);
             employee.Contract = ContractType.Temporary;
-            employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
             _temporaryEmployeeList.Add(employee);
             return employee;
         }
@@ -52,7 +49,7 @@ namespace PayCalculatorLibrary.Repositories
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
             int index = _temporaryEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var existingEmployee = _temporaryEmployeeList[index];
+            var theEmployee = _temporaryEmployeeList[index];
 
             if (index < 0 || index > _temporaryEmployeeList.Count)
             {
@@ -61,15 +58,16 @@ namespace PayCalculatorLibrary.Repositories
             else
             {
                 var updated = employee;
+                var existing = theEmployee;
 
-                if (updated.Name == "string") existingEmployee.Name = existingEmployee.Name;
-                else existingEmployee.Name = updated.Name;
+                if (updated.Name == "string") theEmployee.Name = existing.Name;
+                else theEmployee.Name = updated.Name;
                 
-                if (updated.DayRate == 0) existingEmployee.DayRate = existingEmployee.DayRate;
-                else existingEmployee.DayRate = updated.DayRate;
+                if (updated.DayRate == 0) theEmployee.DayRate = existing.DayRate;
+                else theEmployee.DayRate = updated.DayRate;
                 
-                if (updated.WeeksWorked == 0) existingEmployee.WeeksWorked = existingEmployee.WeeksWorked; 
-                else existingEmployee.WeeksWorked = updated.WeeksWorked;
+                if (updated.WeeksWorked == 0) theEmployee.WeeksWorked = existing.WeeksWorked; 
+                else theEmployee.WeeksWorked = updated.WeeksWorked;
             }
 
             return employee;

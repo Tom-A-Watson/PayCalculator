@@ -6,11 +6,9 @@ namespace PayCalculatorLibrary.Repositories
     public class PermanentEmployeeRepository : IEmployeeRepository<PermanentEmployee>
     {
         private List<PermanentEmployee> _permanentEmployeeList;
-        private PermanentPayCalculator _permPayCalculator;
 
         public PermanentEmployeeRepository()
         {
-            _permPayCalculator = new();
             _permanentEmployeeList = new List<PermanentEmployee>()
             {
                 new PermanentEmployee()
@@ -40,7 +38,6 @@ namespace PayCalculatorLibrary.Repositories
             Random r = new();
             employee.Id = r.Next(3, 1000);
             employee.Contract = ContractType.Permanent;
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
             _permanentEmployeeList.Add(employee);
             return employee;
         }
@@ -54,7 +51,7 @@ namespace PayCalculatorLibrary.Repositories
         public PermanentEmployee? Update(PermanentEmployee employee)
         {
             int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var existingEmployee = _permanentEmployeeList[index];
+            var theEmployee = _permanentEmployeeList[index];
 
             if (index < 0 || index > _permanentEmployeeList.Count)
             {
@@ -63,18 +60,19 @@ namespace PayCalculatorLibrary.Repositories
             else
             {
                 var updated = employee;
+                var existing = theEmployee;
 
-                if (updated.Name == "string") existingEmployee.Name = existingEmployee.Name;
-                else existingEmployee.Name = updated.Name;
+                if (updated.Name == "string") theEmployee.Name = existing.Name;
+                else theEmployee.Name = updated.Name;
                 
-                if (updated.Salary == 0) existingEmployee.Salary = existingEmployee.Salary; 
-                else existingEmployee.Salary = updated.Salary; 
+                if (updated.Salary == 0) theEmployee.Salary = existing.Salary; 
+                else theEmployee.Salary = updated.Salary; 
                 
-                if (updated.Bonus == 0) existingEmployee.Bonus = existingEmployee.Bonus; 
-                else existingEmployee.Bonus = updated.Bonus; 
+                if (updated.Bonus == 0) theEmployee.Bonus = existing.Bonus; 
+                else theEmployee.Bonus = updated.Bonus; 
                 
-                if (updated.HoursWorked == 0) existingEmployee.HoursWorked = existingEmployee.HoursWorked; 
-                else existingEmployee.HoursWorked = updated.HoursWorked; 
+                if (updated.HoursWorked == 0) theEmployee.HoursWorked = existing.HoursWorked; 
+                else theEmployee.HoursWorked = updated.HoursWorked; 
             }
 
             return employee;
