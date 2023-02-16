@@ -87,7 +87,7 @@ namespace PayCalculatorLibrary.Repositories
                 return false;
             }
            
-            _permanentEmployeeList.Remove(employee!);
+            _permanentEmployeeList.Remove(employee);
             return true;
         }
 

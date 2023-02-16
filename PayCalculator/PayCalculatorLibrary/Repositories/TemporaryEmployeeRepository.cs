@@ -82,7 +82,7 @@ namespace PayCalculatorLibrary.Repositories
                 return false;
             }
            
-            _temporaryEmployeeList.Remove(employee!);
+            _temporaryEmployeeList.Remove(employee);
             return true;
         }
 

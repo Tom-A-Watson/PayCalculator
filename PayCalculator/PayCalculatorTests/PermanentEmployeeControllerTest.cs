@@ -162,11 +162,12 @@ namespace PayCalculatorTest
         public void TestUpdateReturnsAccepted()
         {
             // Arrange
+            var id = 1;
             _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
-            _mockRepository.Setup(x => x.Update(_employees[0])).Returns(_employees[0]);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
             
             // Act
-            var response = controller.Update(1, _createOrUpdateEmployeeModel);
+            var response = controller.Update(id, _createOrUpdateEmployeeModel);
             var result = (AcceptedResult) response;
 
             // Assert
@@ -181,12 +182,11 @@ namespace PayCalculatorTest
         public void TestUpdateReturnsNotFound()
         {
             // Arrange
-            _createOrUpdateEmployeeModel = null;
-            _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
-            _mockRepository.Setup(x => x.Update(_employees[0])).Returns(_employees[0]);
+            var id = 5;
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
 
             // Act
-            var response = controller.Update(1, _createOrUpdateEmployeeModel);
+            var response = controller.Update(id, _createOrUpdateEmployeeModel);
             var result = (NotFoundObjectResult) response;
 
             // Assert

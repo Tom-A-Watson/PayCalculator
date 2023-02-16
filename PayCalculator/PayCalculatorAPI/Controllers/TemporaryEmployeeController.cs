@@ -59,15 +59,15 @@ namespace PayCalculatorAPI.Controllers
         {
             var employee = _mapper.Map(createModel);
             employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
-            return Created($"/temporaryemployee{employee.Id}", _tempEmployeeRepo.Create(employee));
+            return Created($"/temporaryemployee/{employee.Id}", _tempEmployeeRepo.Create(employee));
         }
 
         [HttpPatch("{id}")]
         public IActionResult Update(int id, [FromBody] CreateOrUpdateTemporaryEmployee updateModel)
         {
-            if (updateModel == null)
+            if (_tempEmployeeRepo.GetEmployee(id) == null)
             {
-                return NotFound(ErrorMessages.EmployeeNotFound);
+                return NotFound(ErrorMessages.IdNotFound);
             }
 
             var employee = _mapper.Map(updateModel);

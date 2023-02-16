@@ -57,22 +57,22 @@ namespace PayCalculatorAPI.Controllers
         [HttpPut]
         public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
-            var employee = _mapper.Map(createModel);
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
-            return Created($"/permanentemployee/{employee.Id}", _permEmployeeRepo.Create(employee));
+            var permEmployee = _mapper.Map(createModel);
+            permEmployee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(permEmployee.Salary, permEmployee.Bonus);
+            return Created($"/permanentemployee/{permEmployee.Id}", _permEmployeeRepo.Create(permEmployee));
         }
 
         [HttpPatch("{id}")]
         public IActionResult Update(int id, [FromBody] CreateOrUpdatePermanentEmployee updateModel)
         {
-            if (updateModel == null)
+            if (_permEmployeeRepo.GetEmployee(id) == null)
             {
-                return NotFound(ErrorMessages.EmployeeNotFound);
+                return NotFound(ErrorMessages.IdNotFound);
             }
 
-            var employee = _mapper.Map(updateModel);
-            employee.Id = id;
-            _permEmployeeRepo.Update(employee);
+            var permEmployee = _mapper.Map(updateModel);
+            permEmployee.Id = id;
+            _permEmployeeRepo.Update(permEmployee);
             return Accepted();
         }
 
