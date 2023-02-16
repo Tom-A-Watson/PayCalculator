@@ -23,6 +23,10 @@ namespace PayCalculatorTest
         private const string EmployeeName = "Tom Watson";
         private const decimal EmployeeDayRate = 1200;
         private const int EmployeeWeeksWorked = 42;
+
+        private const int Ok_200 = 200;
+        private const int Accepted_202 = 202;
+        private const int NotFound_404 = 404;
 #nullable enable
 
         [SetUp]
@@ -68,13 +72,13 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Get();
-            var result = (OkObjectResult)response;
+            var result = (OkObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(200));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
@@ -93,16 +97,16 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
         [Test]
-        public void TestGetEmployeeReturnsOk()
+        [TestCase(2)]
+        public void TestGetEmployeeReturnsOk(int id)
         {
             // Arrange
-            var id = 2;
-            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[1]);
 
             // Act
             var response = controller.GetEmployee(id);
@@ -112,26 +116,26 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(200));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
         [Test]
-        public void TestGetEmployeeReturnsNotFound()
+        [TestCase(3)]
+        public void TestGetEmployeeReturnsNotFound(int id)
         {
             // Arrange
-            var id = 3;
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns((TemporaryEmployee?) null);
 
             // Act
             var response = controller.GetEmployee(id);
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
@@ -144,7 +148,7 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Create(_createOrUpdateEmployeeModel);
-            var result = (CreatedResult)response;
+            var result = (CreatedResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -155,79 +159,79 @@ namespace PayCalculatorTest
         }
 
         [Test]
-        public void TestUpdateReturnsAccepted()
+        [TestCase(1)]
+        public void TestUpdateReturnsAccepted(int id)
         {
             // Arrange
             _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
-            _mockRepository.Setup(x => x.Update(_employees[0])).Returns(_employees[0]);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
 
             // Act
-            var response = controller.Update(1, _createOrUpdateEmployeeModel);
-            var result = (AcceptedResult)response;
+            var response = controller.Update(id, _createOrUpdateEmployeeModel);
+            var result = (AcceptedResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
             });
         }
 
         [Test]
-        public void TestUpdateReturnsNotFound()
+        [TestCase(5)]
+        public void TestUpdateReturnsNotFound(int id)
         {
             // Arrange
-            _createOrUpdateEmployeeModel = null;
-            _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
-            _mockRepository.Setup(x => x.Update(_employees[0])).Returns(_employees[0]);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((TemporaryEmployee?) null);
 
             // Act
-            var response = controller.Update(1, _createOrUpdateEmployeeModel);
-            var result = (NotFoundObjectResult)response;
+            var response = controller.Update(id, _createOrUpdateEmployeeModel);
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
         [Test]
-        public void TestDeleteReturnsAccepted()
+        [TestCase(2)]
+        public void TestDeleteReturnsAccepted(int id)
         {
             // Arrange
-            var id = 2;
             _mockRepository.Setup(x => x.Delete(id)).Returns(true);
 
             // Act
             var response = controller.Delete(id);
-            var result = (AcceptedResult)response;
+            var result = (AcceptedResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
             });
         }
 
         [Test]
-        public void TestDeleteReturnsNotFound()
+        [TestCase(10)]
+        public void TestDeleteReturnsNotFound(int id)
         {
             // Arrange
-            var id = 10;
             _mockRepository.Setup(x => x.Delete(id)).Returns(false);
 
             // Act
             var response = controller.Delete(id);
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
     }

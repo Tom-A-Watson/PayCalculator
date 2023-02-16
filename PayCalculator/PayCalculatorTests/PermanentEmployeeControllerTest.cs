@@ -24,6 +24,10 @@ namespace PayCalculatorTest
         private const decimal EmployeeSalary = 20000;
         private const decimal EmployeeBonus = 5000;
         private const int EmployeeHoursWorked = 100;
+
+        private const int Ok_200 = 200;
+        private const int Accepted_202 = 202;
+        private const int NotFound_404 = 404;
 #nullable enable
 
         [SetUp]
@@ -78,7 +82,7 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(200));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
@@ -97,16 +101,16 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result); 
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
         [Test]
-        public void TestGetEmployeeReturnsOk()
+        [TestCase(2)]
+        public void TestGetEmployeeReturnsOk(int id)
         {
             // Arrange
-            var id = 2;
-            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[1]);
 
             // Act
             var response = controller.GetEmployee(id);
@@ -116,15 +120,15 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(200));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
         [Test]
-        public void TestGetEmployeeReturnsNotFound()
+        [TestCase(3)]
+        public void TestGetEmployeeReturnsNotFound(int id)
         {
             // Arrange
-            var id = 3;
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
 
             // Act
@@ -135,7 +139,7 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
@@ -159,10 +163,10 @@ namespace PayCalculatorTest
         }
 
         [Test]
-        public void TestUpdateReturnsAccepted()
+        [TestCase(1)]
+        public void TestUpdateReturnsAccepted(int id)
         {
             // Arrange
-            var id = 1;
             _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
             
@@ -174,15 +178,15 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
             });
         }
 
         [Test]
-        public void TestUpdateReturnsNotFound()
+        [TestCase(5)]
+        public void TestUpdateReturnsNotFound(int id)
         {
             // Arrange
-            var id = 5;
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
 
             // Act
@@ -193,15 +197,15 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
 
         [Test]
-        public void TestDeleteReturnsAccepted()
+        [TestCase(2)]
+        public void TestDeleteReturnsAccepted(int id)
         {
             // Arrange
-            var id = 2;
             _mockRepository.Setup(x => x.Delete(id)).Returns(true);
 
             // Act
@@ -212,15 +216,15 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
             });
         }
 
         [Test]
-        public void TestDeleteReturnsNotFound()
+        [TestCase(10)]
+        public void TestDeleteReturnsNotFound(int id)
         {
             // Arrange
-            var id = 10;
             _mockRepository.Setup(x => x.Delete(id)).Returns(false);
 
             // Act
@@ -231,7 +235,7 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(404));
+                Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
     }
