@@ -1,6 +1,7 @@
-﻿using PayCalculator.Models;
+﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
-namespace PayCalculator.Repositories
+namespace PayCalculatorLibrary.Repositories
 {
     public class TemporaryEmployeeRepository : IEmployeeRepository<TemporaryEmployee>
     {
@@ -24,7 +25,7 @@ namespace PayCalculator.Repositories
                     Name = "Emily Sanders",
                     Id = 004,
                     Contract = ContractType.Temporary,
-                    DayRate = 250,
+                    DayRate = 350,
                     WeeksWorked = 48
                 }
             };
@@ -33,7 +34,6 @@ namespace PayCalculator.Repositories
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
             Random r = new();
-
             employee.Id = r.Next(5, 1000);
             employee.Contract = ContractType.Temporary;
             _temporaryEmployeeList.Add(employee);
@@ -49,6 +49,7 @@ namespace PayCalculator.Repositories
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
             int index = _temporaryEmployeeList.FindIndex(x => x.Id == employee.Id);
+            var theEmployee = _temporaryEmployeeList[index];
 
             if (index < 0 || index > _temporaryEmployeeList.Count)
             {
@@ -56,20 +57,27 @@ namespace PayCalculator.Repositories
             }
             else
             {
-                _temporaryEmployeeList[index].Name = employee.Name;
-                _temporaryEmployeeList[index].DayRate = employee.DayRate;
-                _temporaryEmployeeList[index].WeeksWorked = employee.WeeksWorked;
+                var updated = employee;
+                var existing = theEmployee;
+
+                if (updated.Name == "string") theEmployee.Name = existing.Name;
+                else theEmployee.Name = updated.Name;
+                
+                if (updated.DayRate == 0) theEmployee.DayRate = existing.DayRate;
+                else theEmployee.DayRate = updated.DayRate;
+                
+                if (updated.WeeksWorked == 0) theEmployee.WeeksWorked = existing.WeeksWorked; 
+                else theEmployee.WeeksWorked = updated.WeeksWorked;
             }
 
-            var updatedEmployee = GetEmployee(employee.Id);
-            return updatedEmployee;
+            return employee;
         }
 
         public bool Delete(int id)
         {
             var employee = GetEmployee(id);
 
-            if (GetEmployee(id) == null)
+            if (employee == null)
             {
                 return false;
             }

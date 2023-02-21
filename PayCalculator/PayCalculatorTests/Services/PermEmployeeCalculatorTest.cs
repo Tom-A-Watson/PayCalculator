@@ -1,6 +1,6 @@
-using PayCalculator.Services;
+using PayCalculatorLibrary.Services;
 
-namespace PayCalculatorTest
+namespace PayCalculatorTest.Services
 {
     [TestFixture]
     public class PermEmployeeCalculatorTest
@@ -13,18 +13,18 @@ namespace PayCalculatorTest
             // Act
             var total = calculator.TotalAnnualPay(10000, 1000);
             // Assert
-            Assert.That(total, Is.EqualTo(11000)); 
+            Assert.That(total, Is.EqualTo(11000));
         }
 
         [Test]
         public void PermHourlyRateIsCalculated()
         {
             // Arrange
-            var calculator = new PermanentPayCalculator(); 
+            var calculator = new PermanentPayCalculator();
             // Act
-            var hourlyRate = calculator.HourlyRate(10000, 200); 
+            var hourlyRate = calculator.HourlyRate(10000, 200);
             // Assert
-            Assert.That(hourlyRate, Is.EqualTo(50)); 
+            Assert.That(hourlyRate, Is.EqualTo(50));
         }
     }
 }
