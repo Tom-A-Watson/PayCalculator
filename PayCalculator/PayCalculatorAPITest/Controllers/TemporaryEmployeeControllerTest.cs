@@ -6,24 +6,23 @@ using PayCalculatorLibrary.Services;
 using Moq;
 using PayCalculatorAPI.Services;
 
-namespace PayCalculatorTest
+namespace PayCalculatorAPITest.Controllers
 {
     [TestFixture]
-    public class PermanentEmployeeControllerTest
+    public class TemporaryEmployeeControllerTest
     {
 #nullable disable
-        private List<PermanentEmployee> _employees;
-        private CreateOrUpdatePermanentEmployee _createOrUpdateEmployeeModel;
-        private PermanentEmployeeController controller;
+        private List<TemporaryEmployee> _employees;
+        private CreateOrUpdateTemporaryEmployee _createOrUpdateEmployeeModel;
+        private TemporaryEmployeeController controller;
 
-        private Mock<IPermanentEmployeeMapper> _mockMapper;
-        private Mock<IEmployeeRepository<PermanentEmployee>> _mockRepository;
-        private Mock<PermanentPayCalculator> _mockCalculator;
-        
+        private Mock<ITemporaryEmployeeMapper> _mockMapper;
+        private Mock<IEmployeeRepository<TemporaryEmployee>> _mockRepository;
+        private Mock<TemporaryPayCalculator> _mockCalculator;
+
         private const string EmployeeName = "Tom Watson";
-        private const decimal EmployeeSalary = 20000;
-        private const decimal EmployeeBonus = 5000;
-        private const int EmployeeHoursWorked = 100;
+        private const decimal EmployeeDayRate = 1200;
+        private const int EmployeeWeeksWorked = 42;
 
         private const int Ok_200 = 200;
         private const int Accepted_202 = 202;
@@ -33,50 +32,47 @@ namespace PayCalculatorTest
         [SetUp]
         public void Setup()
         {
-            _employees = new List<PermanentEmployee>()
+            _employees = new List<TemporaryEmployee>()
             {
-                new PermanentEmployee()
+                new TemporaryEmployee()
                 {
                     Id = 1,
                     Name = EmployeeName,
-                    Salary = EmployeeSalary,
-                    Bonus = EmployeeBonus,
-                    HoursWorked = EmployeeHoursWorked
+                    DayRate = EmployeeDayRate,
+                    WeeksWorked = EmployeeWeeksWorked
                 },
 
-                new PermanentEmployee()
+                new TemporaryEmployee()
                 {
                     Id= 2,
-                    Name = "zachary",
-                    Salary = 20000,
-                    Bonus = 200,
-                    HoursWorked = 1820
+                    Name = "micheal",
+                    DayRate = 500,
+                    WeeksWorked = 30
                 }
             };
 
             _createOrUpdateEmployeeModel = new()
             {
                 Name = EmployeeName,
-                Salary = EmployeeSalary,
-                Bonus = EmployeeBonus,
-                HoursWorked = EmployeeHoursWorked
+                DayRate = EmployeeDayRate,
+                WeeksWorked = EmployeeWeeksWorked
             };
 
             _mockRepository = new();
             _mockCalculator = new();
             _mockMapper = new();
-            controller = new PermanentEmployeeController(_mockRepository.Object, _mockCalculator.Object, _mockMapper.Object);
+            controller = new TemporaryEmployeeController(_mockRepository.Object, _mockCalculator.Object, _mockMapper.Object);
         }
-        
+
         [Test]
         public void TestGetAllReturnsOk()
         {
             // Arrange
             _mockRepository.Setup(x => x.GetAll()).Returns(_employees);
-            
+
             // Act
             var response = controller.Get();
-            var result = (OkObjectResult) response;
+            var result = (OkObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -95,12 +91,12 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Get();
-            var result = (NotFoundObjectResult) response;
+            var result = (NotFoundObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.IsNotNull(result); 
+                Assert.IsNotNull(result);
                 Assert.That(result?.StatusCode, Is.EqualTo(NotFound_404));
             });
         }
@@ -114,7 +110,7 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.GetEmployee(id);
-            var result = (OkObjectResult) response;
+            var result = (OkObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -129,11 +125,11 @@ namespace PayCalculatorTest
         public void TestGetEmployeeReturnsNotFound(int id)
         {
             // Arrange
-            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((TemporaryEmployee?)null);
 
             // Act
             var response = controller.GetEmployee(id);
-            var result = (NotFoundObjectResult) response;
+            var result = (NotFoundObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -152,7 +148,7 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Create(_createOrUpdateEmployeeModel);
-            var result = (CreatedResult) response;
+            var result = (CreatedResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -169,10 +165,10 @@ namespace PayCalculatorTest
             // Arrange
             _mockMapper.Setup(x => x.Map(_createOrUpdateEmployeeModel)).Returns(_employees[0]);
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[0]);
-            
+
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (AcceptedResult) response;
+            var result = (AcceptedResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -187,11 +183,11 @@ namespace PayCalculatorTest
         public void TestUpdateReturnsNotFound(int id)
         {
             // Arrange
-            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((PermanentEmployee?) null);
+            _mockRepository.Setup(x => x.GetEmployee(id)).Returns((TemporaryEmployee?)null);
 
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (NotFoundObjectResult) response;
+            var result = (NotFoundObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -210,7 +206,7 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Delete(id);
-            var result = (AcceptedResult) response;
+            var result = (AcceptedResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -229,7 +225,7 @@ namespace PayCalculatorTest
 
             // Act
             var response = controller.Delete(id);
-            var result = (NotFoundObjectResult) response;
+            var result = (NotFoundObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>

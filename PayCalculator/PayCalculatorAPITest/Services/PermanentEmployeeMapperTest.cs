@@ -1,7 +1,7 @@
 ﻿using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 
-namespace PayCalculatorTest
+namespace PayCalculatorAPITest.Services
 {
     [TestFixture]
     public class PermanentEmployeeMapperTest
@@ -29,16 +29,16 @@ namespace PayCalculatorTest
             };
 
             // Act
-            var _employee = _mapper.Map(_model);
+            var employee = _mapper.Map(_model);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(_employee.GetType, Is.EqualTo(typeof(PermanentEmployee)));
-                Assert.That(_employee.Name, Is.EqualTo(ModelName));
-                Assert.That(_employee.Salary, Is.EqualTo(ModelSalary));
-                Assert.That(_employee.Bonus, Is.EqualTo(ModelBonus));
-                Assert.That(_employee.HoursWorked, Is.EqualTo(ModelHoursWorked));
+                Assert.That(employee.GetType, Is.EqualTo(typeof(PermanentEmployee)));
+                Assert.That(employee.Name, Is.EqualTo(ModelName));
+                Assert.That(employee.Salary, Is.EqualTo(ModelSalary));
+                Assert.That(employee.Bonus, Is.EqualTo(ModelBonus));
+                Assert.That(employee.HoursWorked, Is.EqualTo(ModelHoursWorked));
             });
         }
     }

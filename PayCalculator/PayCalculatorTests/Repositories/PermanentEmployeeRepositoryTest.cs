@@ -1,15 +1,15 @@
 ﻿using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 
-namespace PayCalculatorTest
+namespace PayCalculatorTest.Repositories
 {
     [TestFixture]
-    public class TemporaryEmployeeRepositoryTest
+    public class PermanentEmployeeRepositoryTest
     {
 #nullable disable
-        private TemporaryEmployeeRepository repository;
-        private TemporaryEmployee testEmployee;
-        private TemporaryEmployee employee;
+        private PermanentEmployeeRepository repository;
+        private PermanentEmployee testEmployee;
+        private PermanentEmployee employee;
         private bool deleted;
 #nullable enable
 
@@ -17,15 +17,16 @@ namespace PayCalculatorTest
         public void SetupTests()
         {
             // Arrange
-            repository = new TemporaryEmployeeRepository();
+            repository = new();
 
             testEmployee = new()
             {
-                Id = 1,
-                Name = "ben",
-                DayRate = 250,
-                Contract = ContractType.Temporary,
-                WeeksWorked = 46
+                Id = 3,
+                Name = "mark",
+                Salary = 20000,
+                Bonus = 5000,
+                Contract = ContractType.Permanent,
+                HoursWorked = 1820
             };
         }
 
@@ -33,16 +34,16 @@ namespace PayCalculatorTest
         public void TestGetEmployeeWorks()
         {
             // Act
-            employee = repository.GetEmployee(3);
+            employee = repository.GetEmployee(2);
             // Assert
-            Assert.That(employee.Name, Is.EqualTo("Matt Burns"));
+            Assert.That(employee.Name, Is.EqualTo("John Smith"));
         }
 
         [Test]
         public void TestGetEmployeeFails()
         {
             // Act
-            employee = repository.GetEmployee(2);
+            employee = repository.GetEmployee(3);
             // Assert
             Assert.IsNull(employee);
         }
@@ -57,7 +58,7 @@ namespace PayCalculatorTest
             Assert.Multiple(() =>
             {
                 Assert.That(repository.GetAll().Count(), Is.EqualTo(3));
-                Assert.That(employee.Name, Is.EqualTo("ben"));
+                Assert.That(employee.Name, Is.EqualTo("mark"));
             });
         }
 
@@ -65,7 +66,7 @@ namespace PayCalculatorTest
         public void TestDeleteEmployeeWorks()
         {
             // Act
-            deleted = repository.Delete(4);
+            deleted = repository.Delete(1);
 
             // Assert
             Assert.Multiple(() =>
@@ -79,7 +80,7 @@ namespace PayCalculatorTest
         public void TestDeleteEmployeeFails()
         {
             // Act
-            deleted = repository.Delete(14);
+            deleted = repository.Delete(4);
 
             // Assert
             Assert.Multiple(() =>

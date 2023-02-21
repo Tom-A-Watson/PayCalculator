@@ -70,9 +70,9 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound(ErrorMessages.IdNotFound);
             }
 
-            var permEmployee = _mapper.Map(updateModel);
-            permEmployee.Id = id;
-            _permEmployeeRepo.Update(permEmployee);
+            var employee = _mapper.Map(updateModel);
+            employee.Id = id;
+            _permEmployeeRepo.Update(employee);
             return Accepted();
         }
 
