@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayCalculator", "PayCalcula
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayCalculatorTest", "PayCalculatorTests\PayCalculatorTest.csproj", "{7B952053-7615-456B-BF8B-D30BF2514A7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayCalculatorLibrary", "PayCalculatorLibrary\PayCalculatorLibrary.csproj", "{771245DA-ADBB-4797-8F81-BB80E31A10C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayCalculatorLibrary", "PayCalculatorLibrary\PayCalculatorLibrary.csproj", "{771245DA-ADBB-4797-8F81-BB80E31A10C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayCalculatorAPI", "PayCalculatorAPI\PayCalculatorAPI.csproj", "{EA546D5F-BBC3-4447-9E1D-F17ACD9E0B43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayCalculatorAPI", "PayCalculatorAPI\PayCalculatorAPI.csproj", "{EA546D5F-BBC3-4447-9E1D-F17ACD9E0B43}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PayCalculatorAPITest", "PayCalculatorAPITest\PayCalculatorAPITest.csproj", "{010DA0D4-A215-43B9-8DB1-F4CE26CDB00B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EA546D5F-BBC3-4447-9E1D-F17ACD9E0B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA546D5F-BBC3-4447-9E1D-F17ACD9E0B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA546D5F-BBC3-4447-9E1D-F17ACD9E0B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{010DA0D4-A215-43B9-8DB1-F4CE26CDB00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{010DA0D4-A215-43B9-8DB1-F4CE26CDB00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{010DA0D4-A215-43B9-8DB1-F4CE26CDB00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{010DA0D4-A215-43B9-8DB1-F4CE26CDB00B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
