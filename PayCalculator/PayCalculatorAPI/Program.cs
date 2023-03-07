@@ -9,7 +9,9 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 var _log4net = LogManager.GetLogger(typeof(Program));
 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+var fileInfo = new FileInfo("C:\\dev\\PayCalculatorRoot\\PayCalculator\\log4net.config");
+XmlConfigurator.Configure(logRepository, fileInfo);
+_log4net.Info("Hello Logging World");
 
 // Add services to the container.
 builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentEmployeeRepository>();
@@ -37,5 +39,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-_log4net.Info("Hello Logging World");
