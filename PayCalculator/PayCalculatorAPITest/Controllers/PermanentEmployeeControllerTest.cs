@@ -26,7 +26,6 @@ namespace PayCalculatorAPITest.Controllers
         private const int EmployeeHoursWorked = 100;
 
         private const int Ok_200 = 200;
-        private const int Accepted_202 = 202;
         private const int NotFound_404 = 404;
 #nullable enable
 
@@ -76,7 +75,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Get();
-            var result = (OkObjectResult)response;
+            var result = (OkObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -95,7 +94,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Get();
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -114,7 +113,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.GetEmployee(id);
-            var result = (OkObjectResult)response;
+            var result = (OkObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -133,7 +132,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.GetEmployee(id);
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -152,7 +151,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Create(_createOrUpdateEmployeeModel);
-            var result = (CreatedResult)response;
+            var result = (CreatedResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -172,13 +171,13 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (AcceptedResult)response;
+            var result = (OkResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
@@ -191,7 +190,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
@@ -210,13 +209,13 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Delete(id);
-            var result = (AcceptedResult)response;
+            var result = (OkObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
@@ -229,7 +228,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Delete(id);
-            var result = (NotFoundObjectResult)response;
+            var result = (NotFoundObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>

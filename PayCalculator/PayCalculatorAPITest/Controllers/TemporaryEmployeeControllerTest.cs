@@ -25,7 +25,6 @@ namespace PayCalculatorAPITest.Controllers
         private const int EmployeeWeeksWorked = 42;
 
         private const int Ok_200 = 200;
-        private const int Accepted_202 = 202;
         private const int NotFound_404 = 404;
 #nullable enable
 
@@ -168,13 +167,13 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (AcceptedResult)response;
+            var result = (OkResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
@@ -206,13 +205,13 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Delete(id);
-            var result = (AcceptedResult)response;
+            var result = (OkObjectResult) response;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.That(result?.StatusCode, Is.EqualTo(Accepted_202));
+                Assert.That(result?.StatusCode, Is.EqualTo(Ok_200));
             });
         }
 
