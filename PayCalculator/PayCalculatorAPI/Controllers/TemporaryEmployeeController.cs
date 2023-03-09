@@ -1,12 +1,10 @@
 ﻿using log4net;
-using log4net.Config;
 using Microsoft.AspNetCore.Mvc;
 using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Constants;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
-using System.Reflection;
 
 namespace PayCalculatorAPI.Controllers
 {
@@ -18,8 +16,6 @@ namespace PayCalculatorAPI.Controllers
         private readonly ITemporaryPayCalculator _tempPayCalculator;
         private ITemporaryEmployeeMapper _mapper;
         private readonly ILog _log4net;
-        private log4net.Repository.ILoggerRepository logRepository;
-        private FileInfo fileInfo = new("C:\\dev\\PayCalculatorRoot\\PayCalculator\\log4net.config");
 
         public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, ITemporaryEmployeeMapper mapper)
         {
@@ -27,8 +23,6 @@ namespace PayCalculatorAPI.Controllers
             _tempPayCalculator = tempPayCalculator;
             _mapper = mapper;
             _log4net = LogManager.GetLogger(typeof(PermanentEmployeeController));
-            logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, fileInfo);
         }
 
         [HttpGet]
@@ -71,9 +65,10 @@ namespace PayCalculatorAPI.Controllers
         public IActionResult Create(CreateOrUpdateTemporaryEmployee createModel)
         {
             var employee = _mapper.Map(createModel);
-            employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
-            _log4net.Info("Created a new temporary employee entry");
-            return Created($"/temporaryemployee/{employee.Id}", _tempEmployeeRepo.Create(employee));
+            var newEmployee = _tempEmployeeRepo.Create(employee);
+            newEmployee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
+            _log4net.Info($"Created a new temporary employee with an ID of {newEmployee.Id}");
+            return Created($"/temporaryemployee/{newEmployee.Id}", newEmployee);
         }
 
         [HttpPatch("{id}")]
@@ -103,7 +98,7 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound(ErrorMessages.IdNotFound);
             }
 
-            _log4net.Info($"Temporary wmployee with ID {id} successfully deleted");
+            _log4net.Info($"Temporary employee with ID {id} successfully deleted");
             return Ok(delete);
         }
     }

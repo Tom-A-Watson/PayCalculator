@@ -11,7 +11,6 @@ var _log4net = LogManager.GetLogger(typeof(Program));
 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 var fileInfo = new FileInfo("C:\\dev\\PayCalculatorRoot\\PayCalculator\\log4net.config");
 XmlConfigurator.Configure(logRepository, fileInfo);
-_log4net.Info("Hello Logging World");
 
 // Add services to the container.
 builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentEmployeeRepository>();

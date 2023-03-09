@@ -5,8 +5,6 @@ using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
 using log4net;
-using System.Reflection;
-using log4net.Config;
 
 namespace PayCalculatorAPI.Controllers
 {
@@ -18,8 +16,6 @@ namespace PayCalculatorAPI.Controllers
         private readonly IPermanentPayCalculator _permPayCalculator;
         private readonly IPermanentEmployeeMapper _mapper;
         private readonly ILog _log4net;
-        private log4net.Repository.ILoggerRepository logRepository;
-        private FileInfo fileInfo = new("C:\\dev\\PayCalculatorRoot\\PayCalculator\\log4net.config");
 
         public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, IPermanentEmployeeMapper mapper)
         {
@@ -27,8 +23,6 @@ namespace PayCalculatorAPI.Controllers
             _permPayCalculator = permPayCalculator;
             _mapper = mapper;
             _log4net = LogManager.GetLogger(typeof(PermanentEmployeeController));
-            logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, fileInfo);
         }
 
         [HttpGet]
@@ -70,10 +64,11 @@ namespace PayCalculatorAPI.Controllers
         [HttpPut]
         public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
-            var permEmployee = _mapper.Map(createModel);
-            permEmployee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(permEmployee.Salary, permEmployee.Bonus);
-            _log4net.Info("Created a new permanent employee entry");
-            return Created($"/permanentemployee/{permEmployee.Id}", _permEmployeeRepo.Create(permEmployee));
+            var employee = _mapper.Map(createModel);
+            var newEmployee = _permEmployeeRepo.Create(employee);
+            newEmployee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+            _log4net.Info($"Created a new permanent employee with an ID of {newEmployee.Id}");
+            return Created($"/permanentemployee/{newEmployee.Id}", newEmployee);
         }
 
         [HttpPatch("{id}")]
