@@ -2,8 +2,15 @@ using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
+using log4net;
+using log4net.Config;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var _log4net = LogManager.GetLogger(typeof(Program));
+var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+var fileInfo = new FileInfo("C:\\dev\\PayCalculatorRoot\\PayCalculator\\log4net.config");
+XmlConfigurator.Configure(logRepository, fileInfo);
 
 // Add services to the container.
 builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentEmployeeRepository>();
