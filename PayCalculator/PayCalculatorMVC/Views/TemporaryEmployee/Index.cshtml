@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "PermanentEmployee Page";
+    ViewData["Title"] = "TemporaryEmployee Page";
 }
 
-@model IEnumerable<PayCalculatorLibrary.Models.PermanentEmployee>
+@model IEnumerable<PayCalculatorLibrary.Models.TemporaryEmployee>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -11,18 +11,17 @@
     </head>
     <body class="bg-dark text-light">
         <div class="text-center">
-            <h1 class="display-4">Permanent Employees</h1>
-            <p>This page will contain the CRUD operations that are performed on permanent employees!</p>
-            
+            <h1 class="display-4">Temporary Employees</h1>
+            <p>This page will contain the CRUD operations that are performed on temporary employees!</p>
+
             <table class="table table-striped bg-light table-hover table-responsive">
                 <thead class="bg-black text-light">
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Contract</th>
-                        <th scope="col">Salary</th>
-                        <th scope="col">Bonus</th>
-                        <th scope="col">Hours Worked</th>
+                        <th scope="col">Day Rate</th>
+                        <th scope="col">Weeks Worked</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,15 +31,12 @@
                             <td>@employee.Id</td>
                             <td>@employee.Name</td>
                             <td>@employee.Contract</td>
-                            <td>@employee.Salary</td>
-                            <td>@employee.Bonus</td>
-                            <td>@employee.HoursWorked</td>
+                            <td>@employee.DayRate</td>
+                            <td>@employee.WeeksWorked</td>
                         </tr>
                     }
                 </tbody>
             </table>
-
-            <a class="btn btn-outline-primary" asp-controller="PermanentEmployee" asp-action="Create">Create an entry</a>
 
             <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>

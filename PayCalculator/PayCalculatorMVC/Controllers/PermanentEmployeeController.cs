@@ -22,10 +22,10 @@ namespace PayCalculatorMVC.Controllers
         }
 
 
-        //public IActionResult Create()
-        //{
-
-        //}
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         //public IActionResult Update()
         //{

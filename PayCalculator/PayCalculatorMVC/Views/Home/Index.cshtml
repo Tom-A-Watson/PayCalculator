@@ -2,7 +2,64 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@model PayCalculatorMVC.Models.HomePageViewModel
+<body class="bg-dark text-light">
+    <div class="text-center">
+        <h1 class="display-4">Home</h1>
+        <p>This page contains both types of employee</p>
+    </div>
+        <h2 class="display-6" style="margin: 0 0 0.5em 0.5em">Permanent Employees</h2>
+        <table class="table table-striped bg-light table-hover table-responsive" style="border: 2px solid #20c997">
+        <thead class="bg-black text-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Salary</th>
+                    <th scope="col">Bonus</th>
+                    <th scope="col">Hours Worked</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model.PermEmployeeList)
+                {
+                    <tr>
+                        <td>@employee.Id</td>
+                        <td>@employee.Name</td>
+                        <td>@employee.Contract</td>
+                        <td>@employee.Salary</td>
+                        <td>@employee.Bonus</td>
+                        <td>@employee.HoursWorked</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h2 class="display-6" style="margin: 1em 0 0.5em 0.5em">Temporary Employees</h2>
+        <table class="table table-striped bg-light table-hover table-responsive" style="border: 2px solid #fd7e14">
+            <thead class="bg-black text-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Day Rate</th>
+                    <th scope="col">Weeks Worked</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model.TempEmployeeList)
+                {
+                    <tr>
+                        <td>@employee.Id</td>
+                        <td>@employee.Name</td>
+                        <td>@employee.Contract</td>
+                        <td>@employee.DayRate</td>
+                        <td>@employee.WeeksWorked</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    <div class="text-center">
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+</body>

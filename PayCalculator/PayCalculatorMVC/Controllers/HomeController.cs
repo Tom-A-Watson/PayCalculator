@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Repositories;
 using PayCalculatorMVC.Models;
 using System.Diagnostics;
 
@@ -7,15 +9,23 @@ namespace PayCalculatorMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
+        private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo)
         {
             _logger = logger;
+            _permEmployeeRepo = permEmployeeRepo;
+            _tempEmployeeRepo = tempEmployeeRepo;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(new HomePageViewModel {
+                PermEmployeeList = _permEmployeeRepo.GetAll(), 
+                TempEmployeeList = _tempEmployeeRepo.GetAll()
+            });
         }
 
         public IActionResult Privacy()
