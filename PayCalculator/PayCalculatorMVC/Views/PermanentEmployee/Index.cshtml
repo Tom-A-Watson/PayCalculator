@@ -19,9 +19,10 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Contract</th>
                         <th scope="col">Salary</th>
                         <th scope="col">Bonus</th>
+                        <th scope="col">Total Annual Pay</th>
+                        <th scope="col">Hourly Rate</th>
                         <th scope="col">Hours Worked</th>
                     </tr>
                 </thead>
@@ -31,16 +32,17 @@
                         <tr>
                             <td>@employee.Id</td>
                             <td>@employee.Name</td>
-                            <td>@employee.Contract</td>
-                            <td>@employee.Salary</td>
-                            <td>@employee.Bonus</td>
+                            <td>£@employee.Salary</td>
+                            <td>£@employee.Bonus</td>
+                            <td>£@employee.TotalAnnualPay</td>
+                            <td>£@employee.HourlyRate</td>
                             <td>@employee.HoursWorked</td>
                         </tr>
                     }
                 </tbody>
             </table>
 
-            <a class="btn btn-outline-primary" asp-controller="PermanentEmployee" asp-action="Create">Create an entry</a>
+            <a class="btn btn-outline-primary" asp-controller="PermanentEmployee" asp-action="Create" asp-area="">Create an entry</a>
 
             <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>

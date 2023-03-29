@@ -1,6 +1,6 @@
 ﻿using PayCalculatorLibrary.Models;
 
-namespace PayCalculatorAPI.Services
+namespace PayCalculatorLibrary.Services
 {
     public class TemporaryEmployeeMapper : ITemporaryEmployeeMapper
     {

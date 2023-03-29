@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
+using PayCalculatorLibrary.Services;
 using PayCalculatorMVC.Models;
 using System.Diagnostics;
 
@@ -11,26 +12,40 @@ namespace PayCalculatorMVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
+        private readonly IPermanentPayCalculator _permPayCalculator;
+        private readonly ITemporaryPayCalculator _tempPayCalculator;
 
-        public HomeController(ILogger<HomeController> logger,
-            IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo)
+        public HomeController(ILogger<HomeController> logger, IEmployeeRepository<PermanentEmployee> permEmployeeRepo, 
+            IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, IPermanentPayCalculator permPayCalculator, ITemporaryPayCalculator tempPayCalculator)
         {
             _logger = logger;
             _permEmployeeRepo = permEmployeeRepo;
+            _permPayCalculator = permPayCalculator;
             _tempEmployeeRepo = tempEmployeeRepo;
+            _tempPayCalculator = tempPayCalculator;
         }
 
         public IActionResult Index()
         {
+            var permEmployeeList = _permEmployeeRepo.GetAll();
+            var tempEmployeeList = _tempEmployeeRepo.GetAll();
+
+            foreach (var permEmployee in permEmployeeList) 
+            {
+                permEmployee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(permEmployee.Salary, permEmployee.Bonus), 2);
+                permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary, permEmployee.HoursWorked), 2);
+            }
+
+            foreach (var tempEmployee in tempEmployeeList)
+            {
+                tempEmployee.TotalAnnualPay = Math.Round(_tempPayCalculator.TotalAnnualPay(tempEmployee.DayRate, tempEmployee.WeeksWorked), 2);
+                tempEmployee.HourlyRate = Math.Round(_tempPayCalculator.HourlyRate(tempEmployee.DayRate), 2);
+            }
+
             return View(new HomePageViewModel {
                 PermEmployeeList = _permEmployeeRepo.GetAll(), 
                 TempEmployeeList = _tempEmployeeRepo.GetAll()
             });
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

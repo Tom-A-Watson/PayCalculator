@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
+using PayCalculatorLibrary.Services;
 using PayCalculatorMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentEmployeeRepository>();
 builder.Services.AddSingleton<IEmployeeRepository<TemporaryEmployee>, TemporaryEmployeeRepository>();
+builder.Services.AddSingleton<IPermanentEmployeeMapper, PermanentEmployeeMapper>();
+builder.Services.AddSingleton<IPermanentPayCalculator, PermanentPayCalculator>();
+builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>();
+builder.Services.AddSingleton<ITemporaryPayCalculator, TemporaryPayCalculator>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EmployeeDbContext>(options =>
