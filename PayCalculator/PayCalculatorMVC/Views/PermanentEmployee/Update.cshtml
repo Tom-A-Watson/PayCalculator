@@ -1,0 +1,46 @@
+﻿@model PayCalculatorLibrary.Models.PermanentEmployee;
+
+<body class="bg-dark text-light">
+    <div class="text-center">
+        <h1 class="display-5">Update a Permanent Employee</h1>
+        <p>By specifying an ID and filling out this form, you can update a permanent employee entry.</p>
+    </div>
+
+    <form asp-controller="PermanentEmployee" asp-action="GetEmployee" method="get" class="positon-absolute" style="width: 75%; margin: 0 0 0 9.5em">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label asp-for="@Model.Id" class="form-label" style="margin: 0.5em 0.8em">Enter the ID of the employee you would like to update</label>
+                        <input asp-for="@Model.Id" type="number" class="form-control bg-black text-light" id="idInput" placeholder="Employee ID" style="border: 1px solid var(--bs-light-border-subtle); border-radius: 0.8em">
+                    </div>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-outline-light display-7" style="margin: 2.4em 0 0 0; border-radius: 0.8em">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+   
+    <form asp-controller="PermanentEmployee" asp-action="Update" method="post" class="position-absolute top-30 start-50 translate-middle-x" style="width: 65%; margin: 0.5em 0 0 0">
+        <div class="mb-3">
+            <label asp-for="@Model.Name" class="form-label" style="margin: 0.5em 0.8em">Name</label>
+            <input asp-for="@Model.Name" type="text" class="form-control bg-black text-light" id="nameInput" placeholder="Employee name" style="border: 1px solid var(--bs-light-border-subtle); border-radius: 0.8em">
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Salary" class="form-label" style="margin: 0.5em 0.8em">Salary</label>
+            <input asp-for="@Model.Salary" type="number" class="form-control bg-black text-light" id="salaryInput" placeholder="Employee salary" style="border: 1px solid var(--bs-light-border-subtle); border-radius: 0.8em">
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Bonus" class="form-label" style="margin: 0.5em 0.8em">Bonus</label>
+            <input asp-for="@Model.Bonus" type="number" class="form-control bg-black text-light" id="bonusInput" placeholder="Employee bonus" style="border: 1px solid var(--bs-light-border-subtle); border-radius: 0.8em">
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.HoursWorked" class="form-label" style="margin: 0.5em 0.8em">Hours Worked</label>
+            <input asp-for="@Model.HoursWorked" type="number" class="form-control bg-black text-light" id="hoursWorkedInput" placeholder="Number of hours worked" style="border: 1px solid var(--bs-light-border-subtle); border-radius: 0.8em">
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success display-7">Update</button>
+        </div>
+    </form>
+</body>

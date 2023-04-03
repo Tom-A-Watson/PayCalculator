@@ -52,13 +52,13 @@ namespace PayCalculatorMVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Create");
         }
 
-        //public IActionResult Update()
-        //{
-
-        //}
+        public IActionResult Update()
+        {
+            return View();
+        }
 
         //public IActionResult Delete()
         //{
