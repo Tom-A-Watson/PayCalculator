@@ -1,0 +1,44 @@
+﻿@model PayCalculatorLibrary.Models.PermanentEmployee;
+<body class="bg-dark text-light">
+    <div class="text-center">
+        <h1 class="display-5">Delete Permanent Employee</h1>
+        <p>Are you sure that you want to delete @Model.Name?</p>
+        <table class="table table-striped bg-light table-hover table-responsive" style="width: 35%; margin: 0 auto; border-radius: 1em; border: none">
+            <tbody>
+                <tr>
+                    <td scope="col">ID:</td><td scope="col">@Model.Id</td>
+                </tr>
+                <tr>
+                    <td scope="col">Name:</td><td scope="col">@Model.Name</td>
+                </tr>
+                <tr>
+                    <td scope="col">Salary:</td><td scope="col">@Model.Salary</td>
+                </tr>
+                <tr>
+                    <td scope="col">Bonus:</td><td scope="col">@Model.Bonus</td>
+                </tr>
+                <tr>
+                    <td scope="col">Hours Worked:</td><td scope="col">@Model.HoursWorked</td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <div class="container">
+            <form asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <input asp-for=Id type="hidden" value="@Model.Id"/>
+                    <!--<a asp-controller="PermanentEmployee" asp-action="Deletion" asp-route-id="@Model.Id">-->
+                    <button type="submit" class="btn btn-danger">Yes, I am sure</button>
+                    <!--</a>-->
+                </div>
+                <div class="col">
+                    <a class="btn btn-outline-secondary" asp-controller="PermanentEmployee" asp-action="Index" asp-area="">No, take me back</a>
+                </div>
+                <div class="col"></div>
+            </div>
+            </form>
+        </div>
+    </div>
+</body>

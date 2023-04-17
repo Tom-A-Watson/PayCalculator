@@ -1,5 +1,5 @@
-﻿using PayCalculatorAPI.Services;
-using PayCalculatorLibrary.Models;
+﻿using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorAPITest.Services
 {

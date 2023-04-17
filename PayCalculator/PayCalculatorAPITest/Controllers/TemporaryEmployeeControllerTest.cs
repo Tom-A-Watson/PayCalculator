@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using PayCalculatorAPI.Controllers;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
-using Moq;
-using PayCalculatorAPI.Services;
 
 namespace PayCalculatorAPITest.Controllers
 {
@@ -167,7 +166,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Update(id, _createOrUpdateEmployeeModel);
-            var result = (OkResult) response;
+            var result = (OkResult)response;
 
             // Assert
             Assert.Multiple(() =>
@@ -205,7 +204,7 @@ namespace PayCalculatorAPITest.Controllers
 
             // Act
             var response = controller.Delete(id);
-            var result = (OkObjectResult) response;
+            var result = (OkObjectResult)response;
 
             // Assert
             Assert.Multiple(() =>

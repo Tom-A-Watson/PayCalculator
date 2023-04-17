@@ -9,61 +9,56 @@ using Microsoft.AspNetCore.Mvc;
 namespace PayCalculatorMVCTest.Controllers
 {
     [TestFixture]
-    public class PermanentEmployeeControllerTest
+    public class TemporaryEmployeeControllerTest
     {
 #nullable disable
-        private List<PermanentEmployee> _employees;
+        private List<TemporaryEmployee> _employees;
         private int employeeCount;
-        private CreateOrUpdatePermanentEmployee _createOrUpdateEmployeeModel;
-        private PermanentEmployeeController controller;
+        private CreateOrUpdateTemporaryEmployee _createOrUpdateEmployeeModel;
+        private TemporaryEmployeeController controller;
 
-        private Mock<ILogger<PermanentEmployeeController>> _mockLogger;
-        private Mock<IPermanentEmployeeMapper> _mockMapper;
-        private Mock<IEmployeeRepository<PermanentEmployee>> _mockRepository;
-        private Mock<IPermanentPayCalculator> _mockCalculator;
+        private Mock<ILogger<TemporaryEmployeeController>> _mockLogger;
+        private Mock<ITemporaryEmployeeMapper> _mockMapper;
+        private Mock<IEmployeeRepository<TemporaryEmployee>> _mockRepository;
+        private Mock<ITemporaryPayCalculator> _mockCalculator;
 
-        private const string EmployeeName = "Bhavana";
-        private const decimal EmployeeSalary = 20000;
-        private const decimal EmployeeBonus = 5000;
-        private const int EmployeeHoursWorked = 100;
+        private const string EmployeeName = "Tom W";
+        private const decimal EmployeeDayRate = 500;
+        private const int EmployeeWeeksWorked = 48;
 #nullable enable
         [SetUp]
         public void Setup()
         {
-            _employees = new List<PermanentEmployee>()
+            _employees = new List<TemporaryEmployee>()
             {
-                new PermanentEmployee()
+                new TemporaryEmployee()
                 {
                     Id = 1,
                     Name = EmployeeName,
-                    Salary = EmployeeSalary,
-                    Bonus = EmployeeBonus,
-                    HoursWorked = EmployeeHoursWorked
+                    DayRate = EmployeeDayRate,
+                    WeeksWorked = EmployeeWeeksWorked
                 },
 
-                new PermanentEmployee()
+                new TemporaryEmployee()
                 {
                     Id= 2,
                     Name = "zachary",
-                    Salary = 20000,
-                    Bonus = 200,
-                    HoursWorked = 1820
+                    DayRate = 400
                 }
             };
 
             _createOrUpdateEmployeeModel = new()
             {
                 Name = EmployeeName,
-                Salary = EmployeeSalary,
-                Bonus = EmployeeBonus,
-                HoursWorked = EmployeeHoursWorked
+                DayRate = EmployeeDayRate,
+                WeeksWorked = EmployeeWeeksWorked
             };
 
             _mockLogger = new();
             _mockRepository = new();
             _mockCalculator = new();
             _mockMapper = new();
-            controller = new PermanentEmployeeController(_mockLogger.Object, _mockRepository.Object, _mockMapper.Object, _mockCalculator.Object);
+            controller = new TemporaryEmployeeController(_mockLogger.Object, _mockRepository.Object, _mockMapper.Object, _mockCalculator.Object);
         }
 
         [Test]
@@ -73,17 +68,17 @@ namespace PayCalculatorMVCTest.Controllers
             _mockRepository.Setup(x => x.GetAll()).Returns(_employees);
 
             // Act
-            var result = (ViewResult) controller.Index();
+            var result = (ViewResult)controller.Index();
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.That(result.GetType, Is.EqualTo(typeof(ViewResult)));
-                Assert.That(((List<PermanentEmployee>) result.Model).Count, Is.EqualTo(_employees.Count));
-                Assert.That(((List<PermanentEmployee>) result.Model), Is.EquivalentTo(_employees));
+                Assert.That(((List<TemporaryEmployee>)result.Model).Count, Is.EqualTo(_employees.Count));
+                Assert.That(((List<TemporaryEmployee>)result.Model), Is.EquivalentTo(_employees));
                 _mockRepository.Verify(x => x.GetAll(), Times.Once());
-                _mockCalculator.Verify(x => x.TotalAnnualPay(It.IsAny<decimal>(), It.IsAny<decimal>()), Times.Exactly(_employees.Count));
-                _mockCalculator.Verify(x => x.HourlyRate(It.IsAny<decimal>(), It.IsAny<int>()), Times.Exactly(_employees.Count));
+                _mockCalculator.Verify(x => x.TotalAnnualPay(It.IsAny<decimal>(), It.IsAny<int>()), Times.Exactly(_employees.Count));
+                _mockCalculator.Verify(x => x.HourlyRate(It.IsAny<decimal>()), Times.Exactly(_employees.Count));
             });
         }
 
@@ -95,7 +90,7 @@ namespace PayCalculatorMVCTest.Controllers
             _mockRepository.Setup(x => x.Create(_employees[0])).Returns(_employees[0]);
 
             // Act
-            var result = (RedirectToActionResult) controller.Create(_createOrUpdateEmployeeModel);
+            var result = (RedirectToActionResult)controller.Create(_createOrUpdateEmployeeModel);
 
             // Assert
             Assert.Multiple(() =>
@@ -103,7 +98,7 @@ namespace PayCalculatorMVCTest.Controllers
                 Assert.That(result.GetType(), Is.EqualTo(typeof(RedirectToActionResult)));
                 Assert.That(result.ActionName, Is.EqualTo("Index"));
                 _mockMapper.Verify(x => x.Map(_createOrUpdateEmployeeModel), Times.Once());
-                _mockRepository.Verify(x => x.Create(It.IsAny<PermanentEmployee>()), Times.Once());
+                _mockRepository.Verify(x => x.Create(It.IsAny<TemporaryEmployee>()), Times.Once());
             });
         }
 
@@ -114,11 +109,11 @@ namespace PayCalculatorMVCTest.Controllers
             _mockRepository.Setup(x => x.GetEmployee(id)).Returns(_employees[1]);
 
             // Act
-            var result = (ViewResult) controller.Update(id);
+            var result = (ViewResult)controller.Update(id);
 
             // Assert
-            Assert.Multiple(() => 
-            { 
+            Assert.Multiple(() =>
+            {
                 Assert.That(result.GetType(), Is.EqualTo(typeof(ViewResult)));
                 _mockRepository.Verify(x => x.GetEmployee(id), Times.Once());
             });
@@ -128,10 +123,10 @@ namespace PayCalculatorMVCTest.Controllers
         public void ValidModel_Updates_Employee_And_RedirectsToIndex()
         {
             // Arrange
-            PermanentEmployee employee = new();
+            TemporaryEmployee employee = new();
 
             // Act
-            var result = (RedirectToActionResult) controller.Update(employee);
+            var result = (RedirectToActionResult)controller.Update(employee);
 
             // Assert
             Assert.Multiple(() =>
@@ -146,14 +141,14 @@ namespace PayCalculatorMVCTest.Controllers
         public void InvalidModel_RedirectsToUpdate()
         {
             // Arrange
-            PermanentEmployee employee = new();
+            TemporaryEmployee employee = new();
             controller.ModelState.AddModelError("test key", "test error message");
 
             // Act
-            var result = (RedirectToActionResult) controller.Update(employee);
+            var result = (RedirectToActionResult)controller.Update(employee);
 
             // Assert
-            Assert.Multiple(() => 
+            Assert.Multiple(() =>
             {
                 Assert.That(result.GetType(), Is.EqualTo(typeof(RedirectToActionResult)));
                 Assert.That(result.ActionName, Is.EqualTo("Update"));
@@ -184,7 +179,7 @@ namespace PayCalculatorMVCTest.Controllers
             _mockRepository.Setup(x => x.Delete(id)).Returns(true);
 
             // Act
-            var result = (RedirectToActionResult) controller.Deletion(id);
+            var result = (RedirectToActionResult)controller.Deletion(id);
 
             // Asserts
             Assert.Multiple(() =>

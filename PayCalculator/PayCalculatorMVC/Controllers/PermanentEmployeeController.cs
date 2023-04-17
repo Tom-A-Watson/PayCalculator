@@ -46,23 +46,43 @@ namespace PayCalculatorMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var employee = _permEmployeeRepo.Create(mappedEmployee);
-                employee.TotalAnnualPay = Math.Round(_calculator.TotalAnnualPay(employee.Salary, employee.Bonus), 2);
-                employee.HourlyRate = Math.Round(_calculator.HourlyRate(employee.Salary, employee.HoursWorked), 2);
+                _permEmployeeRepo.Create(mappedEmployee);
                 return RedirectToAction("Index");
             }
 
             return RedirectToAction("Create");
         }
 
-        public IActionResult Update()
+        public IActionResult Update(int id)
         {
-            return View();
+            var employee = _permEmployeeRepo.GetEmployee(id);
+            return View(employee);
         }
 
-        //public IActionResult Delete()
-        //{
+        [HttpPost]
+        public IActionResult Update(PermanentEmployee existingEmployee)
+        {
+            if (ModelState.IsValid)
+            {
+                _permEmployeeRepo.Update(existingEmployee);
+                return RedirectToAction("Index");
+            }
 
-        //}
+            return RedirectToAction("Update");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var employee = _permEmployeeRepo.GetEmployee(id);
+            return View(employee);
+        }
+
+
+        [HttpPost]
+        public IActionResult Deletion(int id)
+        {
+            _permEmployeeRepo.Delete(id);
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace PayCalculatorLibrary.Repositories
         public PermanentEmployee? Update(PermanentEmployee employee)
         {
             int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var theEmployee = _permanentEmployeeList[index];
+            var existing = _permanentEmployeeList[index];
 
             if (index < 0 || index > _permanentEmployeeList.Count)
             {
@@ -60,19 +60,18 @@ namespace PayCalculatorLibrary.Repositories
             else
             {
                 var updated = employee;
-                var existing = theEmployee;
 
-                if (updated.Name == "string") theEmployee.Name = existing.Name;
-                else theEmployee.Name = updated.Name;
+                if (updated.Name == "string") existing.Name = existing.Name;
+                else existing.Name = updated.Name;
                 
-                if (updated.Salary == 0) theEmployee.Salary = existing.Salary; 
-                else theEmployee.Salary = updated.Salary; 
+                if (updated.Salary == 0) existing.Salary = existing.Salary; 
+                else existing.Salary = updated.Salary; 
                 
-                if (updated.Bonus == 0) theEmployee.Bonus = existing.Bonus; 
-                else theEmployee.Bonus = updated.Bonus; 
+                if (updated.Bonus == 0) existing.Bonus = existing.Bonus; 
+                else existing.Bonus = updated.Bonus; 
                 
-                if (updated.HoursWorked == 0) theEmployee.HoursWorked = existing.HoursWorked; 
-                else theEmployee.HoursWorked = updated.HoursWorked; 
+                if (updated.HoursWorked == 0) existing.HoursWorked = existing.HoursWorked; 
+                else existing.HoursWorked = updated.HoursWorked; 
             }
 
             return employee;
