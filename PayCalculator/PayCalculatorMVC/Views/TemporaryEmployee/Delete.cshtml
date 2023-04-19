@@ -22,16 +22,19 @@
         </table>
         <br/>
         <div class="container">
-            <div class="row">
-                <div class="col"></div>
-                <div class="col">
-                    <a class="btn btn-danger" asp-controller="TemporaryEmployee" asp-action="Deletion" asp-route-id="@Model.Id">Yes, I am sure</a>
+            <form asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <input asp-for=Id type="hidden" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger">Yes, I am sure</button>
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-outline-success" asp-controller="TemporaryEmployee" asp-action="Index" asp-area="">No, take me back</a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col">
-                    <a class="btn btn-outline-success" asp-controller="TemporaryEmployee" asp-action="Index" asp-area="">No, take me back</a>
-                </div>
-                <div class="col"></div>
-            </div>
+            </form>
         </div>
     </div>
 </body>

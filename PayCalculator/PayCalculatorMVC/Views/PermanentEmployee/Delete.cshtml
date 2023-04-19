@@ -25,19 +25,17 @@
         <br/>
         <div class="container">
             <form asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
-            <div class="row">
-                <div class="col"></div>
-                <div class="col">
-                    <input asp-for=Id type="hidden" value="@Model.Id"/>
-                    <!--<a asp-controller="PermanentEmployee" asp-action="Deletion" asp-route-id="@Model.Id">-->
-                    <button type="submit" class="btn btn-danger">Yes, I am sure</button>
-                    <!--</a>-->
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <input asp-for=Id type="hidden" value="@Model.Id"/>
+                        <button type="submit" class="btn btn-danger">Yes, I am sure</button>
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-outline-secondary" asp-controller="PermanentEmployee" asp-action="Index" asp-area="">No, take me back</a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col">
-                    <a class="btn btn-outline-secondary" asp-controller="PermanentEmployee" asp-action="Index" asp-area="">No, take me back</a>
-                </div>
-                <div class="col"></div>
-            </div>
             </form>
         </div>
     </div>

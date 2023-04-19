@@ -49,8 +49,8 @@ namespace PayCalculatorMVC.Controllers
                 _permEmployeeRepo.Create(mappedEmployee);
                 return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Create");
+            
+            return View(mappedEmployee);
         }
 
         public IActionResult Update(int id)
