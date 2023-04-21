@@ -27,8 +27,8 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var employee in employeeList) 
             {
-                employee.TotalAnnualPay = Math.Round(_calculator.TotalAnnualPay(employee.Salary, employee.Bonus), 2);
-                employee.HourlyRate = Math.Round(_calculator.HourlyRate(employee.Salary, employee.HoursWorked), 2);
+                employee.TotalAnnualPay = Math.Round(_calculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
+                employee.HourlyRate = Math.Round(_calculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
             }
 
             return View(employeeList);

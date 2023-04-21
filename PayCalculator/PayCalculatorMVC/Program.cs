@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
-using PayCalculatorMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +13,6 @@ builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>
 builder.Services.AddSingleton<ITemporaryPayCalculator, TemporaryPayCalculator>();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<EmployeeDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:EmployeeDbContextConnection"]);
-});
 
 var app = builder.Build();
 

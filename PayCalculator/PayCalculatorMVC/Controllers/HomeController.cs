@@ -32,8 +32,8 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var permEmployee in permEmployeeList) 
             {
-                permEmployee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(permEmployee.Salary, permEmployee.Bonus), 2);
-                permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary, permEmployee.HoursWorked), 2);
+                permEmployee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(permEmployee.Salary.Value, permEmployee.Bonus.Value), 2);
+                permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary.Value, permEmployee.HoursWorked.Value), 2);
             }
 
             foreach (var tempEmployee in tempEmployeeList)
@@ -43,8 +43,8 @@ namespace PayCalculatorMVC.Controllers
             }
 
             return View(new HomePageViewModel {
-                PermEmployeeList = _permEmployeeRepo.GetAll(), 
-                TempEmployeeList = _tempEmployeeRepo.GetAll()
+                PermEmployeeList = permEmployeeList,
+                TempEmployeeList = tempEmployeeList
             });
         }
 
