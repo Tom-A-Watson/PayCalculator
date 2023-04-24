@@ -5,7 +5,7 @@
         <h1 class="display-5">Create a new Permanent Employee</h1>
         <p>By filling out this form, you can create a new permanent employee entry.</p>
     </div>
-    <form asp-controller="PermanentEmployee" asp-action="Create" method="post" class="position-absolute top-50 start-50 translate-middle">
+    <form asp-controller="PermanentEmployee" asp-action="Create" method="post" class="create-and-update-forms position-absolute top-50 start-50 translate-middle">
         <div class="mb-3">
             <label asp-for="@Model.Name" class="form-label">Name</label>
             <input asp-for="@Model.Name" type="text" class="form-control form-input bg-black text-light" placeholder="Employee name">

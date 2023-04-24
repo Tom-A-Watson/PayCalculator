@@ -18,6 +18,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 25000,
                     Contract = ContractType.Permanent,
                     Bonus = 2500,
+                    StartDate = new DateOnly(2022, 8, 15),
                     HoursWorked = 1820
                 },
 
@@ -28,6 +29,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 35000,
                     Contract = ContractType.Permanent,
                     Bonus = 1000,
+                    StartDate = new DateOnly(2021, 1, 1),
                     HoursWorked = 1820
                 }
             };
