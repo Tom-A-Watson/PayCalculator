@@ -14,15 +14,17 @@ namespace PayCalculatorMVC.Controllers
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
+        private readonly ITimeCalculator _timeCalculator;
 
         public HomeController(ILogger<HomeController> logger, IEmployeeRepository<PermanentEmployee> permEmployeeRepo, 
-            IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, IPermanentPayCalculator permPayCalculator, ITemporaryPayCalculator tempPayCalculator)
+            IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, IPermanentPayCalculator permPayCalculator, ITemporaryPayCalculator tempPayCalculator, ITimeCalculator timeCalculator)
         {
             _logger = logger;
             _permEmployeeRepo = permEmployeeRepo;
             _permPayCalculator = permPayCalculator;
             _tempEmployeeRepo = tempEmployeeRepo;
             _tempPayCalculator = tempPayCalculator;
+            _timeCalculator = timeCalculator;
         }
 
         public IActionResult Index()
@@ -32,6 +34,7 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var permEmployee in permEmployeeList) 
             {
+                permEmployee.HoursWorked = _timeCalculator.HoursWorked(permEmployee.StartDate);
                 permEmployee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(permEmployee.Salary.Value, permEmployee.Bonus.Value), 2);
                 permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary.Value, permEmployee.HoursWorked.Value), 2);
             }

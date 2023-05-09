@@ -17,7 +17,7 @@ namespace PayCalculatorLibrary.Repositories
                     Id = 003,
                     Contract = ContractType.Temporary,
                     DayRate = 250,
-                    StartDate = new DateOnly(2022, 3, 23),
+                    StartDate = new DateTime(2022, 3, 23),
                     WeeksWorked = 48
                 },
 
@@ -27,7 +27,7 @@ namespace PayCalculatorLibrary.Repositories
                     Id = 004,
                     Contract = ContractType.Temporary,
                     DayRate = 350,
-                    StartDate = new DateOnly(2020, 1, 1),
+                    StartDate = new DateTime(2020, 1, 1),
                     WeeksWorked = 48
                 }
             };

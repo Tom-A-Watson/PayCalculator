@@ -41,3 +41,14 @@ span {
 #search-bar {
     width: 20em;
 }
+
+.bi-person-gear {
+    transform: scale(1.4);
+    color: forestgreen;
+}
+
+.bi-person-fill-gear {
+    display: none;
+    transform: scale(1.4);
+    color: forestgreen;
+}

@@ -11,6 +11,7 @@ builder.Services.AddSingleton<IPermanentEmployeeMapper, PermanentEmployeeMapper>
 builder.Services.AddSingleton<IPermanentPayCalculator, PermanentPayCalculator>();
 builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>();
 builder.Services.AddSingleton<ITemporaryPayCalculator, TemporaryPayCalculator>();
+builder.Services.AddSingleton<ITimeCalculator, TimeCalculator>();
 
 builder.Services.AddControllersWithViews();
 
