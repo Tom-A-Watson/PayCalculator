@@ -28,7 +28,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 35000,
                     Contract = ContractType.Permanent,
                     Bonus = 1000,
-                    StartDate = new DateTime(2023, 4, 26),
+                    StartDate = new DateTime(2023, 5, 8),
                 }
             };
         }

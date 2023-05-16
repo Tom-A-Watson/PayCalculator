@@ -38,7 +38,7 @@ namespace PayCalculatorAPI.Controllers
 
             foreach (var employee in employeeList)
             {
-                employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+                employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value);
             }
 
             _log4net.Info("Permanent " + LogMessages.ReturnedAllEmployees.Insert(24, Convert.ToString(employeeCount)));
@@ -57,7 +57,7 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound(ErrorMessages.IdNotFound);
             }
 
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value);
             _log4net.Info("Permanent " + LogMessages.EmployeeRead.Insert(17, stringID));
             return Ok(employee);
         }
@@ -67,7 +67,7 @@ namespace PayCalculatorAPI.Controllers
         {
             var mappedEmployee = _mapper.Map(createModel);
             var employee = _permEmployeeRepo.Create(mappedEmployee);
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(mappedEmployee.Salary, mappedEmployee.Bonus);
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(mappedEmployee.Salary.Value, mappedEmployee.Bonus.Value);
             _log4net.Info("Permanent " + LogMessages.EmployeeCreated + $"{employee.Id}");
             return Created($"/permanentemployee/{employee.Id}", employee);
         }

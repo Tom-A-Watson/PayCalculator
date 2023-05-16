@@ -2,9 +2,9 @@
 {
     public class TimeCalculator : ITimeCalculator
     {
-        public int HoursWorked(DateTime startDate)
+        public int HoursWorked(DateTime startDate, DateTime currentDate)
         {
-            var currentDate = DateTime.Now.Date;
+            currentDate = currentDate.Date;
             startDate = startDate.Date;
 
             if (startDate > currentDate) 
@@ -14,27 +14,29 @@
 
             TimeSpan span = currentDate - startDate;
             var businessDays = span.Days + 1;
-            var fullWeekCount = businessDays / 7;
+            var daysInAWeek = 7;
 
-            // Check if there are weekends during the time outside of the full weeks
-            if (businessDays > fullWeekCount * 7) 
+            if (businessDays % daysInAWeek > 0) 
             { 
-                // Check if 1 or both weekend days are in the time period remaining after subtracting complete weeks
-                var startDateDayOfWeek = (int) startDate.DayOfWeek;
-                var currentDayOfWeek = (int) currentDate.DayOfWeek;
-                if (currentDayOfWeek < startDateDayOfWeek) { currentDayOfWeek += 7; }
-                
-                if (startDateDayOfWeek <= 6)
+                var dates = new List<DateTime>();
+
+                for (DateTime date = startDate; date <= currentDate; date = date.AddDays(1))
                 {
-                    // Both Saturday and Sunday are in the remaining time interval
-                    if (currentDayOfWeek >= 7) { businessDays -= 2; }
-                    // Only Saturday is in the interval
-                    else if (currentDayOfWeek >= 6) { businessDays -= 1; }
+                    if (date.DayOfWeek == DayOfWeek.Monday || date.DayOfWeek == DayOfWeek.Tuesday || date.DayOfWeek == DayOfWeek.Wednesday ||
+                        date.DayOfWeek == DayOfWeek.Thursday || date.DayOfWeek == DayOfWeek.Friday)
+                    {
+                        dates.Add(date);
+                    }
                 }
 
-                // Subtract the weekends during the full weeks in the interval
+                businessDays = dates.Count;
+            }
+            else if (businessDays % daysInAWeek == 0)
+            {
+                var fullWeekCount = businessDays / daysInAWeek;
                 businessDays -= fullWeekCount * 2;
             }
+
             var hoursWorked = businessDays * 7;
             return hoursWorked;
         }

@@ -29,7 +29,7 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var employee in employeeList) 
             {
-                employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate);
+                employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
                 employee.TotalAnnualPay = Math.Round(_payCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
                 employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
             }

@@ -20,7 +20,8 @@ namespace PayCalculatorMVCTest.Controllers
         private Mock<ILogger<PermanentEmployeeController>> _mockLogger;
         private Mock<IPermanentEmployeeMapper> _mockMapper;
         private Mock<IEmployeeRepository<PermanentEmployee>> _mockRepository;
-        private Mock<IPermanentPayCalculator> _mockCalculator;
+        private Mock<IPermanentPayCalculator> _mockPayCalculator;
+        private Mock<ITimeCalculator> _mockTimeCalculator;
 
         private const string EmployeeName = "Bhavana";
         private const decimal EmployeeSalary = 20000;
@@ -61,9 +62,10 @@ namespace PayCalculatorMVCTest.Controllers
 
             _mockLogger = new();
             _mockRepository = new();
-            _mockCalculator = new();
+            _mockPayCalculator = new();
+            _mockTimeCalculator = new();
             _mockMapper = new();
-            controller = new PermanentEmployeeController(_mockLogger.Object, _mockRepository.Object, _mockMapper.Object, _mockCalculator.Object);
+            controller = new PermanentEmployeeController(_mockLogger.Object, _mockRepository.Object, _mockMapper.Object, _mockPayCalculator.Object, _mockTimeCalculator.Object);
         }
 
         [Test]
@@ -82,8 +84,8 @@ namespace PayCalculatorMVCTest.Controllers
                 Assert.That(((List<PermanentEmployee>) result.Model).Count, Is.EqualTo(_employees.Count));
                 Assert.That(((List<PermanentEmployee>) result.Model), Is.EquivalentTo(_employees));
                 _mockRepository.Verify(x => x.GetAll(), Times.Once());
-                _mockCalculator.Verify(x => x.TotalAnnualPay(It.IsAny<decimal>(), It.IsAny<decimal>()), Times.Exactly(_employees.Count));
-                _mockCalculator.Verify(x => x.HourlyRate(It.IsAny<decimal>(), It.IsAny<int>()), Times.Exactly(_employees.Count));
+                _mockPayCalculator.Verify(x => x.TotalAnnualPay(It.IsAny<decimal>(), It.IsAny<decimal>()), Times.Exactly(_employees.Count));
+                _mockPayCalculator.Verify(x => x.HourlyRate(It.IsAny<decimal>(), It.IsAny<int>()), Times.Exactly(_employees.Count));
             });
         }
 

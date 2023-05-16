@@ -2,6 +2,6 @@
 {
     public interface ITimeCalculator
     {
-        int HoursWorked(DateTime startDate);
+        int HoursWorked(DateTime startDate, DateTime currentDate);
     }
 }
