@@ -1,5 +1,4 @@
 ﻿using PayCalculatorLibrary.Models;
-using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorLibrary.Repositories
 {
@@ -50,30 +49,12 @@ namespace PayCalculatorLibrary.Repositories
 
         public PermanentEmployee? Update(PermanentEmployee employee)
         {
-            int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var existing = _permanentEmployeeList[index];
-
-            if (index < 0 || index > _permanentEmployeeList.Count)
-            {
-                return null;
-            }
-            else
-            {
-                var updated = employee;
-
-                if (updated.Name == "string") existing.Name = existing.Name;
-                else existing.Name = updated.Name;
-                
-                if (updated.Salary == 0) existing.Salary = existing.Salary; 
-                else existing.Salary = updated.Salary; 
-                
-                if (updated.Bonus == 0) existing.Bonus = existing.Bonus; 
-                else existing.Bonus = updated.Bonus; 
-                
-                if (updated.HoursWorked == 0) existing.HoursWorked = existing.HoursWorked; 
-                else existing.HoursWorked = updated.HoursWorked; 
-            }
-
+            var existing = _permanentEmployeeList.FirstOrDefault(x => x.Id == employee.Id);
+            var updated = employee;
+            existing.Name = updated.Name;
+            existing.Salary = updated.Salary; 
+            existing.Bonus = updated.Bonus; 
+            existing.HoursWorked = updated.HoursWorked; 
             return employee;
         }
 

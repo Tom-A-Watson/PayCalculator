@@ -7,29 +7,28 @@
             currentDate = currentDate.Date;
             startDate = startDate.Date;
 
-            if (startDate > currentDate) 
+            if (startDate > currentDate)
             {
-                throw new ArgumentException("Cannot calculate hours worked as the employee has not started work yet!");
+                return 0;
             }
 
             TimeSpan span = currentDate - startDate;
             var businessDays = span.Days + 1;
             var daysInAWeek = 7;
 
-            if (businessDays % daysInAWeek > 0) 
-            { 
-                var dates = new List<DateTime>();
+            if (businessDays % daysInAWeek > 0)
+            {
+                var businessDaysCount = 0;
 
                 for (DateTime date = startDate; date <= currentDate; date = date.AddDays(1))
                 {
-                    if (date.DayOfWeek == DayOfWeek.Monday || date.DayOfWeek == DayOfWeek.Tuesday || date.DayOfWeek == DayOfWeek.Wednesday ||
-                        date.DayOfWeek == DayOfWeek.Thursday || date.DayOfWeek == DayOfWeek.Friday)
+                    if (IsWeekDay(date))
                     {
-                        dates.Add(date);
+                        businessDaysCount++;
                     }
                 }
 
-                businessDays = dates.Count;
+                businessDays = businessDaysCount;
             }
             else if (businessDays % daysInAWeek == 0)
             {
@@ -40,32 +39,18 @@
             var hoursWorked = businessDays * 7;
             return hoursWorked;
         }
+
+        private bool IsWeekDay(DateTime date)
+        {
+            if (date.DayOfWeek == DayOfWeek.Monday || date.DayOfWeek == DayOfWeek.Tuesday || date.DayOfWeek == DayOfWeek.Wednesday ||
+                        date.DayOfWeek == DayOfWeek.Thursday || date.DayOfWeek == DayOfWeek.Friday)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

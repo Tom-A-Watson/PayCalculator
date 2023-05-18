@@ -50,26 +50,17 @@ namespace PayCalculatorLibrary.Repositories
 
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
-            int index = _temporaryEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var existing = _temporaryEmployeeList[index];
+            var existing = _temporaryEmployeeList.FirstOrDefault(x => x.Id == employee.Id);
+            var updated = employee;
 
-            if (index < 0 || index > _temporaryEmployeeList.Count)
-            {
-                return null;
-            }
-            else
-            {
-                var updated = employee;
-
-                if (updated.Name == "string") existing.Name = existing.Name;
-                else existing.Name = updated.Name;
+            if (updated.Name == "string") existing.Name = existing.Name;
+            else existing.Name = updated.Name;
                 
-                if (updated.DayRate == 0) existing.DayRate = existing.DayRate;
-                else existing.DayRate = updated.DayRate;
+            if (updated.DayRate == 0) existing.DayRate = existing.DayRate;
+            else existing.DayRate = updated.DayRate;
                 
-                if (updated.WeeksWorked == 0) existing.WeeksWorked = existing.WeeksWorked; 
-                else existing.WeeksWorked = updated.WeeksWorked;
-            }
+            if (updated.WeeksWorked == 0) existing.WeeksWorked = existing.WeeksWorked; 
+            else existing.WeeksWorked = updated.WeeksWorked;
 
             return employee;
         }
