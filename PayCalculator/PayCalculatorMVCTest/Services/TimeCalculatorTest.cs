@@ -19,7 +19,7 @@ namespace PayCalculatorTest.Services
             var endDate = DateTime.Parse(stringEndDate);
 
             // Act
-            var result = calculator.HoursWorked(startDate, endDate);
+            var result = calculator.DaysWorked(startDate, endDate);
 
             // Assert
             Assert.That(result, Is.EqualTo(expectedHoursWorked));

@@ -10,15 +10,17 @@ namespace PayCalculatorMVC.Controllers
         private readonly ILogger<TemporaryEmployeeController> _logger;
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryEmployeeMapper _mapper;
-        private readonly ITemporaryPayCalculator _calculator;
+        private readonly ITemporaryPayCalculator _payCalculator;
+        private readonly ITimeCalculator _timeCalculator;
 
         public TemporaryEmployeeController(ILogger<TemporaryEmployeeController> logger, IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo,
-            ITemporaryEmployeeMapper mapper, ITemporaryPayCalculator calculator)
+            ITemporaryEmployeeMapper mapper, ITemporaryPayCalculator calculator, ITimeCalculator timeCalculator)
         {
             _logger = logger;
             _tempEmployeeRepo = tempEmployeeRepo;
             _mapper = mapper;
-            _calculator = calculator;
+            _payCalculator = calculator;
+            _timeCalculator = timeCalculator;
         }
 
         public IActionResult Index()
@@ -27,8 +29,10 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var employee in employeeList)
             {
-                employee.TotalAnnualPay = Math.Round(_calculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked), 2);
-                employee.HourlyRate = Math.Round(_calculator.HourlyRate(employee.DayRate), 2);
+                employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
+                employee.WeeksWorked = _timeCalculator.WeeksWorked(employee.StartDate, DateTime.Now);
+                employee.TotalAnnualPay = Math.Round(_payCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked), 2);
+                employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.DayRate), 2);
             }
 
             return View(employeeList);

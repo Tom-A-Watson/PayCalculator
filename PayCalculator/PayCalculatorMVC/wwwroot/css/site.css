@@ -43,12 +43,23 @@ span {
 }
 
 .bi-person-gear {
-    transform: scale(1.4);
+    transform: scale(1.75);
     color: forestgreen;
 }
 
 .bi-person-fill-gear {
     display: none;
-    transform: scale(1.4);
+    transform: scale(1.75);
     color: forestgreen;
+}
+
+.bi-person-x {
+    transform: scale(1.75);
+    color: red
+}
+
+.bi-person-fill-x {
+    display: none;
+    transform: scale(1.75);
+    color: red
 }

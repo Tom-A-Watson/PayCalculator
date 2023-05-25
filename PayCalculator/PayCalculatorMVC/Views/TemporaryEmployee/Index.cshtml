@@ -19,8 +19,9 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Contract</th>
                         <th scope="col">Day Rate</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">Hours Worked</th>
                         <th scope="col">Weeks Worked</th>
                         <th scope="col">Total Annual Pay</th>
                         <th scope="col">Hourly Rate</th>
@@ -34,8 +35,9 @@
                         <tr>
                             <td>@employee.Id</td>
                             <td>@employee.Name</td>
-                            <td>@employee.Contract</td>
                             <td>£@employee.DayRate</td>
+                            <td>@employee.StartDate.ToShortDateString()</td>
+                            <td>@employee.HoursWorked</td>
                             <td>@employee.WeeksWorked</td>
                             <td>£@employee.TotalAnnualPay</td>
                             <td>£@employee.HourlyRate</td>

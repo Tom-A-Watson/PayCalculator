@@ -13,7 +13,6 @@ namespace PayCalculatorMVCTest.Controllers
     {
 #nullable disable
         private List<PermanentEmployee> _employees;
-        private int employeeCount;
         private CreateOrUpdatePermanentEmployee _createOrUpdateEmployeeModel;
         private PermanentEmployeeController controller;
 
@@ -23,10 +22,10 @@ namespace PayCalculatorMVCTest.Controllers
         private Mock<IPermanentPayCalculator> _mockPayCalculator;
         private Mock<ITimeCalculator> _mockTimeCalculator;
 
-        private const string EmployeeName = "Bhavana";
+        private const string EmployeeName = "William";
         private const decimal EmployeeSalary = 20000;
         private const decimal EmployeeBonus = 5000;
-        private const int EmployeeHoursWorked = 100;
+        private DateTime EmployeeStartDate = new(27/01/2023);
 #nullable enable
         [SetUp]
         public void Setup()
@@ -39,7 +38,7 @@ namespace PayCalculatorMVCTest.Controllers
                     Name = EmployeeName,
                     Salary = EmployeeSalary,
                     Bonus = EmployeeBonus,
-                    HoursWorked = EmployeeHoursWorked
+                    StartDate = EmployeeStartDate
                 },
 
                 new PermanentEmployee()
@@ -57,7 +56,7 @@ namespace PayCalculatorMVCTest.Controllers
                 Name = EmployeeName,
                 Salary = EmployeeSalary,
                 Bonus = EmployeeBonus,
-                HoursWorked = EmployeeHoursWorked
+                StartDate = EmployeeStartDate
             };
 
             _mockLogger = new();

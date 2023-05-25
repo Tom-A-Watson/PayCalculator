@@ -10,7 +10,7 @@ namespace PayCalculatorLibrary.Services
             permEmployee.Name = model.Name;
             permEmployee.Salary = model.Salary;
             permEmployee.Bonus = model.Bonus;
-            permEmployee.HoursWorked = model.HoursWorked;
+            permEmployee.StartDate = model.StartDate;
             return permEmployee;
         }
     }

@@ -17,7 +17,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 25000,
                     Contract = ContractType.Permanent,
                     Bonus = 2500,
-                    StartDate = new DateTime(2022, 8, 15),
+                    StartDate = new(2022, 8, 15),
                 },
 
                 new PermanentEmployee()
@@ -27,7 +27,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 35000,
                     Contract = ContractType.Permanent,
                     Bonus = 1000,
-                    StartDate = new DateTime(2023, 5, 8),
+                    StartDate = new(2023, 5, 8),
                 }
             };
         }
@@ -53,8 +53,8 @@ namespace PayCalculatorLibrary.Repositories
             var updated = employee;
             existing.Name = updated.Name;
             existing.Salary = updated.Salary; 
-            existing.Bonus = updated.Bonus; 
-            existing.HoursWorked = updated.HoursWorked; 
+            existing.Bonus = updated.Bonus;
+            existing.StartDate = updated.StartDate; 
             return employee;
         }
 

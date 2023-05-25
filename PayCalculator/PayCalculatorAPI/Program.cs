@@ -18,6 +18,7 @@ builder.Services.AddSingleton<IPermanentPayCalculator, PermanentPayCalculator>()
 builder.Services.AddSingleton<ITemporaryPayCalculator, TemporaryPayCalculator>();
 builder.Services.AddSingleton<IPermanentEmployeeMapper, PermanentEmployeeMapper>();
 builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>();
+builder.Services.AddSingleton<ITimeCalculator, TimeCalculator>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

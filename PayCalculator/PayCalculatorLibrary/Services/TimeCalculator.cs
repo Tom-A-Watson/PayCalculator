@@ -2,7 +2,7 @@
 {
     public class TimeCalculator : ITimeCalculator
     {
-        public int HoursWorked(DateTime startDate, DateTime currentDate)
+        public int DaysWorked(DateTime startDate, DateTime currentDate, int daysInAWeek = 7)
         {
             currentDate = currentDate.Date;
             startDate = startDate.Date;
@@ -14,7 +14,6 @@
 
             TimeSpan span = currentDate - startDate;
             var businessDays = span.Days + 1;
-            var daysInAWeek = 7;
 
             if (businessDays % daysInAWeek > 0)
             {
@@ -36,11 +35,22 @@
                 businessDays -= fullWeekCount * 2;
             }
 
-            var hoursWorked = businessDays * 7;
+            return businessDays;
+        }
+
+        public int HoursWorked(DateTime startDate, DateTime currentDate)
+        {
+            var hoursWorked = DaysWorked(startDate, currentDate) * 7;
             return hoursWorked;
         }
 
-        private bool IsWeekDay(DateTime date)
+        public int WeeksWorked(DateTime startDate, DateTime currentDate)
+        {
+            var weeksWorked = DaysWorked(startDate, currentDate) / 7;
+            return weeksWorked;
+        }
+
+        private static bool IsWeekDay(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Monday || date.DayOfWeek == DayOfWeek.Tuesday || date.DayOfWeek == DayOfWeek.Wednesday ||
                         date.DayOfWeek == DayOfWeek.Thursday || date.DayOfWeek == DayOfWeek.Friday)

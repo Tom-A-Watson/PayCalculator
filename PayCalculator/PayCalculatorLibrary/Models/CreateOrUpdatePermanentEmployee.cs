@@ -22,9 +22,8 @@ namespace PayCalculatorLibrary.Models
         [Range(0, 10000)]
         public decimal? Bonus { get; set; }
 
-        [Required(ErrorMessage = "Enter the number of hours this employee has worked")]
-        [Display(Name = "HoursWorked")]
-        [Range(0, 1820)]
-        public int? HoursWorked { get; set; }
+        [Required(ErrorMessage = "Enter the date that this employee started")]
+        [Display(Name = "StartDate")]
+        public DateTime StartDate { get; set; }
     }
 }

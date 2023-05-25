@@ -84,6 +84,11 @@ namespace PayCalculatorMVC.Controllers
         [HttpPost]
         public IActionResult Deletion(int id)
         {
+            if (!_permEmployeeRepo.Delete(id))
+            {
+                return RedirectToAction("Index");
+            }
+
             _permEmployeeRepo.Delete(id);
             return RedirectToAction("Index");
         }
