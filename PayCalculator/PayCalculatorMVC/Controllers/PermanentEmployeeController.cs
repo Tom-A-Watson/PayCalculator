@@ -2,6 +2,7 @@
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
+using PayCalculatorMVC.Models;
 
 namespace PayCalculatorMVC.Controllers
 {
@@ -31,7 +32,7 @@ namespace PayCalculatorMVC.Controllers
             {
                 employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
                 employee.TotalAnnualPay = Math.Round(_payCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
-                employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
+                employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked), 2);
             }
 
             return View(employeeList);
@@ -77,20 +78,33 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Delete(int id)
         {
             var employee = _permEmployeeRepo.GetEmployee(id);
-            return View(employee);
+            return View(new PermDeleteAndAlertViewModel() {
+                Id = employee.Id,
+                Name = employee.Name,
+                Salary = employee.Salary,
+                Bonus = employee.Bonus,
+                StartDate = employee.StartDate,
+                HoursWorked = employee.HoursWorked,
+                Alerts = Enums.Alerts.None
+            });
         }
 
 
         [HttpPost]
         public IActionResult Deletion(int id)
         {
-            if (!_permEmployeeRepo.Delete(id))
+            var delete = _permEmployeeRepo.Delete(id);
+            var alertViewModel = new PermDeleteAndAlertViewModel();
+
+            if (!delete)
             {
-                return RedirectToAction("Index");
+                alertViewModel.Alerts = Enums.Alerts.Danger;
+                return View("Delete", alertViewModel);
             }
 
+            alertViewModel.Alerts = Enums.Alerts.Success;
             _permEmployeeRepo.Delete(id);
-            return RedirectToAction("Index");
+            return View("Delete", alertViewModel);
         }
     }
 }

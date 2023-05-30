@@ -3,6 +3,7 @@
     public enum Alerts
     {
         Success,
-        Danger
+        Danger,
+        None
     }
 }

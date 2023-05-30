@@ -1,4 +1,4 @@
-﻿@model PayCalculatorLibrary.Models.PermanentEmployee;
+﻿@model PayCalculatorMVC.Models.PermDeleteAndAlertViewModel;
 <body class="bg-dark text-light">
     <div class="text-center">
         <h1 class="display-5">Delete Permanent Employee</h1>
@@ -18,14 +18,18 @@
                     <td scope="col">Bonus:</td><td scope="col">@Model.Bonus</td>
                 </tr>
                 <tr>
+                    <td scope="col">Start Date:</td><td scope="col">@Model.StartDate.ToShortDateString()</td>
+                </tr>
+                <tr>
                     <td scope="col">Hours Worked:</td><td scope="col">@Model.HoursWorked</td>
                 </tr>
             </tbody>
         </table>
         <br/>
         <div class="container">
-            <form asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
+            <form class="deleteForm" asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
                 <div class="row">
+                    <div class="col"></div>
                     <div class="col"></div>
                     <div class="col">
                         <input asp-for=Id type="hidden" value="@Model.Id"/>
@@ -35,8 +39,21 @@
                         <a class="btn btn-outline-secondary" asp-controller="PermanentEmployee" asp-action="Index" asp-area="">No, take me back</a>
                     </div>
                     <div class="col"></div>
+                    <div class="col"></div>
                 </div>
             </form>
+            @if (Model.Alerts == PayCalculatorMVC.Enums.Alerts.Success)
+            {
+                <div id="successDiv" class="alert alert-success" runat="server" role="alert">
+                    <strong>Success!</strong> @Model.Name was deleted from the repository
+                </div>
+            }
+            else if (Model.Alerts == PayCalculatorMVC.Enums.Alerts.Danger)
+            {
+                <div id="failureDiv" class="alert alert-danger" runat="server" role="alert">
+                    <strong>Failure!</strong> The employee could not be deleted as they do not exist
+                </div>
+            }
         </div>
     </div>
 </body>

@@ -35,9 +35,9 @@ namespace PayCalculatorMVC.Controllers
 
             foreach (var permEmployee in permEmployeeList) 
             {
-                permEmployee.HoursWorked = _timeCalculator.DaysWorked(permEmployee.StartDate, DateTime.Now, daysInAWeek);
+                permEmployee.HoursWorked = _timeCalculator.HoursWorked(permEmployee.StartDate, DateTime.Now);
                 permEmployee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(permEmployee.Salary.Value, permEmployee.Bonus.Value), 2);
-                permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary.Value, permEmployee.HoursWorked.Value), 2);
+                permEmployee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(permEmployee.Salary.Value, permEmployee.HoursWorked), 2);
             }
 
             foreach (var tempEmployee in tempEmployeeList)
