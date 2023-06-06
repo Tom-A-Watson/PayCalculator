@@ -67,7 +67,7 @@ namespace PayCalculator
             {
                 employee.HoursWorked = _timeCalculator.DaysWorked(employee.StartDate, DateTime.Now);
                 employee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
-                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
+                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked), 2);
                 Console.WriteLine(employee.ToString());
             }
 
@@ -110,7 +110,7 @@ namespace PayCalculator
                         break;
                     case "2":
                         Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" +
-                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary.Value, permanentEmployee.HoursWorked.Value), 2)}\n");
+                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary.Value, permanentEmployee.HoursWorked), 2)}\n");
                         break;
                     default:
                         Console.WriteLine("\nInvalid input!\n");

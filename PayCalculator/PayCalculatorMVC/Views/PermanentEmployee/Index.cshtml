@@ -2,7 +2,7 @@
     ViewData["Title"] = "PermanentEmployee Page";
 }
 
-@model IEnumerable<PayCalculatorLibrary.Models.PermanentEmployee>
+@model PayCalculatorMVC.Models.PermEmployeeAlertsViewModel;
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -12,8 +12,32 @@
     <body class="bg-dark text-light">
         <div class="text-center">
             <h1 class="display-4">Permanent Employees</h1>
-            <p>This page will contain the CRUD operations that are performed on permanent employees!</p>
-            
+            <p>This page contains the CRUD operations that are performed on permanent employees!</p>
+
+            @switch (Model.Alerts)
+            {
+                case PayCalculatorMVC.Enums.Alerts.DeleteSuccess:
+                    <div id="successDiv" class="alert alert-success" runat="server" role="alert">
+                        <strong>Success!</strong> @Model.Name was deleted from the repository
+                    </div>
+                    break;
+                case PayCalculatorMVC.Enums.Alerts.DeleteFailure:
+                    <div id="failureDiv" class="alert alert-danger" runat="server" role="alert">
+                        <strong>Failure!</strong> @Model.Name could not be deleted as they do not exist
+                    </div>
+                    break;
+                case PayCalculatorMVC.Enums.Alerts.CreateSuccess:
+                    <div id="successDiv" class="alert alert-success" runat="server" role="alert">
+                        <strong>Success!</strong> @Model.Name was created and added to the repository
+                    </div>
+                    break;
+                case PayCalculatorMVC.Enums.Alerts.UpdateSuccess:
+                    <div id="successDiv" class="alert alert-success" runat="server" role="alert">
+                        <strong>Success!</strong> @Model.Name's details were updated
+                    </div>
+                    break;
+            }
+
             <table class="table table-striped bg-light table-hover table-responsive">
                 <thead class="bg-black text-light">
                     <tr>
@@ -30,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in Model)
+                    @foreach (var employee in Model.Employees)
                     {
                         <tr>
                             <td>@employee.Id</td>
@@ -67,10 +91,11 @@
                     }
                 </tbody>
             </table>
-            
+
             <a class="btn btn-outline-primary" asp-controller="PermanentEmployee" asp-action="Create" asp-area="" style="margin: 1.5em 0">Create an entry</a>
             
             <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+          
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     </body>

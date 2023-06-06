@@ -1,9 +1,9 @@
-﻿@model PayCalculatorMVC.Models.PermDeleteAndAlertViewModel;
+﻿@model PayCalculatorLibrary.Models.PermanentEmployee;
 <body class="bg-dark text-light">
     <div class="text-center">
         <h1 class="display-5">Delete Permanent Employee</h1>
         <p>Are you sure that you want to delete @Model.Name?</p>
-        <table class="table table-striped bg-light table-hover table-responsive" style="width: 35%; margin: 0 auto; border-radius: 1em; border: none">
+        <table class="table deleteTable table-striped bg-light table-hover table-responsive">
             <tbody>
                 <tr>
                     <td scope="col">ID:</td><td scope="col">@Model.Id</td>
@@ -42,18 +42,6 @@
                     <div class="col"></div>
                 </div>
             </form>
-            @if (Model.Alerts == PayCalculatorMVC.Enums.Alerts.Success)
-            {
-                <div id="successDiv" class="alert alert-success" runat="server" role="alert">
-                    <strong>Success!</strong> @Model.Name was deleted from the repository
-                </div>
-            }
-            else if (Model.Alerts == PayCalculatorMVC.Enums.Alerts.Danger)
-            {
-                <div id="failureDiv" class="alert alert-danger" runat="server" role="alert">
-                    <strong>Failure!</strong> The employee could not be deleted as they do not exist
-                </div>
-            }
         </div>
     </div>
 </body>

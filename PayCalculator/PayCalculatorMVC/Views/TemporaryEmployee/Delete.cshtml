@@ -4,7 +4,7 @@
     <div class="text-center">
         <h1 class="display-5">Delete Temporary Employee</h1>
         <p>Are you sure that you want to delete @Model.Name?</p>
-        <table class="table table-striped bg-light table-hover table-responsive" style="width: 35%; margin: 0 auto">
+        <table class="table deleteTable table-striped bg-light table-hover table-responsive" style="width: 35%; margin: 0 auto">
             <tbody>
                 <tr>
                     <td scope="col">ID:</td><td scope="col">@Model.Id</td>
@@ -22,16 +22,18 @@
         </table>
         <br/>
         <div class="container">
-            <form asp-controller="PermanentEmployee" asp-action="Deletion" method="post">
+            <form class="deleteForm" asp-controller="TemporaryEmployee" asp-action="Deletion" method="post">
                 <div class="row">
+                    <div class="col"></div>
                     <div class="col"></div>
                     <div class="col">
                         <input asp-for=Id type="hidden" value="@Model.Id" />
                         <button type="submit" class="btn btn-danger">Yes, I am sure</button>
                     </div>
                     <div class="col">
-                        <a class="btn btn-outline-success" asp-controller="TemporaryEmployee" asp-action="Index" asp-area="">No, take me back</a>
+                        <a class="btn btn-outline-secondary" asp-controller="TemporaryEmployee" asp-action="Index" asp-area="">No, take me back</a>
                     </div>
+                    <div class="col"></div>
                     <div class="col"></div>
                 </div>
             </form>

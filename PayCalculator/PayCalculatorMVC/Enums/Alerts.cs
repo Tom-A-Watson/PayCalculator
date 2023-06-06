@@ -2,8 +2,10 @@
 {
     public enum Alerts
     {
-        Success,
-        Danger,
-        None
+        None,
+        DeleteSuccess,
+        DeleteFailure,
+        UpdateSuccess,
+        CreateSuccess
     }
 }

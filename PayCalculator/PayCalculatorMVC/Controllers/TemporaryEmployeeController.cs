@@ -2,6 +2,7 @@
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
 using PayCalculatorLibrary.Services;
+using PayCalculatorMVC.Models;
 
 namespace PayCalculatorMVC.Controllers
 {
@@ -23,9 +24,15 @@ namespace PayCalculatorMVC.Controllers
             _timeCalculator = timeCalculator;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(TempEmployeeAlertsViewModel viewModel)
         {
             var employeeList = _tempEmployeeRepo.GetAll();
+            viewModel.Employees = employeeList;
+
+            if (!viewModel.Alerts.HasValue)
+            {
+                viewModel.Alerts = Enums.Alerts.None;
+            }
 
             foreach (var employee in employeeList)
             {
@@ -35,7 +42,7 @@ namespace PayCalculatorMVC.Controllers
                 employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.DayRate), 2);
             }
 
-            return View(employeeList);
+            return View(viewModel);
         }
 
         public IActionResult Create()
@@ -47,11 +54,13 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Create(CreateOrUpdateTemporaryEmployee createModel)
         {
             var mappedEmployee = _mapper.Map(createModel);
+            var viewModel = new TempEmployeeAlertsViewModel();
 
             if (ModelState.IsValid)
             {
                 _tempEmployeeRepo.Create(mappedEmployee);
-                return RedirectToAction("Index");
+                viewModel.Alerts = Enums.Alerts.CreateSuccess;
+                return RedirectToAction("Index", viewModel);
             }
 
             return RedirectToAction("Create");
@@ -66,10 +75,13 @@ namespace PayCalculatorMVC.Controllers
         [HttpPost]
         public IActionResult Update(TemporaryEmployee existingEmployee)
         {
+            var viewModel = new TempEmployeeAlertsViewModel();
+
             if (ModelState.IsValid)
             {
                 _tempEmployeeRepo.Update(existingEmployee);
-                return RedirectToAction("Index");
+                viewModel.Alerts = Enums.Alerts.UpdateSuccess;
+                return RedirectToAction("Index", viewModel);
             }
 
             return RedirectToAction("Update");
@@ -81,11 +93,21 @@ namespace PayCalculatorMVC.Controllers
             return View(employee);
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult Deletion(int id)
         {
+            var delete = _tempEmployeeRepo.Delete(id);
+            var viewModel = new TempEmployeeAlertsViewModel();
+
+            if (!delete)
+            {
+                viewModel.Alerts = Enums.Alerts.DeleteFailure;
+                return RedirectToAction("Index", viewModel);
+            }
+
             _tempEmployeeRepo.Delete(id);
-            return RedirectToAction("Index");
+            viewModel.Alerts = Enums.Alerts.DeleteSuccess;
+            return RedirectToAction("Index", viewModel);
         }
     }
 }

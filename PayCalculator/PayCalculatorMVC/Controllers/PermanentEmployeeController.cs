@@ -24,9 +24,15 @@ namespace PayCalculatorMVC.Controllers
             _timeCalculator = timeCalculator;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(PermEmployeeAlertsViewModel viewModel)
         {
             var employeeList = _permEmployeeRepo.GetAll();
+            viewModel.Employees = employeeList;
+
+            if (!viewModel.Alerts.HasValue)
+            {
+                viewModel.Alerts = Enums.Alerts.None;
+            }
 
             foreach (var employee in employeeList) 
             {
@@ -35,7 +41,7 @@ namespace PayCalculatorMVC.Controllers
                 employee.HourlyRate = Math.Round(_payCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked), 2);
             }
 
-            return View(employeeList);
+            return View(viewModel);
         }
 
         public IActionResult Create()
@@ -47,13 +53,16 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Create(CreateOrUpdatePermanentEmployee createModel)
         {
             var mappedEmployee = _mapper.Map(createModel);
+            var viewModel = new PermEmployeeAlertsViewModel();
+            viewModel.Name = createModel.Name;
 
             if (ModelState.IsValid)
             {
                 _permEmployeeRepo.Create(mappedEmployee);
-                return RedirectToAction("Index");
+                viewModel.Alerts = Enums.Alerts.CreateSuccess;
+                return RedirectToAction("Index", viewModel);
             }
-            
+
             return View(mappedEmployee);
         }
 
@@ -66,10 +75,14 @@ namespace PayCalculatorMVC.Controllers
         [HttpPost]
         public IActionResult Update(PermanentEmployee existingEmployee)
         {
+            var viewModel = new PermEmployeeAlertsViewModel();
+            viewModel.Name = _permEmployeeRepo.Update(existingEmployee).Name;
+
             if (ModelState.IsValid)
             {
                 _permEmployeeRepo.Update(existingEmployee);
-                return RedirectToAction("Index");
+                viewModel.Alerts = Enums.Alerts.UpdateSuccess;
+                return RedirectToAction("Index", viewModel);
             }
 
             return RedirectToAction("Update");
@@ -78,33 +91,26 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Delete(int id)
         {
             var employee = _permEmployeeRepo.GetEmployee(id);
-            return View(new PermDeleteAndAlertViewModel() {
-                Id = employee.Id,
-                Name = employee.Name,
-                Salary = employee.Salary,
-                Bonus = employee.Bonus,
-                StartDate = employee.StartDate,
-                HoursWorked = employee.HoursWorked,
-                Alerts = Enums.Alerts.None
-            });
+            return View(employee);
         }
 
 
         [HttpPost]
         public IActionResult Deletion(int id)
         {
+            var viewModel = new PermEmployeeAlertsViewModel();
+            viewModel.Name = _permEmployeeRepo.GetEmployee(id).Name;
             var delete = _permEmployeeRepo.Delete(id);
-            var alertViewModel = new PermDeleteAndAlertViewModel();
 
             if (!delete)
             {
-                alertViewModel.Alerts = Enums.Alerts.Danger;
-                return View("Delete", alertViewModel);
+                viewModel.Alerts = Enums.Alerts.DeleteFailure;
+                return RedirectToAction("Index", viewModel);
             }
 
-            alertViewModel.Alerts = Enums.Alerts.Success;
             _permEmployeeRepo.Delete(id);
-            return View("Delete", alertViewModel);
+            viewModel.Alerts = Enums.Alerts.DeleteSuccess;
+            return RedirectToAction("Index", viewModel);
         }
     }
 }

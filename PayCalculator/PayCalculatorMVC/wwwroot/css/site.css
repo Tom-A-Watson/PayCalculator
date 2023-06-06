@@ -42,6 +42,13 @@ span {
     width: 20em;
 }
 
+.deleteTable {
+    width: 35%;
+    margin: 0 auto;
+    border-radius: 1em;
+    border: none
+}
+
 .deleteForm {
     width: 100%;
 }
@@ -71,5 +78,4 @@ span {
 .alert {
     width: 80%;
     margin: 0 auto;
-    margin-top: 3em;
 }
