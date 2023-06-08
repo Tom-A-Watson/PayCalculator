@@ -12,28 +12,28 @@
     <body class="bg-dark text-light">
         <div class="text-center">
             <h1 class="display-4">Temporary Employees</h1>
-            <p>This page will contain the CRUD operations that are performed on temporary employees!</p>
+            <p>This page contains the CRUD operations that are performed on temporary employees!</p>
 
             @switch (Model.Alerts)
             {
                 case PayCalculatorMVC.Enums.Alerts.DeleteSuccess:
                     <div id="successDiv" class="alert alert-success" runat="server" role="alert">
-                        <strong>Success!</strong> The employee was deleted from the repository
+                        <strong>Success!</strong> @Model.Name was deleted from the repository
                     </div>
                     break;
                 case PayCalculatorMVC.Enums.Alerts.DeleteFailure:
                     <div id="failureDiv" class="alert alert-danger" runat="server" role="alert">
-                        <strong>Failure!</strong> The employee could not be deleted as they do not exist
+                        <strong>Failure!</strong> @Model.Name could not be deleted as they do not exist
                     </div>
                     break;
                 case PayCalculatorMVC.Enums.Alerts.CreateSuccess:
                     <div id="successDiv" class="alert alert-success" runat="server" role="alert">
-                        <strong>Success!</strong> The employee was created and added to the repository
+                        <strong>Success!</strong> @Model.Name was created and added to the repository
                     </div>
                     break;
                 case PayCalculatorMVC.Enums.Alerts.UpdateSuccess:
                     <div id="successDiv" class="alert alert-success" runat="server" role="alert">
-                        <strong>Success!</strong> The employee's details were updated
+                        <strong>Success!</strong> @Model.Name's details were updated
                     </div>
                     break;
             }

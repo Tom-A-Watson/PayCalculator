@@ -55,6 +55,7 @@ namespace PayCalculatorMVC.Controllers
         {
             var mappedEmployee = _mapper.Map(createModel);
             var viewModel = new TempEmployeeAlertsViewModel();
+            viewModel.Name = createModel.Name;
 
             if (ModelState.IsValid)
             {
@@ -76,6 +77,12 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Update(TemporaryEmployee existingEmployee)
         {
             var viewModel = new TempEmployeeAlertsViewModel();
+            var updated = _tempEmployeeRepo.Update(existingEmployee);
+
+            if (updated != null)
+            {
+                viewModel.Name = updated.Name;
+            }
 
             if (ModelState.IsValid)
             {
@@ -96,8 +103,9 @@ namespace PayCalculatorMVC.Controllers
         [HttpPost]
         public IActionResult Deletion(int id)
         {
-            var delete = _tempEmployeeRepo.Delete(id);
             var viewModel = new TempEmployeeAlertsViewModel();
+            viewModel.Name = _tempEmployeeRepo.GetEmployee(id).Name;
+            var delete = _tempEmployeeRepo.Delete(id);
 
             if (!delete)
             {

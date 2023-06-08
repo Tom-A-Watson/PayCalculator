@@ -52,7 +52,7 @@ namespace PayCalculatorLibrary.Repositories
             var updated = employee;
             existing.Name = updated.Name;
             existing.DayRate = updated.DayRate;    
-            existing.WeeksWorked = updated.WeeksWorked;
+            existing.StartDate = updated.StartDate;
             return employee;
         }
 

@@ -5,7 +5,7 @@
         <h1 class="display-5">Create a new Permanent Employee</h1>
         <p>By filling out this form, you can create a new permanent employee entry.</p>
     </div>
-    <form asp-controller="PermanentEmployee" asp-action="Create" method="post" class="create-and-update-forms position-absolute top-50 start-50 translate-middle">
+    <form asp-controller="PermanentEmployee" asp-action="Create" method="post" class="top-50 start-50">
         <div class="mb-3">
             <label asp-for="@Model.Name" class="form-label">Name</label>
             <input asp-for="@Model.Name" type="text" class="form-control form-input bg-black text-light" placeholder="Employee name">
@@ -23,7 +23,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="@Model.StartDate" class="form-label">Start Date</label>
-            <input asp-for="@Model.StartDate" type="text" class="form-control form-input bg-black text-light" inputmode="numeric" placeholder="Number of hours worked">
+            <input asp-for="@Model.StartDate" type="text" class="form-control form-input bg-black text-light" inputmode="numeric" placeholder="Employee start date">
             <span asp-validation-for="StartDate" class="text-danger"></span>
         </div>
         <div class="text-center">

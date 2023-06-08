@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
         public decimal DayRate { get; set; }
-        public int WeeksWorked { get; set; }
+        public DateTime StartDate { get; set; }
     }
 }

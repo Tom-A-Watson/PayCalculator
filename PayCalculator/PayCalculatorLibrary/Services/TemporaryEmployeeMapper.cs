@@ -9,7 +9,7 @@ namespace PayCalculatorLibrary.Services
             var tempEmployee = new TemporaryEmployee();
             tempEmployee.Name = model.Name;
             tempEmployee.DayRate = model.DayRate;
-            tempEmployee.WeeksWorked = model.WeeksWorked;
+            tempEmployee.StartDate = model.StartDate;
             return tempEmployee;
         }
     }

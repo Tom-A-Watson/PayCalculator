@@ -76,7 +76,12 @@ namespace PayCalculatorMVC.Controllers
         public IActionResult Update(PermanentEmployee existingEmployee)
         {
             var viewModel = new PermEmployeeAlertsViewModel();
-            viewModel.Name = _permEmployeeRepo.Update(existingEmployee).Name;
+            var updated = _permEmployeeRepo.Update(existingEmployee);
+
+            if (updated != null)
+            {
+                viewModel.Name = updated.Name;
+            }
 
             if (ModelState.IsValid)
             {

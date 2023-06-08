@@ -19,14 +19,11 @@ body {
 
 form {
     width: 65%;
+    margin: 0 auto;
 }
 
 label {
     margin: 0.5em 0.8em;
-}
-
-.create-and-update-forms {
-    position: relative;
 }
 
 .form-input {
