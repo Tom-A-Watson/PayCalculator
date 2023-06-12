@@ -8,6 +8,9 @@ namespace PayCalculator
     {
         private static IEmployeeRepository<PermanentEmployee> _permEmployeeRepo = new PermanentEmployeeRepository();
         private static IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo = new TemporaryEmployeeRepository();
+        private static IPermanentPayCalculator _permPayCalculator = new PermanentPayCalculator();
+        private static ITemporaryPayCalculator _tempPayCalculator = new TemporaryPayCalculator();
+        private static ITimeCalculator _timeCalculator = new TimeCalculator();
         private static readonly string enterID = "\nEnter the ID of the employee you would like to ";
         private static readonly string confirmationDeclined = "\nConfirmation was declined, returning to the main menu";
         private static readonly string nonNumericalError = "\nNon-numerical input is invalid! Please enter a number";
@@ -56,8 +59,26 @@ namespace PayCalculator
         static void GetAllInfo()
         {
             Console.Clear();
-            Console.WriteLine("-=-=-=-=- Permanent Employees -=-=-=-=-\n" + string.Concat(_permEmployeeRepo.GetAll()));
-            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-\n" + string.Concat(_tempEmployeeRepo.GetAll()));
+            var permEmployeeList = _permEmployeeRepo.GetAll();
+            var tempEmployeeList = _tempEmployeeRepo.GetAll();
+
+            Console.WriteLine("-=-=-=-=- Permanent Employees -=-=-=-=-\n");
+            foreach (var employee in permEmployeeList)
+            {
+                employee.HoursWorked = _timeCalculator.DaysWorked(employee.StartDate, DateTime.Now);
+                employee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
+                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked), 2);
+                Console.WriteLine(employee.ToString());
+            }
+
+            Console.WriteLine("-=-=-=-=- Temporary Employees -=-=-=-=-\n");
+            foreach (var employee in tempEmployeeList)
+            {
+                employee.HoursWorked = _timeCalculator.DaysWorked(employee.StartDate, DateTime.Now);
+                employee.TotalAnnualPay = Math.Round(_tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked), 2);
+                employee.HourlyRate = Math.Round(_tempPayCalculator.HourlyRate(employee.DayRate), 2);
+                Console.WriteLine(employee.ToString());
+            }
         }
 
         static void GetEmployee()
@@ -85,11 +106,11 @@ namespace PayCalculator
                 {
                     case "1":
                         Console.WriteLine($"\n{permanentEmployee.Name}'s salary is: £" +
-                        $"{Math.Round(permEmployeePayCalculator.TotalAnnualPay(permanentEmployee.Salary, permanentEmployee.Bonus), 2)}\n");
+                        $"{Math.Round(permEmployeePayCalculator.TotalAnnualPay(permanentEmployee.Salary.Value, permanentEmployee.Bonus.Value), 2)}\n");
                         break;
                     case "2":
                         Console.WriteLine($"\n{permanentEmployee.Name}'s hourly rate is: £" +
-                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary, permanentEmployee.HoursWorked), 2)}\n");
+                        $"{Math.Round(permEmployeePayCalculator.HourlyRate(permanentEmployee.Salary.Value, permanentEmployee.HoursWorked), 2)}\n");
                         break;
                     default:
                         Console.WriteLine("\nInvalid input!\n");

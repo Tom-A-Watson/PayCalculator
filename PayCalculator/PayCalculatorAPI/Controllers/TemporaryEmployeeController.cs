@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Constants;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
@@ -14,15 +13,18 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<TemporaryEmployee> _tempEmployeeRepo;
         private readonly ITemporaryPayCalculator _tempPayCalculator;
+        private readonly ITimeCalculator _timeCalculator;
         private readonly ITemporaryEmployeeMapper _mapper;
         private readonly ILog _log4net;
 
-        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, ITemporaryEmployeeMapper mapper)
+        public TemporaryEmployeeController(IEmployeeRepository<TemporaryEmployee> tempEmployeeRepo, ITemporaryPayCalculator tempPayCalculator, 
+            ITemporaryEmployeeMapper mapper, ITimeCalculator timeCalculator)
         {
             _tempEmployeeRepo = tempEmployeeRepo;
             _tempPayCalculator = tempPayCalculator;
             _mapper = mapper;
             _log4net = LogManager.GetLogger(typeof(TemporaryEmployeeController));
+            _timeCalculator = timeCalculator;
         }
 
         [HttpGet]
@@ -39,7 +41,9 @@ namespace PayCalculatorAPI.Controllers
 
             foreach (var employee in employeeList)
             {
+                employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
                 employee.TotalAnnualPay = _tempPayCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
+                employee.HourlyRate = _tempPayCalculator.HourlyRate(employee.DayRate);
             }
 
             _log4net.Info("Temporary " + LogMessages.ReturnedAllEmployees.Insert(24, Convert.ToString(employeeCount)));

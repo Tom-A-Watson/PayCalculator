@@ -17,7 +17,7 @@ namespace PayCalculatorLibrary.Repositories
                     Id = 003,
                     Contract = ContractType.Temporary,
                     DayRate = 250,
-                    WeeksWorked = 48
+                    StartDate = new(2022, 3, 23)
                 },
 
                 new TemporaryEmployee()
@@ -26,7 +26,7 @@ namespace PayCalculatorLibrary.Repositories
                     Id = 004,
                     Contract = ContractType.Temporary,
                     DayRate = 350,
-                    WeeksWorked = 48
+                    StartDate = new(2020, 1, 1)
                 }
             };
         }
@@ -48,28 +48,11 @@ namespace PayCalculatorLibrary.Repositories
 
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
-            int index = _temporaryEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var theEmployee = _temporaryEmployeeList[index];
-
-            if (index < 0 || index > _temporaryEmployeeList.Count)
-            {
-                return null;
-            }
-            else
-            {
-                var updated = employee;
-                var existing = theEmployee;
-
-                if (updated.Name == "string") theEmployee.Name = existing.Name;
-                else theEmployee.Name = updated.Name;
-                
-                if (updated.DayRate == 0) theEmployee.DayRate = existing.DayRate;
-                else theEmployee.DayRate = updated.DayRate;
-                
-                if (updated.WeeksWorked == 0) theEmployee.WeeksWorked = existing.WeeksWorked; 
-                else theEmployee.WeeksWorked = updated.WeeksWorked;
-            }
-
+            var existing = _temporaryEmployeeList.FirstOrDefault(x => x.Id == employee.Id);
+            var updated = employee;
+            existing.Name = updated.Name;
+            existing.DayRate = updated.DayRate;    
+            existing.StartDate = updated.StartDate;
             return employee;
         }
 

@@ -1,0 +1,78 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+form {
+    width: 65%;
+    margin: 0 auto;
+}
+
+label {
+    margin: 0.5em 0.8em;
+}
+
+.form-input {
+    border: 1px solid var(--bs-light-border-subtle); 
+    border-radius: 0.8em;
+}
+
+span {
+    margin: 0 0.8em;
+}
+
+#search-bar {
+    width: 20em;
+}
+
+.deleteTable {
+    width: 35%;
+    margin: 0 auto;
+    border-radius: 1em;
+    border: none
+}
+
+.deleteForm {
+    width: 100%;
+}
+
+.bi-person-gear {
+    transform: scale(1.75);
+    color: forestgreen;
+}
+
+.bi-person-fill-gear {
+    display: none;
+    transform: scale(1.75);
+    color: forestgreen;
+}
+
+.bi-person-x {
+    transform: scale(1.75);
+    color: red
+}
+
+.bi-person-fill-x {
+    display: none;
+    transform: scale(1.75);
+    color: red
+}
+
+.alert {
+    width: 80%;
+    margin: 0 auto;
+}

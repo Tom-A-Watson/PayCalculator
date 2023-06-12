@@ -1,5 +1,4 @@
 ﻿using PayCalculatorLibrary.Models;
-using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorLibrary.Repositories
 {
@@ -18,7 +17,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 25000,
                     Contract = ContractType.Permanent,
                     Bonus = 2500,
-                    HoursWorked = 1820
+                    StartDate = new(2022, 8, 15),
                 },
 
                 new PermanentEmployee()
@@ -28,7 +27,7 @@ namespace PayCalculatorLibrary.Repositories
                     Salary = 35000,
                     Contract = ContractType.Permanent,
                     Bonus = 1000,
-                    HoursWorked = 1820
+                    StartDate = new(2023, 5, 8),
                 }
             };
         }
@@ -50,31 +49,12 @@ namespace PayCalculatorLibrary.Repositories
 
         public PermanentEmployee? Update(PermanentEmployee employee)
         {
-            int index = _permanentEmployeeList.FindIndex(x => x.Id == employee.Id);
-            var theEmployee = _permanentEmployeeList[index];
-
-            if (index < 0 || index > _permanentEmployeeList.Count)
-            {
-                return null;
-            }
-            else
-            {
-                var updated = employee;
-                var existing = theEmployee;
-
-                if (updated.Name == "string") theEmployee.Name = existing.Name;
-                else theEmployee.Name = updated.Name;
-                
-                if (updated.Salary == 0) theEmployee.Salary = existing.Salary; 
-                else theEmployee.Salary = updated.Salary; 
-                
-                if (updated.Bonus == 0) theEmployee.Bonus = existing.Bonus; 
-                else theEmployee.Bonus = updated.Bonus; 
-                
-                if (updated.HoursWorked == 0) theEmployee.HoursWorked = existing.HoursWorked; 
-                else theEmployee.HoursWorked = updated.HoursWorked; 
-            }
-
+            var existing = _permanentEmployeeList.FirstOrDefault(x => x.Id == employee.Id);
+            var updated = employee;
+            existing.Name = updated.Name;
+            existing.Salary = updated.Salary; 
+            existing.Bonus = updated.Bonus;
+            existing.StartDate = updated.StartDate; 
             return employee;
         }
 

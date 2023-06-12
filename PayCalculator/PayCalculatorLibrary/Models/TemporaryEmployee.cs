@@ -7,7 +7,8 @@
 
         public override string ToString()
         {
-            return $"\nID: {Id} \nName: {Name} \nContract Type: {ContractType.Temporary} \nDay Rate: {DayRate} \nWeeks Worked: {WeeksWorked}" + "\n";
+            return $"ID: {Id} \nName: {Name} \nContract Type: {ContractType.Temporary} \nDay Rate: {DayRate} \nStart Date: {StartDate.ToShortDateString()}" +
+                $"\nWeeks Worked: {WeeksWorked} \nHours Worked: {HoursWorked} \nTotal Annual Pay: {TotalAnnualPay} \nHourly Rate: {HourlyRate} \n";
         }
     }
 }

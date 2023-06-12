@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayCalculatorAPI.Services;
 using PayCalculatorLibrary.Constants;
 using PayCalculatorLibrary.Models;
 using PayCalculatorLibrary.Repositories;
@@ -14,14 +13,16 @@ namespace PayCalculatorAPI.Controllers
     {
         private readonly IEmployeeRepository<PermanentEmployee> _permEmployeeRepo;
         private readonly IPermanentPayCalculator _permPayCalculator;
+        private readonly ITimeCalculator _timeCalculator;
         private readonly IPermanentEmployeeMapper _mapper;
         private readonly ILog _log4net;
 
-        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, IPermanentEmployeeMapper mapper)
+        public PermanentEmployeeController(IEmployeeRepository<PermanentEmployee> permEmployeeRepo, IPermanentPayCalculator permPayCalculator, IPermanentEmployeeMapper mapper, ITimeCalculator timeCalculator)
         {
             _permEmployeeRepo = permEmployeeRepo;
             _permPayCalculator = permPayCalculator;
             _mapper = mapper;
+            _timeCalculator = timeCalculator;
             _log4net = LogManager.GetLogger(typeof(PermanentEmployeeController));
         }
 
@@ -39,7 +40,9 @@ namespace PayCalculatorAPI.Controllers
 
             foreach (var employee in employeeList)
             {
-                employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+                employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
+                employee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
+                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
             }
 
             _log4net.Info("Permanent " + LogMessages.ReturnedAllEmployees.Insert(24, Convert.ToString(employeeCount)));
@@ -51,6 +54,7 @@ namespace PayCalculatorAPI.Controllers
         {
             var employee = _permEmployeeRepo.GetEmployee(id);
             var stringID = Convert.ToString(id);
+            const int daysInAWeek = 7;
 
             if (employee == null)
             {
@@ -58,7 +62,9 @@ namespace PayCalculatorAPI.Controllers
                 return NotFound(ErrorMessages.IdNotFound);
             }
 
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary, employee.Bonus);
+            employee.HoursWorked = _timeCalculator.DaysWorked(employee.StartDate, DateTime.Now, daysInAWeek);
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value);
+            employee.HourlyRate = _permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value);
             _log4net.Info("Permanent " + LogMessages.EmployeeRead.Insert(17, stringID));
             return Ok(employee);
         }
@@ -68,7 +74,7 @@ namespace PayCalculatorAPI.Controllers
         {
             var mappedEmployee = _mapper.Map(createModel);
             var employee = _permEmployeeRepo.Create(mappedEmployee);
-            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(mappedEmployee.Salary, mappedEmployee.Bonus);
+            employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(mappedEmployee.Salary.Value, mappedEmployee.Bonus.Value);
             _log4net.Info("Permanent " + LogMessages.EmployeeCreated + $"{employee.Id}");
             return Created($"/permanentemployee/{employee.Id}", employee);
         }
