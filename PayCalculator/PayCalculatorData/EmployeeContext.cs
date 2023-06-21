@@ -5,6 +5,10 @@ namespace PayCalculatorData
 {
     public class EmployeeContext : DbContext
     {
+        public EmployeeContext() { } 
+
+        public EmployeeContext(DbContextOptions options) : base(options) { }
+
         public DbSet<PermanentEmployee> PermanentEmployees { get; set; }
         public DbSet<TemporaryEmployee> TemporaryEmployees { get; set; }
 

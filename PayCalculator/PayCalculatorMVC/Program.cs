@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PermanentEmployeeRepository>();
 builder.Services.AddSingleton<IEmployeeRepository<TemporaryEmployee>, TemporaryEmployeeRepository>();
+builder.Services.AddSingleton<IEmployeeRepository<PermanentEmployee>, PersistentPermanentEmployeeRepo>();
+builder.Services.AddSingleton<IEmployeeRepository<TemporaryEmployee>, PersistentTemporaryEmployeeRepo>();
 builder.Services.AddSingleton<IPermanentEmployeeMapper, PermanentEmployeeMapper>();
 builder.Services.AddSingleton<IPermanentPayCalculator, PermanentPayCalculator>();
 builder.Services.AddSingleton<ITemporaryEmployeeMapper, TemporaryEmployeeMapper>();

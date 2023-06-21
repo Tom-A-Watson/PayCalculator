@@ -42,7 +42,7 @@ namespace PayCalculatorAPI.Controllers
             {
                 employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
                 employee.TotalAnnualPay = Math.Round(_permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value), 2);
-                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value), 2);
+                employee.HourlyRate = Math.Round(_permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked), 2);
             }
 
             _log4net.Info("Permanent " + LogMessages.ReturnedAllEmployees.Insert(24, Convert.ToString(employeeCount)));
@@ -64,7 +64,7 @@ namespace PayCalculatorAPI.Controllers
 
             employee.HoursWorked = _timeCalculator.DaysWorked(employee.StartDate, DateTime.Now, daysInAWeek);
             employee.TotalAnnualPay = _permPayCalculator.TotalAnnualPay(employee.Salary.Value, employee.Bonus.Value);
-            employee.HourlyRate = _permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked.Value);
+            employee.HourlyRate = _permPayCalculator.HourlyRate(employee.Salary.Value, employee.HoursWorked);
             _log4net.Info("Permanent " + LogMessages.EmployeeRead.Insert(17, stringID));
             return Ok(employee);
         }
