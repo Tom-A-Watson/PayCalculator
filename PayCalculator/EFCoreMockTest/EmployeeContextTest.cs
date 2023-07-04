@@ -13,7 +13,6 @@ namespace EFCoreMockTest
 
         private PersistentPermanentEmployeeRepo _persistentPermEmployeeRepo;
         private List<PermanentEmployee> _employees;
-        private PermanentEmployee testEmployee;
         private IPermanentPayCalculator _permPayCalculator;
         private ITimeCalculator _timeCalculator;
 #nullable enable
@@ -25,14 +24,6 @@ namespace EFCoreMockTest
             {
                 new PermanentEmployee() { Id = 1, Name = "William" },
                 new PermanentEmployee() { Id = 2, Name = "Amir" }
-            };
-
-            testEmployee = new()
-            {
-                Name = "Alex",
-                Salary = 30000,
-                Bonus = 2500,
-                StartDate = new DateTime(2023, 7, 1)
             };
 
             _mockEmployeeContext = new();
@@ -71,13 +62,6 @@ namespace EFCoreMockTest
                 Assert.That(employee, Is.Not.Null);
                 Assert.That(employee.Name, Is.EqualTo("Amir"));
             });
-        }
-
-        [Test]
-        public void Test_PermanentEmployee_CreateEmployee()
-        {
-            // Arrange
-            _mockEmployeeContext.Setup(x => x.PermanentEmployees.Add(testEmployee)).Returns(_employees[2]);
         }
     }
 }
