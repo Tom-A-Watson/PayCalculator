@@ -6,30 +6,29 @@ using PayCalculatorLibrary.Services;
 namespace PayCalculatorTest.Repositories
 {
     [TestFixture]
-    public class PersistentPermEmployeeRepoTest
+    public class PersistentTempEmployeeRepoTest
     {
 #nullable disable
-        private List<PermanentEmployee> employees;
-        private PermanentEmployee _updateModel;
-        private PersistentPermanentEmployeeRepo repository;
+        private List<TemporaryEmployee> employees;
+        private TemporaryEmployee _updateModel;
+        private PersistentTemporaryEmployeeRepo repository;
 
         private const string EmployeeName = "Jake";
-        private const decimal EmployeeSalary = 20000;
-        private const decimal EmployeeBonus = 5000;
+        private const decimal EmployeeDayRate = 250;
         private DateTime EmployeeStartDate = new(2023, 5, 1);
 
         private DbContextOptionsBuilder builder = new DbContextOptionsBuilder<EmployeeContext>();
         private EmployeeContext context;
         private DbContextOptions options;
-        private PermanentPayCalculator payCalculator;
+        private TemporaryPayCalculator payCalculator;
         private TimeCalculator timeCalculator;
-        private PermanentEmployee testEmployee;
-        private PermanentEmployee employee;
+        private TemporaryEmployee testEmployee;
+        private TemporaryEmployee employee;
         private bool deleted;
 #nullable enable
 
         [SetUp]
-        public void SetUp() 
+        public void SetUp()
         {
             builder.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
             options = builder.Options;
@@ -38,29 +37,27 @@ namespace PayCalculatorTest.Repositories
 
             employees = new()
             {
-                new PermanentEmployee { Id = 1, Name = "Tom" },
-                new PermanentEmployee { Id = 2, Name = "Harry" },
-                new PermanentEmployee { Id = 3, Name = "Kyle"},
-                new PermanentEmployee { Id = 4, Name = "Alex"}
+                new TemporaryEmployee { Id = 1, Name = "Tom" },
+                new TemporaryEmployee { Id = 2, Name = "Harry" },
+                new TemporaryEmployee{ Id = 3, Name = "Kyle"},
+                new TemporaryEmployee { Id = 4, Name = "Alex"}
             };
 
-            context.PermanentEmployees.AddRange(employees);
+            context.TemporaryEmployees.AddRange(employees);
             context.SaveChanges();
 
-            testEmployee = new PermanentEmployee()
+            testEmployee = new()
             {
                 Name = "Lucy",
-                Salary = 1000,
-                Bonus = 1000,
+                DayRate = 300,
                 StartDate = new DateTime(2023, 5, 1)
             };
 
-            _updateModel = new PermanentEmployee()
+            _updateModel = new()
             {
                 Id = 1,
                 Name = EmployeeName,
-                Salary = EmployeeSalary,
-                Bonus = EmployeeBonus,
+                DayRate = EmployeeDayRate,
                 StartDate = EmployeeStartDate
             };
 
@@ -73,7 +70,7 @@ namespace PayCalculatorTest.Repositories
         public void CanInsertEmployeeIntoDatabase()
         {
             // Act
-            context.PermanentEmployees.Add(testEmployee);
+            context.TemporaryEmployees.Add(testEmployee);
             context.SaveChanges();
 
             // Assert
@@ -100,7 +97,7 @@ namespace PayCalculatorTest.Repositories
         {
             // Act
             employee = repository.GetEmployee(40);
-            
+
             // Assert
             Assert.That(employee, Is.Null);
         }
@@ -110,14 +107,14 @@ namespace PayCalculatorTest.Repositories
         {
             // Act
             employee = repository.Create(testEmployee);
-            
+
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.That(employee, Is.Not.Null);
                 Assert.That(employee.Id, Is.Not.EqualTo(0));
                 Assert.That(employee.Name, Is.EqualTo("Lucy"));
-                Assert.That(employee.TotalAnnualPay, Is.EqualTo(2000));
+                Assert.That(Math.Round(employee.HourlyRate, 2), Is.EqualTo(42.86));
                 Assert.That(repository.GetAll(), Has.Exactly(5).Items);
             });
         }
@@ -130,7 +127,7 @@ namespace PayCalculatorTest.Repositories
             employee = repository.Update(_updateModel);
 
             // Assert
-            Assert.Multiple(() => 
+            Assert.Multiple(() =>
             {
                 Assert.That(employee, Is.Not.Null);
                 Assert.That(employee.Name, Is.EqualTo("Jake"));

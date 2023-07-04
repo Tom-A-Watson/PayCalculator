@@ -1,28 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PayCalculatorLibrary.Models;
+using PayCalculatorLibrary.Services;
 
 namespace PayCalculatorLibrary.Repositories
 {
     public class PersistentTemporaryEmployeeRepo : DbContext, IEmployeeRepository<TemporaryEmployee>
     {
-        public DbSet<TemporaryEmployee> TemporaryEmployees { get; set; }
+        private readonly EmployeeContext _context;
+        private readonly ITemporaryPayCalculator _payCalculator;
+        private readonly ITimeCalculator _timeCalculator;
+
+        public PersistentTemporaryEmployeeRepo(EmployeeContext context, ITemporaryPayCalculator payCalculator, ITimeCalculator timeCalculator)
+        {
+            _context = context;
+            _payCalculator = payCalculator;
+            _timeCalculator = timeCalculator;
+        }
 
         public TemporaryEmployee Create(TemporaryEmployee employee)
         {
             employee.Contract = ContractType.Temporary;
-            TemporaryEmployees.Add(employee);
-            SaveChanges();
+            employee.HoursWorked = _timeCalculator.HoursWorked(employee.StartDate, DateTime.Now);
+            employee.WeeksWorked = _timeCalculator.WeeksWorked(employee.StartDate, DateTime.Now);
+            employee.TotalAnnualPay = _payCalculator.TotalAnnualPay(employee.DayRate, employee.WeeksWorked);
+            employee.HourlyRate = _payCalculator.HourlyRate(employee.DayRate);
+            _context.TemporaryEmployees.Add(employee);
+            _context.SaveChanges();
             return employee;
         }
 
         public bool Delete(int id)
         {
-            var employee = TemporaryEmployees.Find(id);
+            var employee = _context.TemporaryEmployees.Find(id);
 
             if (employee != null)
             {
-                TemporaryEmployees.Remove(employee);
-                SaveChanges();
+                _context.TemporaryEmployees.Remove(employee);
+                _context.SaveChanges();
                 return true;
             }
 
@@ -31,18 +45,18 @@ namespace PayCalculatorLibrary.Repositories
 
         public IEnumerable<TemporaryEmployee> GetAll()
         {
-            return TemporaryEmployees.ToList();
+            return _context.TemporaryEmployees.ToList();
         }
 
         public TemporaryEmployee? GetEmployee(int id)
         {
-            var employee = TemporaryEmployees.Find(id);
+            var employee = _context.TemporaryEmployees.Find(id);
             return employee;
         }
 
         public TemporaryEmployee? Update(TemporaryEmployee employee)
         {
-            var existing = TemporaryEmployees.FirstOrDefault(x  => x.Id == employee.Id);
+            var existing = _context.TemporaryEmployees.FirstOrDefault(x  => x.Id == employee.Id);
             var updated = employee;
 
             if (existing != null)
@@ -50,7 +64,7 @@ namespace PayCalculatorLibrary.Repositories
                 existing.Name = updated.Name;
                 existing.DayRate = updated.DayRate;
                 existing.StartDate = updated.StartDate;
-                SaveChanges();
+                _context.SaveChanges();
                 return employee;
             }
 

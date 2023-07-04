@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PayCalculatorLibrary.Models;
 
-namespace PayCalculatorData
+namespace PayCalculatorLibrary.Repositories
 {
     public class EmployeeContext : DbContext
     {
@@ -9,14 +9,17 @@ namespace PayCalculatorData
 
         public EmployeeContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<PermanentEmployee> PermanentEmployees { get; set; }
-        public DbSet<TemporaryEmployee> TemporaryEmployees { get; set; }
+        public virtual DbSet<PermanentEmployee> PermanentEmployees { get; set; }
+        public virtual DbSet<TemporaryEmployee> TemporaryEmployees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(
                 "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = EmployeeDatabase"
-            );
+                );
+            }
         }
     }
 }
