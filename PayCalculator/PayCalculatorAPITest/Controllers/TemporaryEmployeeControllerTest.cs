@@ -53,7 +53,6 @@ namespace PayCalculatorAPITest.Controllers
             {
                 Name = EmployeeName,
                 DayRate = EmployeeDayRate,
-                WeeksWorked = EmployeeWeeksWorked
             };
 
             _mockRepository = new();

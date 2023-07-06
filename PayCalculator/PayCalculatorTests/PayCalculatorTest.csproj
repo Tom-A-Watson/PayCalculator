@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.4" />
@@ -20,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PayCalculatorAPI\PayCalculatorAPI.csproj" />
+    <ProjectReference Include="..\PayCalculatorData\PayCalculatorData.csproj" />
+    <ProjectReference Include="..\PayCalculatorLibrary\PayCalculatorLibrary.csproj" />
     <ProjectReference Include="..\PayCalculator\PayCalculator.csproj" />
   </ItemGroup>
 

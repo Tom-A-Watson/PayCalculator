@@ -14,7 +14,7 @@ namespace PayCalculatorTest.Repositories
 #nullable enable
 
         [SetUp]
-        public void SetupTests()
+        public void Setup()
         {
             // Arrange
             repository = new();
